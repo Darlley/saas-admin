@@ -2,7 +2,11 @@
 
 > [!NOTE]
 > Ajuda e tutoriais
-> **Auth.js:** [Micro-SaaS na Prática: Setup com Next.js 14, Shadcn UI e Autenticação com Next Auth [+ Bônus]](https://youtu.be/Lvxpl0bwYf8) (Vibe Dev)
+>
+> **AUTHENTICATION** 
+> 1. [Micro-SaaS na Prática: Setup com Next.js 14, Shadcn UI e Autenticação com Next Auth [+ Bônus]](https://youtu.be/Lvxpl0bwYf8) (Vibe Dev)
+> 2. [Next Auth V5 - Advanced Guide (2024)](https://youtu.be/1MTyCvS05V4?list=PL45i6mPs-nehL258s7ITf4yp53ErESKs4) (Code With Antonio
+)
 
 
 ## Features
