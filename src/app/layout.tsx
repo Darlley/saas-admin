@@ -30,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${inter.className} min-h-svh w-full`}>{children}</body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

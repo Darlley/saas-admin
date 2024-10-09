@@ -1,10 +1,34 @@
-import SigninForm from '@/components/SigninForm'
-import React from 'react'
+import SigninForm from '@/components/SigninForm';
+import Logotipo from '@/icons/Logotipo';
+import { type Metadata } from 'next';
+import Link from 'next/link';
 
-export default function page() {
+export const metadata: Metadata = {
+  title: 'Sign In',
+};
+
+export default function Login() {
   return (
-    <div>
+    <main className="mx-auto w-full max-w-md sm:px-4 md:w-96 md:max-w-sm md:px-0">
+      <div className="flex justify-center">
+        <Link href="/" aria-label="Home">
+          <Logotipo className="h-10 w-auto" />
+        </Link>
+      </div>
+      <h2 className="mt-10 text-lg font-semibold text-gray-900 text-center">
+        Faça login na sua conta
+      </h2>
+      <p className="mt-2 text-sm text-gray-700 text-center">
+        Não tem uma conta?{' '}
+        <Link
+          href="/register"
+          className="font-medium text-blue-600 hover:underline"
+        >
+          Crie uma
+        </Link>{' '}
+        e faça um teste gratuito.
+      </p>
       <SigninForm />
-    </div>
-  )
+    </main>
+  );
 }

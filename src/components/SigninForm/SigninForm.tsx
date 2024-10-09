@@ -12,6 +12,7 @@ import { Input } from "../ui/input";
 
 import { formSchema } from "./SigninForm.schemas";
 import { SigninFormProps } from './SigninForm.types';
+import { Separator } from '../ui/separator';
 export default function SigninForm (props: SigninFormProps) {
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -33,18 +34,11 @@ export default function SigninForm (props: SigninFormProps) {
   }
 
   return (
-    <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
-      <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
-        Bem vindo
-      </h2>
-      <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
-        Por favor, insira seu melhor email para que possamos enviar la seu link de acesso
-      </p>
- 
+    <div className="w-full mt-6">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="flex flex-col gap-4 w-full py-4 border-b"
+          className="flex flex-col gap-4 w-full"
         >
           <FormField
             control={form.control}
@@ -83,7 +77,14 @@ export default function SigninForm (props: SigninFormProps) {
         </form>
       </Form>
 
-      <div className="flex gap-2 justify-center w-full py-4">
+      <div className='flex box-content my-6 items-center w-full justify-center gap-4'>
+      <Separator className='max-w-20' />
+      <span>ou</span>
+      <Separator className='max-w-20' />
+      </div>
+
+
+      <div className="flex gap-2 justify-center w-full">
         <Button
           size="lg"
           className="w-full"
