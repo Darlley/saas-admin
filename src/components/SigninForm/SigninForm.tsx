@@ -11,6 +11,7 @@ import {
   FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
@@ -21,10 +22,8 @@ import { useState } from 'react';
 import { Separator } from '../ui/separator';
 import { LoginSchema, loginSchema } from './SigninForm.schemas';
 import { SigninFormProps } from './SigninForm.types';
+import { toast } from 'sonner';
 export default function SigninForm(props: SigninFormProps) {
-  const [error, setError] = useState<string | null>();
-  const [success, setSuccess] = useState<string | null>();
-
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -39,12 +38,10 @@ export default function SigninForm(props: SigninFormProps) {
   async function handleSubmit(values: LoginSchema) {
     console.log(values);
     // signIn('email', values);
-    setError(null);
-    setSuccess(null);
-
+    
     await login(values).then((data) => {
-      setError(data.error);
-      setSuccess(data.success);
+      data.error && toast.error(data.error)
+      data.success && toast.success(data.success)
     });
   }
 
@@ -60,6 +57,7 @@ export default function SigninForm(props: SigninFormProps) {
             name="email"
             render={({ field }) => (
               <FormItem className="w-full">
+                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -68,13 +66,7 @@ export default function SigninForm(props: SigninFormProps) {
                     className="p-4 h-10"
                   />
                 </FormControl>
-                {errors.email ? (
-                  <FormMessage />
-                ) : (
-                  <FormDescription>
-                    Teste grátis sem fidelidade.
-                  </FormDescription>
-                )}
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -84,6 +76,7 @@ export default function SigninForm(props: SigninFormProps) {
             name="password"
             render={({ field }) => (
               <FormItem className="w-full">
+                <FormLabel>Senha</FormLabel>
                 <FormControl>
                   <Input
                     {...field}

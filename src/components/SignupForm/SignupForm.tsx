@@ -11,21 +11,30 @@ import {
   FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
 
+import { register } from '@/actions/register';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import { ApiResponse } from '../../../types/api-response.types';
 import { Separator } from '../ui/separator';
 import { RegisterSchema, registerSchema } from './SignupForm.schemas';
 import { SignupFormProps } from './SignupForm.types';
+import { useRouter } from 'next/navigation';
 export default function SignupForm(props: SignupFormProps) {
+  const router = useRouter()
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
   const form = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      name: '',
-      email: '',
-      password: '',
+      name: 'Darlley',
+      email: 'darlleybrito@gmail.com',
+      password: 'mudar1234@L',
     },
     mode: 'onBlur',
   });
@@ -61,21 +70,39 @@ export default function SignupForm(props: SignupFormProps) {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  function handleSubmit(values: RegisterSchema) {
-    console.log(values);
+  async function handleSubmit(values: RegisterSchema) {
+    setSuccess(null);
+    setError(null);
+
+    const data: ApiResponse = await register(values);
+
+    if (data.type === 'success') {
+      toast.success(data.message);
+      setSuccess(data?.message ?? '');
+      setTimeout(() => {
+        router.replace('/login')
+      }, 1000)
+    } else {
+      toast.error(data.message);
+      setError(data?.message ?? '');
+    }
   }
 
   return (
     <div className="w-full mt-6">
-      {/* <div className="flex items-center gap-2 p-2 rounded-sm bg-green-100 text-green-600 mb-4 text-sm">
-        <span>✅</span>
-        <span className="font-medium">Email enviado</span>
-      </div>
+      {success && (
+        <div className="flex items-center gap-2 p-2 rounded-sm bg-green-100 text-green-600 mb-4 text-sm">
+          <span>✅</span>
+          <span className="font-medium">{success}</span>
+        </div>
+      )}
 
-      <div className="flex items-center gap-2 p-2 rounded-sm bg-red-100 text-red-600 mb-4 text-sm">
-        <span>⚠️</span>
-        <span className="font-medium">Email não enviado</span>
-      </div> */}
+      {error && (
+        <div className="flex items-center gap-2 p-2 rounded-sm bg-red-100 text-red-600 mb-4 text-sm">
+          <span>⚠️</span>
+          <span className="font-medium">{error}</span>
+        </div>
+      )}
 
       <Form {...form}>
         <form
@@ -87,6 +114,7 @@ export default function SignupForm(props: SignupFormProps) {
             name="name"
             render={({ field }) => (
               <FormItem className="w-full">
+                <FormLabel>Nome</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -105,6 +133,7 @@ export default function SignupForm(props: SignupFormProps) {
             name="email"
             render={({ field }) => (
               <FormItem className="w-full">
+                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -123,6 +152,7 @@ export default function SignupForm(props: SignupFormProps) {
             name="password"
             render={({ field }) => (
               <FormItem className="w-full">
+                <FormLabel>Senha</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -192,8 +222,10 @@ export default function SignupForm(props: SignupFormProps) {
           />
 
           <Button size="lg" disabled={isSubmitting}>
-            Enviar link magico
-            {isSubmitting ? <LoaderCircleIcon /> : <span>&rarr;</span>}
+            Cadastrar
+            {isSubmitting && (
+              <LoaderCircleIcon className="animate-spin ml-2.5" />
+            )}
           </Button>
         </form>
       </Form>
