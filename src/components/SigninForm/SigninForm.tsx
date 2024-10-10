@@ -50,7 +50,7 @@ export default function SigninForm (props: SigninFormProps) {
                     {...field}
                     placeholder="Insira seu email"
                     type="email"
-                    className="bg-white p-6 h-12"
+                    className="bg-white p-4 h-10"
                   />
                 </FormControl>
                 {errors.email ? (
