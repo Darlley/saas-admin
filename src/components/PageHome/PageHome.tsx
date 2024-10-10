@@ -19,6 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
+import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { PageHomeProps } from './PageHome.types';
@@ -26,81 +27,8 @@ export default function PageHome(props: PageHomeProps) {
   // const {} = props
   return (
     <>
-      <header className="h-svh py-6 flex flex-col">
-        <nav className="p-4 mx-auto container flex w-full justify-between sticky top-0 bg-white/20 backdrop-blur-md z-50">
-          <div className="flex items-center md:gap-x-12">
-            <Link href="#" aria-label="Home">
-              <Logotipo className="h-10 w-auto" />
-            </Link>
-            <div className="hidden md:flex md:gap-x-6">
-              {ClientNavigation.map((item, index) => (
-                <Link key={`ClientNavigationDesktop-${index}`} href={item.path}>
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-          <div className="flex items-center gap-x-5 md:gap-x-8">
-            <div className="hidden md:block">
-              <Link href="/login">Entrar</Link>
-            </div>
-            <Button asChild>
-              <Link href="/register">
-                <span>
-                  Começar <span className="hidden lg:inline">agora</span>
-                </span>
-              </Link>
-            </Button>
-            <div className="-mr-1 md:hidden">
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="shrink-0 md:hidden"
-                  >
-                    <Menu className="h-5 w-5" />
-                    <span className="sr-only">Toggle navigation menu</span>
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="left" className="flex flex-col">
-                  <nav className="flex flex-col gap-2 items-start px-2 text-sm font-medium lg:px-4">
-                    <Link href="/" aria-label="Home">
-                      <Logotipo className="size-8" />
-                    </Link>
-                    {ClientNavigation.map((item, index) => (
-                      <Link
-                        key={`ClientNavigationMobile-${index}`}
-                        href={item.path}
-                        className="flex items-center gap-2 text-lg font-semibold"
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </nav>
-                  <div className="mt-auto">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>Upgrade to Pro</CardTitle>
-                        <CardDescription>
-                          Unlock all features and get unlimited access to our
-                          support team.
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <Button size="sm" className="w-full">
-                          Upgrade
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </SheetContent>
-              </Sheet>
-            </div>
-          </div>
-        </nav>
+      <header className="h-svh py-6 mx-auto container flex-1 flex-grow flex flex-col text-center items-center justify-center">
 
-        <section className="mx-auto container flex-1 flex-grow flex flex-col text-center items-center justify-center">
           <h1 className="mx-auto max-w-4xl font-display text-5xl font-medium tracking-tight text-slate-900 sm:text-7xl">
             Faça uma frase de efeito{' '}
             <span className="relative whitespace-nowrap text-primary">
@@ -124,38 +52,50 @@ export default function PageHome(props: PageHomeProps) {
             <Button asChild>
               <Link href="/register">Começar agora</Link>
             </Button>
-            <Button asChild variant="outline">
-              <Link href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
-                <svg
-                  aria-hidden="true"
-                  className="h-3 w-3 flex-none fill-blue-600 group-active:fill-current"
-                >
-                  <path d="m9.997 6.91-7.583 3.447A1 1 0 0 1 1 9.447V2.553a1 1 0 0 1 1.414-.91L9.997 5.09c.782.355.782 1.465 0 1.82Z" />
-                </svg>
-                <span className="ml-3">Assistir demonstração</span>
-              </Link>
-            </Button>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline">
+                  <svg
+                    aria-hidden="true"
+                    className="h-3 w-3 flex-none fill-primary group-active:fill-current"
+                  >
+                    <path d="m9.997 6.91-7.583 3.447A1 1 0 0 1 1 9.447V2.553a1 1 0 0 1 1.414-.91L9.997 5.09c.782.355.782 1.465 0 1.82Z" />
+                  </svg>
+                  <span className="ml-2.5">Assistir demonstração</span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="w-10/12 h-max max-w-full !rounded-none p-0 border-none">
+                <iframe
+                  src="https://www.youtube.com/embed/QXo-Kng7pZQ?autoplay=1&controls=0&quality=hd1080"
+                  title="Demonstração"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  className="w-full aspect-video rounded-none"
+                ></iframe>
+              </DialogContent>
+            </Dialog>
           </div>
-        </section>
       </header>
 
       <main className="">
-        <section id="resources">Recursos</section>
-        <section id="testimonials">Testemunhos</section>
+        <section id="resources" className="py-24 h-full w-full">
+          <div className="container mx-auto">Recursos</div>
+        </section>
+        <section id="testimonials" className="py-24 h-full w-full">
+          <div className="container mx-auto">Testemunhos</div>
+        </section>
         <section
           id="pricing"
-          className="bg-secondary/20 py-16 md:py-24 lg:py-32 relative h-full w-full border-b dark:border-secondary-foreground/20"
+          className="bg-secondary/20 py-24 h-full w-full border-b dark:border-secondary-foreground/20"
         >
           <div className="absolute inset-0 -z-10 h-full w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#ffffff20_1px,transparent_1px)]"></div>
 
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="text-center text-3xl md:text-4xl font-bold">
+            <h2 className="text-center text-3xl md:text-4xl font-bold">
               Cresça seu negócio <br />
               com o <span className="text-primary">melhor investimento!</span>
-            </h1>
-            <p className="text-center text-base md:text-lg mt-4">
-              Teste 30 dias grátis sem informar dados de pagamento.
-            </p>
+            </h2>
           </div>
 
           <div className="max-w-[1400px] mx-auto mt-12 md:mt-16 px-4 2xl:px-0">
@@ -175,13 +115,13 @@ export default function PageHome(props: PageHomeProps) {
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="monthly" className="flex">
-                <div className="flex w-full justify-center gap-6 lg:gap-8">
+                <div className="flex flex-col lg:flex-row lg:flex-wrap w-full justify-center gap-6 lg:gap-8">
                   {plans.map((plan) => (
                     <Card
                       key={plan.name}
                       className={cn(
                         plan.popular && 'border-primary',
-                        'max-w-xs h-full flex flex-col w-full'
+                        'max-w-xs h-full flex flex-col w-full mx-auto lg:mx-0'
                       )}
                     >
                       <CardHeader className="flex flex-col gap-4">
@@ -202,7 +142,9 @@ export default function PageHome(props: PageHomeProps) {
                           <sub>/mês</sub>
                         </div>
                         {plan.name == 'Free' ? (
-                          <Button className="w-full" variant="outline">Criar conta</Button>
+                          <Button className="w-full" variant="outline" asChild>
+                            <Link href="register">Criar conta</Link>
+                          </Button>
                         ) : (
                           <Button className="w-full">Assinar</Button>
                         )}
@@ -260,7 +202,9 @@ export default function PageHome(props: PageHomeProps) {
                           /ano
                         </div>
                         {plan.name == 'Free' ? (
-                          <Button className="w-full" variant="outline">Criar conta</Button>
+                          <Button className="w-full" variant="outline" asChild>
+                            <Link href="register">Criar conta</Link>
+                          </Button>
                         ) : (
                           <Button className="w-full">Assinar</Button>
                         )}
@@ -289,11 +233,11 @@ export default function PageHome(props: PageHomeProps) {
         <section id="questions" className="py-32">
           <div className="max-w-[1400px] mx-auto grid grid-cols-12 px-4 2xl:px-0">
             <div className="col-span-12 md:col-span-4">
-              <h3 className="text-5xl font-bold">
+              <h2 className="text-5xl font-bold">
                 Dúvidas
                 <br className="sr-only" />
                 frequentes
-              </h3>
+              </h2>
             </div>
 
             <div className="col-span-12 md:col-span-8">
