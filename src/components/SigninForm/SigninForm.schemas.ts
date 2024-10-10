@@ -1,12 +1,16 @@
 import * as z from 'zod';
 
-export const formSchema = z.object({
-  email: z.string({
-    required_error: 'Este campo é obrigatório',
-  }).email({
-    message: 'Insira um endereço de email válido',
+export const loginSchema = z.object({
+  email: z
+    .string({
+      required_error: 'Este campo é obrigatório',
+    })
+    .email({
+      message: 'Insira um endereço de email válido',
+    }),
+  password: z.string().min(8, {
+    message: 'A senha deve ter pelo menos 8 caracteres',
   }),
-  password: z.string()
 });
 
-export type FormSchema = z.infer<typeof formSchema>;
+export type LoginSchema = z.infer<typeof loginSchema>;

@@ -18,11 +18,11 @@ import { Input } from '../ui/input';
 
 import { useEffect, useState } from 'react';
 import { Separator } from '../ui/separator';
-import { formSchema } from './SignupForm.schemas';
+import { RegisterSchema, registerSchema } from './SignupForm.schemas';
 import { SignupFormProps } from './SignupForm.types';
 export default function SignupForm(props: SignupFormProps) {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<RegisterSchema>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       email: 'darlleybrito@gmail.com',
       password: '',
@@ -61,7 +61,7 @@ export default function SignupForm(props: SignupFormProps) {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  function handleSubmit(values: z.infer<typeof formSchema>) {
+  function handleSubmit(values: RegisterSchema) {
     console.log(values);
   }
 

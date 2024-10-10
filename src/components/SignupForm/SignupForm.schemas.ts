@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-export const formSchema = z.object({
+export const registerSchema = z.object({
   email: z.string({
     required_error: 'Este campo é obrigatório',
   }).email({
@@ -24,4 +24,4 @@ export const formSchema = z.object({
     }),
 });
 
-export type FormSchema = z.infer<typeof formSchema>;
+export type RegisterSchema = z.infer<typeof registerSchema>;

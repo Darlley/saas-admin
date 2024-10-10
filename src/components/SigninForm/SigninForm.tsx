@@ -1,10 +1,9 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CheckCircle, LoaderCircleIcon } from 'lucide-react';
+import { LoaderCircleIcon } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { Button } from '../ui/button';
 import {
   Form,
@@ -16,13 +15,18 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 
+import { login } from '@/actions/login';
 import Link from 'next/link';
+import { useState } from 'react';
 import { Separator } from '../ui/separator';
-import { formSchema } from './SigninForm.schemas';
+import { LoginSchema, loginSchema } from './SigninForm.schemas';
 import { SigninFormProps } from './SigninForm.types';
 export default function SigninForm(props: SigninFormProps) {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const [error, setError] = useState<string | null>();
+  const [success, setSuccess] = useState<string | null>();
+
+  const form = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: 'darlleybrito@gmail.com',
       password: '',
@@ -32,22 +36,37 @@ export default function SigninForm(props: SigninFormProps) {
 
   const { errors, isSubmitting } = form.formState;
 
-  function handleSubmit(values: z.infer<typeof formSchema>) {
+  async function handleSubmit(values: LoginSchema) {
     console.log(values);
-    signIn('email', values);
+    // signIn('email', values);
+    setError(null);
+    setSuccess(null);
+
+    await login(values).then((data) => {
+      setError(data.error);
+      setSuccess(data.success);
+    });
   }
 
   return (
     <div className="w-full mt-6">
-      <div className="flex items-center gap-2 p-2 rounded-sm bg-green-100 text-green-600 mb-4 text-sm">
-        <span>✅</span>
-        <span className="font-medium">Email enviado</span>
-      </div>
-      
-      <div className="flex items-center gap-2 p-2 rounded-sm bg-red-100 text-red-600 mb-4 text-sm">
-        <span>⚠️</span>
-        <span className="font-medium">Email não enviado</span>
-      </div>
+      {error && (
+        <div className="flex items-start gap-2 p-4 rounded-lg bg-red-100 text-red-600 mb-4">
+          <span className="text-2xl">{/* Adicione o emoji aqui */}⚠️</span>
+          <span className="font-medium text-sm mt-1.5">
+            Email não enviado
+          </span>
+        </div>
+      )}
+
+      {success && (
+        <div className="flex items-start gap-2 p-4 rounded-lg bg-green-100 text-green-600 mb-4">
+          <span className="text-2xl">{/* Adicione o emoji aqui */}✅</span>
+          <span className="font-medium text-sm mt-1.5">
+            Email enviado
+          </span>
+        </div>
+      )}
 
       <Form {...form}>
         <form
@@ -91,27 +110,26 @@ export default function SigninForm(props: SigninFormProps) {
                     className="p-4 h-10"
                   />
                 </FormControl>
-                {errors.email ? (
-                  <FormMessage />
-                ) : (
-                  <FormDescription>
-                    Não se lembra?{' '}
-                    <Link
-                      href="/recovery"
-                      className="font-medium text-blue-600 hover:underline"
-                    >
-                      Recuperar senha
-                    </Link>
-                    .
-                  </FormDescription>
-                )}
+                <FormMessage />
+                <FormDescription>
+                  Não se lembra?{' '}
+                  <Link
+                    href="/recovery"
+                    className="font-medium text-blue-600 hover:underline"
+                  >
+                    Recuperar senha
+                  </Link>
+                  .
+                </FormDescription>
               </FormItem>
             )}
           />
 
           <Button size="lg" disabled={isSubmitting}>
             Entrar
-            {isSubmitting && <LoaderCircleIcon />}
+            {isSubmitting && (
+              <LoaderCircleIcon className="animate-spin ml-2.5" />
+            )}
           </Button>
         </form>
       </Form>
