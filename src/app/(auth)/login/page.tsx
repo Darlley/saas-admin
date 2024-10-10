@@ -15,8 +15,8 @@ export default function Login() {
           <Logotipo className="h-10 w-auto" />
         </Link>
       </div>
-      <h1 className="mt-20 text-lg font-semibold text-gray-900">
-        Faça login na sua conta
+      <h1 className="mt-10 text-lg font-semibold text-gray-900">
+        Bem vindo de volta
       </h1>
       <p className="mt-2 text-sm text-gray-700">
         Não tem uma conta?{' '}
