@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LoaderCircleIcon } from 'lucide-react';
+import { Check, LoaderCircleIcon } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -16,11 +16,11 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 
-import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { Separator } from '../ui/separator';
-import { formSchema } from './SigninForm.schemas';
-import { SigninFormProps } from './SigninForm.types';
-export default function SigninForm(props: SigninFormProps) {
+import { formSchema } from './SignupForm.schemas';
+import { SignupFormProps } from './SignupForm.types';
+export default function SignupForm(props: SignupFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -31,10 +31,38 @@ export default function SigninForm(props: SigninFormProps) {
   });
 
   const { errors, isSubmitting } = form.formState;
+  const { watch } = form;
+
+  // Valores padrão para as validações
+  const [isValidPassword, setIsValidPassword] = useState({
+    minLength: false,
+    hasLowercase: false,
+    hasUppercase: false,
+    hasNumber: false,
+    hasSpecialChar: false,
+  });
+
+  // Função para validar a senha e atualizar o estado
+  const validatePassword = (password: string) => {
+    setIsValidPassword({
+      minLength: password.length >= 8,
+      hasLowercase: /[a-z]/.test(password),
+      hasUppercase: /[A-Z]/.test(password),
+      hasNumber: /\d/.test(password),
+      hasSpecialChar: /[\W_]/.test(password),
+    });
+  };
+
+  // Observe mudanças na senha
+  useEffect(() => {
+    const subscription = watch((value) => {
+      validatePassword(value?.password ?? '');
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   function handleSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-    signIn('email', values);
   }
 
   return (
@@ -85,14 +113,56 @@ export default function SigninForm(props: SigninFormProps) {
                   <FormMessage />
                 ) : (
                   <FormDescription>
-                    Não se lembra?{' '}
-                    <Link
-                      href="/recovery"
-                      className="font-medium text-blue-600 hover:underline"
+                    <span
+                      className={`flex items-center gap-2 text-xs ${
+                        isValidPassword.minLength
+                          ? 'text-teal-500'
+                          : 'text-destructive'
+                      }`}
                     >
-                      Recuperar senha
-                    </Link>
-                    .
+                      <Check className="size-4 stroke-1" />
+                      <span>Pelo menos 8 caracteres</span>
+                    </span>
+                    <span
+                      className={`flex items-center gap-2 text-xs ${
+                        isValidPassword.hasLowercase
+                          ? 'text-teal-500'
+                          : 'text-destructive'
+                      }`}
+                    >
+                      <Check className="size-4 stroke-1" />
+                      <span>Uma letra minúscula</span>
+                    </span>
+                    <span
+                      className={`flex items-center gap-2 text-xs ${
+                        isValidPassword.hasUppercase
+                          ? 'text-teal-500'
+                          : 'text-destructive'
+                      }`}
+                    >
+                      <Check className="size-4 stroke-1" />
+                      <span>Uma letra maiúscula</span>
+                    </span>
+                    <span
+                      className={`flex items-center gap-2 text-xs ${
+                        isValidPassword.hasNumber
+                          ? 'text-teal-500'
+                          : 'text-destructive'
+                      }`}
+                    >
+                      <Check className="size-4 stroke-1" />
+                      <span>Um número</span>
+                    </span>
+                    <span
+                      className={`flex items-center gap-2 text-xs ${
+                        isValidPassword.hasSpecialChar
+                          ? 'text-teal-500'
+                          : 'text-destructive'
+                      }`}
+                    >
+                      <Check className="size-4 stroke-1" />
+                      <span>Um caractere especial</span>
+                    </span>
                   </FormDescription>
                 )}
               </FormItem>
@@ -100,8 +170,8 @@ export default function SigninForm(props: SigninFormProps) {
           />
 
           <Button size="lg" disabled={isSubmitting}>
-            Entrar
-            {isSubmitting && <LoaderCircleIcon />}
+            Enviar link magico
+            {isSubmitting ? <LoaderCircleIcon /> : <span>&rarr;</span>}
           </Button>
         </form>
       </Form>

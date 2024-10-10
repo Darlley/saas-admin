@@ -2,7 +2,7 @@ import Logotipo from '@/icons/Logotipo';
 import { type Metadata } from 'next';
 import Link from 'next/link';
 
-import SigninForm from '@/components/SigninForm';
+import SignupForm from '@/components/SignupForm';
 
 export const metadata: Metadata = {
   title: 'Sign Up',
@@ -29,7 +29,7 @@ export default function Register() {
         </Link>{' '}
         em sua conta
       </p>
-      <SigninForm />
+      <SignupForm />
     </main>
   );
 }
