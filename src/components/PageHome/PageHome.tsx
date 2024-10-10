@@ -174,8 +174,8 @@ export default function PageHome(props: PageHomeProps) {
                   Anual
                 </TabsTrigger>
               </TabsList>
-              <TabsContent value="monthly">
-                <div className="flex w-full h-full justify-center gap-6 lg:gap-8">
+              <TabsContent value="monthly" className="flex">
+                <div className="flex w-full justify-center gap-6 lg:gap-8">
                   {plans.map((plan) => (
                     <Card
                       key={plan.name}
@@ -201,7 +201,11 @@ export default function PageHome(props: PageHomeProps) {
                           </span>
                           <sub>/mês</sub>
                         </div>
-                        <Button className="w-full">Comece grátis</Button>
+                        {plan.name == 'Free' ? (
+                          <Button className="w-full" variant="outline">Criar conta</Button>
+                        ) : (
+                          <Button className="w-full">Assinar</Button>
+                        )}
                       </CardHeader>
                       <CardContent className="border-t pt-4">
                         <ul className="space-y-2">
@@ -255,7 +259,11 @@ export default function PageHome(props: PageHomeProps) {
                           }).format(plan.annualPrice)}
                           /ano
                         </div>
-                        <Button className="w-full">Comece grátis</Button>
+                        {plan.name == 'Free' ? (
+                          <Button className="w-full" variant="outline">Criar conta</Button>
+                        ) : (
+                          <Button className="w-full">Assinar</Button>
+                        )}
                       </CardHeader>
                       <CardContent className="border-t pt-4">
                         <ul className="space-y-2">
@@ -282,7 +290,7 @@ export default function PageHome(props: PageHomeProps) {
           <div className="max-w-[1400px] mx-auto grid grid-cols-12 px-4 2xl:px-0">
             <div className="col-span-12 md:col-span-4">
               <h3 className="text-5xl font-bold">
-                Perguntas
+                Dúvidas
                 <br className="sr-only" />
                 frequentes
               </h3>
@@ -345,10 +353,10 @@ export default function PageHome(props: PageHomeProps) {
                     Esqueci minha senha. Como posso recuperá-la?
                   </AccordionTrigger>
                   <AccordionContent className="text-left text-lg">
-                    Se você esqueceu sua senha, clique em &quot;Esqueci minha senha&ldquo;
-                    na página de login. Você receberá um e-mail com instruções
-                    para redefinir sua senha. Siga as etapas para criar uma nova
-                    senha e acessar sua conta novamente.
+                    Se você esqueceu sua senha, clique em &quot;Esqueci minha
+                    senha&ldquo; na página de login. Você receberá um e-mail com
+                    instruções para redefinir sua senha. Siga as etapas para
+                    criar uma nova senha e acessar sua conta novamente.
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -362,7 +370,7 @@ export default function PageHome(props: PageHomeProps) {
         <p>
           Desenvolvido por{' '}
           <Link href="https://darlley.dev" className="text-primary font-bold">
-            Darlley Brasil
+            Qual seu nome?
           </Link>
         </p>
       </footer>
