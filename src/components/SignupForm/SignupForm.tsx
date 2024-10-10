@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Check, LoaderCircleIcon } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { Button } from '../ui/button';
 import {
   Form,
@@ -24,7 +23,8 @@ export default function SignupForm(props: SignupFormProps) {
   const form = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      email: 'darlleybrito@gmail.com',
+      name: '',
+      email: '',
       password: '',
     },
     mode: 'onBlur',
@@ -84,6 +84,24 @@ export default function SignupForm(props: SignupFormProps) {
         >
           <FormField
             control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="Insira seu nome"
+                    type="text"
+                    className="p-4 h-10"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="email"
             render={({ field }) => (
               <FormItem className="w-full">
@@ -95,13 +113,7 @@ export default function SignupForm(props: SignupFormProps) {
                     className="p-4 h-10"
                   />
                 </FormControl>
-                {errors.email ? (
-                  <FormMessage />
-                ) : (
-                  <FormDescription>
-                    Teste grátis sem fidelidade.
-                  </FormDescription>
-                )}
+                <FormMessage />
               </FormItem>
             )}
           />

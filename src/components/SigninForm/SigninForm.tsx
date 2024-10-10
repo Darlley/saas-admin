@@ -51,20 +51,16 @@ export default function SigninForm(props: SigninFormProps) {
   return (
     <div className="w-full mt-6">
       {error && (
-        <div className="flex items-start gap-2 p-4 rounded-lg bg-red-100 text-red-600 mb-4">
-          <span className="text-2xl">{/* Adicione o emoji aqui */}⚠️</span>
-          <span className="font-medium text-sm mt-1.5">
-            Email não enviado
-          </span>
+        <div className="flex items-center gap-2 p-2 rounded-sm bg-red-100 text-red-600 mb-4 text-sm">
+          <span>⚠️</span>
+          <span className="font-medium">Email não enviado</span>
         </div>
       )}
 
       {success && (
-        <div className="flex items-start gap-2 p-4 rounded-lg bg-green-100 text-green-600 mb-4">
-          <span className="text-2xl">{/* Adicione o emoji aqui */}✅</span>
-          <span className="font-medium text-sm mt-1.5">
-            Email enviado
-          </span>
+        <div className="flex items-center gap-2 p-2 rounded-sm bg-green-100 text-green-600 mb-4 text-sm">
+          <span>✅</span>
+          <span className="font-medium">Email enviado</span>
         </div>
       )}
 
