@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LoaderCircleIcon } from 'lucide-react';
+import { CheckCircle, LoaderCircleIcon } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -39,6 +39,16 @@ export default function SigninForm(props: SigninFormProps) {
 
   return (
     <div className="w-full mt-6">
+      <div className="flex items-center gap-2 p-2 rounded-sm bg-green-100 text-green-600 mb-4 text-sm">
+        <span>✅</span>
+        <span className="font-medium">Email enviado</span>
+      </div>
+      
+      <div className="flex items-center gap-2 p-2 rounded-sm bg-red-100 text-red-600 mb-4 text-sm">
+        <span>⚠️</span>
+        <span className="font-medium">Email não enviado</span>
+      </div>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
