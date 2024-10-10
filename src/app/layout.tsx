@@ -44,8 +44,8 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${inter.className} relative`}>
-        <div className="w-full fixed top-0">
-          <nav className="p-4 container mx-auto flex w-full justify-between bg-white/20 backdrop-blur-md z-50">
+        <div className="w-full fixed top-0 bg-white/20 backdrop-blur-md z-50">
+          <nav className="px-4 2xl:px-0 py-4 container mx-auto flex w-full justify-between">
             <div className="flex items-center md:gap-x-12">
               <Link href="#" aria-label="Home">
                 <Logotipo className="h-10 w-auto" />
@@ -66,7 +66,7 @@ export default function RootLayout({
                 <Link href="/login">Entrar</Link>
               </div>
               <Button asChild>
-                <Link href="/register">
+                <Link href="#pricing">
                   <span>
                     Começar <span className="hidden lg:inline">agora</span>
                   </span>
