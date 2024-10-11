@@ -61,15 +61,16 @@ export default function SigninForm(props: SigninFormProps) {
 
   return (
     <div className="w-full mt-4">
+      
       {success && (
-        <div className="flex items-center gap-2 p-2 rounded-sm bg-green-100 text-green-600 mb-4 text-sm">
+        <div className="flex items-center gap-2 p-3 rounded-sm bg-green-100 text-green-600 mb-4 text-sm">
           <span>✅</span>
           <span>{success}</span>
         </div>
       )}
 
       {error && (
-        <div className="flex items-center gap-2 p-2 rounded-sm bg-red-100 text-red-600 mb-4 text-sm">
+        <div className="flex items-center gap-2 p-3 rounded-sm bg-red-100 text-red-600 mb-4 text-sm">
           <span>⚠️</span>
           <span>{error}</span>
         </div>

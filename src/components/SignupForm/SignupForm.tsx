@@ -81,11 +81,13 @@ export default function SignupForm(props: SignupFormProps) {
     const data: ApiResponse = await register(values);
 
     if (data.type === 'success') {
-      toast.success(data.message);
       setSuccess(data?.message ?? '');
-      setTimeout(() => {
-        router.replace('/login');
-      }, 1000);
+      toast.success(data.message, {
+        action: {
+          label: 'Gmail',
+          onClick: () => window.open('https://mail.google.com/mail/u/0/?hl=pt-BR#inbox', '_blank'),
+        },
+      })
     } else {
       toast.error(data.message);
       setError(data?.message ?? '');
@@ -95,14 +97,14 @@ export default function SignupForm(props: SignupFormProps) {
   return (
     <div className="w-full mt-4">
       {success && (
-        <div className="flex items-center gap-2 p-2 rounded-sm bg-green-100 text-green-600 mb-4 text-sm">
+        <div className="flex items-center gap-2 p-3 rounded-sm bg-green-100 text-green-600 mb-4 text-sm">
           <span>✅</span>
           <span>{success}</span>
         </div>
       )}
 
       {error && (
-        <div className="flex items-center gap-2 p-2 rounded-sm bg-red-100 text-red-600 mb-4 text-sm">
+        <div className="flex items-center gap-2 p-3 rounded-sm bg-red-100 text-red-600 mb-4 text-sm">
           <span>⚠️</span>
           <span>{error}</span>
         </div>
