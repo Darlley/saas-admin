@@ -15,9 +15,8 @@
 
 > [!NOTE]
 > Ajuda e tutoriais
-> 1. [Next Auth V5 - Advanced Guide (2024)](https://youtu.be/1MTyCvS05V4?t=8970) (Code With Antonio
+> 1. [Next Auth V5 - Advanced Guide (2024)](https://youtu.be/1MTyCvS05V4?t=13964) (Code With Antonio)
 > 2. [Micro-SaaS na Prática: Setup com Next.js 14, Shadcn UI e Autenticação com Next Auth [+ Bônus]](https://youtu.be/Lvxpl0bwYf8) (Vibe Dev)
-)
 
 Principais funcionalidades implementadas:
 
