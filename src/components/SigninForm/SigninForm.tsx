@@ -18,12 +18,18 @@ import { Input } from '../ui/input';
 
 import { login } from '@/actions/login';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from 'sonner';
+import { ApiResponse } from '../../../types/api-response.types';
 import { Separator } from '../ui/separator';
 import { LoginSchema, loginSchema } from './SigninForm.schemas';
 import { SigninFormProps } from './SigninForm.types';
-import { toast } from 'sonner';
 export default function SigninForm(props: SigninFormProps) {
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -36,17 +42,33 @@ export default function SigninForm(props: SigninFormProps) {
   const { errors, isSubmitting } = form.formState;
 
   async function handleSubmit(values: LoginSchema) {
-    console.log(values);
-    // signIn('email', values);
-    
-    await login(values).then((data) => {
-      data.error && toast.error(data.error)
-      data.success && toast.success(data.success)
-    });
+    setSuccess(null);
+    setError(null);
+
+    const data: ApiResponse | any = await login(values);
+
+    if (data?.type === 'error') {
+      toast.error(data?.message);
+      setError(data?.message ?? '');
+    }
   }
 
   return (
     <div className="w-full mt-6">
+      {success && (
+        <div className="flex items-center gap-2 p-2 rounded-sm bg-green-100 text-green-600 mb-4 text-sm">
+          <span>✅</span>
+          <span className="font-medium">{success}</span>
+        </div>
+      )}
+
+      {error && (
+        <div className="flex items-center gap-2 p-2 rounded-sm bg-red-100 text-red-600 mb-4 text-sm">
+          <span>⚠️</span>
+          <span className="font-medium">{error}</span>
+        </div>
+      )}
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
