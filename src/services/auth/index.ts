@@ -10,9 +10,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
+  events: {
+    async linkAccount({ user }) {
+      const userDb = await prisma.user.update({
+        where: { id: user?.id as string },
+        data: { emailVerified: new Date() },
+      });
+    },
+  },
   callbacks: {
     async signIn({ user, account }) {
-      
       if (account?.type === 'credentials') {
         const userDb = await prisma.user.findUnique({
           where: { id: user.id },
@@ -52,4 +59,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
   },
+  pages: {
+    signIn: '/login',
+    signOut: '/',
+    error: '/error',
+    verifyRequest: '/verify-request',
+    newUser: '/register',
+  }
 });

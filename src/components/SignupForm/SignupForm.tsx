@@ -97,14 +97,14 @@ export default function SignupForm(props: SignupFormProps) {
       {success && (
         <div className="flex items-center gap-2 p-2 rounded-sm bg-green-100 text-green-600 mb-4 text-sm">
           <span>✅</span>
-          <span className="font-medium">{success}</span>
+          <span>{success}</span>
         </div>
       )}
 
       {error && (
         <div className="flex items-center gap-2 p-2 rounded-sm bg-red-100 text-red-600 mb-4 text-sm">
           <span>⚠️</span>
-          <span className="font-medium">{error}</span>
+          <span>{error}</span>
         </div>
       )}
 

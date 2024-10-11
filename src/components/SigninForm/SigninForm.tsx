@@ -17,21 +17,23 @@ import {
 import { Input } from '../ui/input';
 
 import { login } from '@/actions/login';
+import { DEFAULT_LOGIN_REDIRECT } from '@/constants/public-routes';
 import GithubIcon from '@/icons/GithubIcon';
 import GoogleIcon from '@/icons/GoogleIcon';
 import LinkedinIcon from '@/icons/LinkedinIcon';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { ApiResponse } from '../../../types/api-response.types';
 import { Separator } from '../ui/separator';
 import { LoginSchema, loginSchema } from './SigninForm.schemas';
 import { SigninFormProps } from './SigninForm.types';
-import { DEFAULT_LOGIN_REDIRECT } from '@/constants/public-routes';
 export default function SigninForm(props: SigninFormProps) {
-  const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const urlError = searchParams.get('error') === 'OAuthAccountNotLinked' ? 'Este email ja esta sendo utilizado por outra conta' : '';
+
+  const [error, setError] = useState<string | null>(urlError || null);
   const [success, setSuccess] = useState<string | null>(null);
 
   const form = useForm<LoginSchema>({
@@ -62,14 +64,14 @@ export default function SigninForm(props: SigninFormProps) {
       {success && (
         <div className="flex items-center gap-2 p-2 rounded-sm bg-green-100 text-green-600 mb-4 text-sm">
           <span>✅</span>
-          <span className="font-medium">{success}</span>
+          <span>{success}</span>
         </div>
       )}
 
       {error && (
         <div className="flex items-center gap-2 p-2 rounded-sm bg-red-100 text-red-600 mb-4 text-sm">
           <span>⚠️</span>
-          <span className="font-medium">{error}</span>
+          <span>{error}</span>
         </div>
       )}
 
