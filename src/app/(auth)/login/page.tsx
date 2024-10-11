@@ -25,8 +25,7 @@ export default function Login() {
           className="font-medium text-blue-600 hover:underline"
         >
           Crie uma
-        </Link>{' '}
-        e faça um teste gratuito.
+        </Link>
       </p>
       <SigninForm />
     </main>

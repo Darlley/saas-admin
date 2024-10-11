@@ -35,7 +35,7 @@ export const register = async (
       return {
         type: 'error',
         status: 409,
-        message: 'Email already in use!',
+        message: 'Este email ja esta sendo utilizado!',
       };
     }
 
@@ -52,10 +52,9 @@ export const register = async (
     return {
       type: 'success',
       status: 200,
-      message: 'User created',
+      message: 'Usuário criado! Por favor, verifique seu email para continuar.',
     };
   } catch (error) {
-    console.error('Error during registration:', error);
     return {
       type: 'error',
       status: 500,
