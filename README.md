@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# SAAS ADMIN
 
-## Getting Started
+> [!NOTE]
+> Ajuda e tutoriais
+>
+> **AUTHENTICATION** 
+> 1. [Micro-SaaS na Prática: Setup com Next.js 14, Shadcn UI e Autenticação com Next Auth [+ Bônus]](https://youtu.be/Lvxpl0bwYf8) (Vibe Dev)
+> 2. [Next Auth V5 - Advanced Guide (2024)](https://youtu.be/1MTyCvS05V4?t=8970) (Code With Antonio
+)
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- 🌐 App Router Next.js
+- 🔐 Autenticação Auth.js com Linkedin, Google e GitHub
+- 💰 Pagamentos utilizando Stripe e Mercado Pago
+- 🎊 React Confetti para pagamentos concluidos
+- 🎲 Banco de Dados Postgres Supabase
+- 💨 ORM Prisma
+- ✅ Validação do Servidor usando Zod
+- 🗂️ Upload de Arquivos com Uploadthing
+- 🎨 Estilização com Tailwindcss e NextUI
+- ✍️ Editor de artigos usando o Tiptap
+- 💿 Zustand para fazer a comunição Back-end/Front-end
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Running the Application
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- Run `pnpm install`
+- Run `pnpm dev`
 
-## Learn More
+## Stripe CLI
 
-To learn more about Next.js, take a look at the following resources:
+- Download [Stripe CLI](https://docs.stripe.com/stripe-cli) (Webhook)
+- Run `stripe login`
+- Run `stripe --forward-to http://localhost:3000/api/webhook/stripe`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# TODO
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Aqui está uma tabela de check-in baseada nas features que você forneceu:
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+| Feature                                                    | Status       | Comentários                          |
+|-----------------------------------------------------------|--------------|-------------------------------------|
+| 🌐 App Router Next.js                                     | ⚠️ em andamento | Estrutura de rotas implementada.    |
+| 🔐 Autenticação Auth.js com Linkedin, Google e GitHub     | ⚠️ em andamento | Configuração de autenticação finalizada. |
+| 💰 Pagamentos utilizando Stripe e Mercado Pago             | ❌ não feito | Integração com Stripe está completa; Mercado Pago em progresso. |
+| 🎊 React Confetti para pagamentos concluídos              | ❌ não feito | Implementação para visualização de pagamentos. |
+| 🎲 Banco de Dados Postgres Supabase                        | ❌ não feito | Banco de dados está configurado e em uso. |
+| 💨 ORM Prisma                                             | ❌ não feito | Modelo de dados implementado com sucesso. |
+| ✅ Validação do Servidor usando Zod                        | ❌ não feito | Regras de validação em implementação. |
+| 🗂️ Upload de Arquivos com Uploadthing                     | ❌ não feito | Funcionalidade de upload testada e funcionando. |
+| 🎨 Estilização com Tailwindcss e NextUI                   | ❌ não feito | Design responsivo e estilizado.     |
+| ✍️ Editor de artigos usando o Tiptap                      | ❌ não feito | Editor integrado; revisões necessárias. |
+| 💿 Zustand para fazer a comunicação Back-end/Front-end    | ❌ não feito | Gerenciamento de estado estabelecido. |
