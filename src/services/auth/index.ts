@@ -1,4 +1,4 @@
-import NextAuth, { type DefaultSession } from 'next-auth';
+import NextAuth, { AuthError, type DefaultSession } from 'next-auth';
 
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { UserRole } from '@prisma/client';
@@ -18,6 +18,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
   callbacks: {
+    signIn: async ({ user }) => {
+      const userDb = await prisma.user.findUnique({
+        where: { id: user.id },
+      });
+
+      if (!userDb || !userDb.emailVerified) return false;
+
+      return true;
+    },
     session: ({ session, token }) => {
       console.log({ session: token });
 

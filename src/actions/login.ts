@@ -36,6 +36,12 @@ export const login = async (values: LoginSchema) => {
             status: 401,
             message: 'User not found!',
           };
+        case 'AccessDenied': 
+          return {
+            type: 'error',
+            status: 401,
+            message: 'Acessão não permitido!',
+          };
         default:
           return {
             type: 'error',
