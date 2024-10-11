@@ -16,7 +16,7 @@ export default function Register() {
           <Logotipo className="h-10 w-auto" />
         </Link>
       </div>
-      <h1 className="mt-10 text-lg font-semibold text-gray-950">
+      <h1 className="mt-2 text-lg font-semibold text-gray-950">
         Comece agora
       </h1>
       <p className="mt-2 text-sm text-gray-500">

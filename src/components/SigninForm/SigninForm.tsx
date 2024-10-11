@@ -54,7 +54,7 @@ export default function SigninForm(props: SigninFormProps) {
   }
 
   return (
-    <div className="w-full mt-6">
+    <div className="w-full mt-4">
       {success && (
         <div className="flex items-center gap-2 p-2 rounded-sm bg-green-100 text-green-600 mb-4 text-sm">
           <span>✅</span>
@@ -131,7 +131,7 @@ export default function SigninForm(props: SigninFormProps) {
         </form>
       </Form>
 
-      <div className="flex box-content my-6 items-center w-full justify-center gap-4">
+      <div className="flex box-content my-4 items-center w-full justify-center gap-4">
         <Separator className="max-w-20" />
         <span>ou</span>
         <Separator className="max-w-20" />
