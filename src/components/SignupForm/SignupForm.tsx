@@ -85,9 +85,13 @@ export default function SignupForm(props: SignupFormProps) {
       toast.success(data.message, {
         action: {
           label: 'Gmail',
-          onClick: () => window.open('https://mail.google.com/mail/u/0/?hl=pt-BR#inbox', '_blank'),
+          onClick: () =>
+            window.open(
+              'https://mail.google.com/mail/u/0/?hl=pt-BR#inbox',
+              '_blank'
+            ),
         },
-      })
+      });
     } else {
       toast.error(data.message);
       setError(data?.message ?? '');
@@ -249,6 +253,12 @@ export default function SignupForm(props: SignupFormProps) {
               <LoaderCircleIcon className="animate-spin ml-2.5" />
             )}
           </Button>
+
+          {!!watch('email') && (
+            <Button size="lg" disabled={isSubmitting} variant="link">
+              Enviar link mágico
+            </Button>
+          )}
         </form>
       </Form>
 
