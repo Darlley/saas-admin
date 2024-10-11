@@ -6,7 +6,9 @@ import {
 } from '@/components/SigninForm/SigninForm.schemas';
 import { DEFAULT_LOGIN_REDIRECT } from '@/constants/public-routes';
 import { signIn } from '@/services/auth';
+import { UserNotFoundError } from '@/services/auth/customErrors';
 import { AuthError } from 'next-auth';
+import { EmailNotVerifiedError } from '../services/auth/customErrors';
 
 export const login = async (values: LoginSchema) => {
   const validatedFields = loginSchema.safeParse(values);
@@ -28,29 +30,33 @@ export const login = async (values: LoginSchema) => {
       redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
   } catch (error) {
-    if (error instanceof AuthError) {
-      switch (error.type) {
-        case 'CredentialsSignin':
-          return {
-            type: 'error',
-            status: 401,
-            message: 'User not found!',
-          };
-        case 'AccessDenied': 
-          return {
-            type: 'error',
-            status: 401,
-            message: 'Acessão não permitido!',
-          };
-        default:
-          return {
-            type: 'error',
-            status: 500,
-            message: 'Something went wrong!',
-          };
+    console.log("ERROR", error);
+    if (error instanceof EmailNotVerifiedError) {
+      return {
+        type: 'error',
+        status: 401,
+        message: error.message,
+      };
+    } else if (error instanceof UserNotFoundError) {
+      return {
+        type: 'error',
+        status: 401,
+        message: error.message,
+      };
+    } else if (error instanceof AuthError) {
+      if (error.type === 'CredentialsSignin') {
+        return {
+          type: 'error',
+          status: 401,
+          message: 'Credenciais inválidas!',
+        };
       }
     }
-
-    throw error;
+    
+    return {
+      type: 'error',
+      status: 500,
+      message: 'Algo deu errado durante a autenticação.',
+    };
   }
 };

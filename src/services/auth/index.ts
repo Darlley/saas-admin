@@ -1,17 +1,10 @@
-import NextAuth, { AuthError, type DefaultSession } from 'next-auth';
+import NextAuth from 'next-auth';
 
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { UserRole } from '@prisma/client';
 import { prisma } from '../database';
 import authConfig from './auth.config';
-
-declare module 'next-auth' {
-  interface Session {
-    user: {
-      role?: UserRole; // Adiciona a propriedade role
-    } & DefaultSession['user'];
-  }
-}
+import { EmailNotVerifiedError, UserNotFoundError } from './customErrors';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
@@ -23,13 +16,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         where: { id: user.id },
       });
 
-      if (!userDb || !userDb.emailVerified) return false;
+      if (!userDb) {
+        throw new UserNotFoundError();
+      }
+
+      if (!userDb.emailVerified) {
+        throw new EmailNotVerifiedError();
+      }
 
       return true;
     },
     session: ({ session, token }) => {
-      console.log({ session: token });
-
       if (token.sub && session.user) {
         session.user.id = token?.sub;
       }
