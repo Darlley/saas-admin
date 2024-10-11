@@ -4,29 +4,29 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import { UserRole } from '@prisma/client';
 import { prisma } from '../database';
 import authConfig from './auth.config';
-import { EmailNotVerifiedError, UserNotFoundError } from './customErrors';
+import { EmailNotVerifiedError } from './customErrors';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
   callbacks: {
-    signIn: async ({ user }) => {
-      const userDb = await prisma.user.findUnique({
-        where: { id: user.id },
-      });
+    async signIn({ user, account }) {
+      
+      if (account?.type === 'credentials') {
+        const userDb = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { emailVerified: true },
+        });
 
-      if (!userDb) {
-        throw new UserNotFoundError();
-      }
-
-      if (!userDb.emailVerified) {
-        throw new EmailNotVerifiedError();
+        if (!userDb?.emailVerified) {
+          throw new EmailNotVerifiedError();
+        }
       }
 
       return true;
     },
-    session: ({ session, token }) => {
+    session({ session, token }) {
       if (token.sub && session.user) {
         session.user.id = token?.sub;
       }
@@ -37,15 +37,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return session;
     },
-    jwt: async ({ token }) => {
+    async jwt({ token }) {
       if (!token.sub) return token;
 
       const user = await prisma.user.findUnique({
         where: { id: token.sub },
+        select: { role: true }, // Selecione apenas o campo necessário
       });
 
-      if (!user) return token;
-      token.role = user?.role;
+      if (user) {
+        token.role = user.role;
+      }
 
       return token;
     },
