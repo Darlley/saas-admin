@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LoaderCircleIcon } from 'lucide-react';
+import { Ellipsis } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { Button } from '../ui/button';
@@ -146,9 +146,10 @@ export default function SigninForm(props: SigninFormProps) {
           </AnimatePresence>
 
           <Button size="lg" disabled={isSubmitting}>
-            Entrar
-            {isSubmitting && (
-              <LoaderCircleIcon className="animate-spin ml-2.5" />
+            {isSubmitting ? (
+              <Ellipsis className="size-8 stroke-2 animate-pulse ml-2.5" />
+            ) : (
+              <>Entrar</>
             )}
           </Button>
         </form>

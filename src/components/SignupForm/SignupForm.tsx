@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Check, LoaderCircleIcon, X } from 'lucide-react';
+import { Check, Ellipsis, X } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { Button } from '../ui/button';
@@ -84,7 +84,7 @@ export default function SignupForm(props: SignupFormProps) {
     if (data.type === 'success') {
       setSuccess(data?.message ?? '');
       if (watch('email').endsWith('@gmail.com')) {
-        toast.success("Você usa o Gmail?", {
+        toast.success('Você usa o Gmail?', {
           action: {
             label: 'Abra aqui',
             onClick: () =>
@@ -262,9 +262,10 @@ export default function SignupForm(props: SignupFormProps) {
           </AnimatePresence>
 
           <Button size="lg" disabled={isSubmitting}>
-            Cadastrar
-            {isSubmitting && (
-              <LoaderCircleIcon className="animate-spin ml-2.5" />
+            {isSubmitting ? (
+              <Ellipsis className="size-8 stroke-2 animate-pulse ml-2.5" />
+            ) : (
+              <>Cadastrar</>
             )}
           </Button>
 
