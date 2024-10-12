@@ -25,9 +25,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import { toast } from 'sonner';
 import { ApiResponse } from '../../../types/api-response.types';
-import { Separator } from '../ui/separator';
 import { LoginSchema, loginSchema } from './SigninForm.schemas';
 import { SigninFormProps } from './SigninForm.types';
 
@@ -59,8 +57,10 @@ export default function SigninForm(props: SigninFormProps) {
     const data: ApiResponse | any = await login(values);
 
     if (data?.type === 'error') {
-      toast.error(data?.message);
       setError(data?.message ?? '');
+    }
+    if (data?.type === 'success') {
+      setSuccess(data?.message ?? '');
     }
   }
 
@@ -125,7 +125,7 @@ export default function SigninForm(props: SigninFormProps) {
                 initial={{ opacity: 0, y: -50, scale: 0.3 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.1 } }}
-                className="flex items-center gap-2 p-3 rounded-sm bg-green-100 text-green-600 text-sm"
+                className="flex items-center gap-2 p-3 rounded-md bg-green-100 text-green-600 text-sm"
               >
                 <span>✅</span>
                 <span>{success}</span>
@@ -137,7 +137,7 @@ export default function SigninForm(props: SigninFormProps) {
                 initial={{ opacity: 0, y: -50, scale: 0.3 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.1 } }}
-                className="flex items-center gap-2 p-3 rounded-sm bg-red-100 text-red-600 text-sm"
+                className="flex items-center gap-2 p-3 rounded-md bg-red-100 text-red-600 text-sm"
               >
                 <span>⚠️</span>
                 <span>{error}</span>
@@ -154,13 +154,7 @@ export default function SigninForm(props: SigninFormProps) {
         </form>
       </Form>
 
-      <div className="flex box-content my-4 items-center w-full justify-center gap-4">
-        <Separator className="max-w-20" />
-        <span>ou</span>
-        <Separator className="max-w-20" />
-      </div>
-
-      <div className="flex gap-2 justify-center w-full">
+      <div className="flex gap-2 justify-center w-full mt-4">
         <Button
           size="lg"
           className="w-full"

@@ -26,7 +26,6 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { ApiResponse } from '../../../types/api-response.types';
-import { Separator } from '../ui/separator';
 import { RegisterSchema, registerSchema } from './SignupForm.schemas';
 import { SignupFormProps } from './SignupForm.types';
 
@@ -84,18 +83,19 @@ export default function SignupForm(props: SignupFormProps) {
 
     if (data.type === 'success') {
       setSuccess(data?.message ?? '');
-      toast.success(data.message, {
-        action: {
-          label: 'Gmail',
-          onClick: () =>
-            window.open(
-              'https://mail.google.com/mail/u/0/?hl=pt-BR#inbox',
-              '_blank'
-            ),
-        },
-      });
+      if (watch('email').endsWith('@gmail.com')) {
+        toast.success("Você usa o Gmail?", {
+          action: {
+            label: 'Abra aqui',
+            onClick: () =>
+              window.open(
+                'https://mail.google.com/mail/u/0/?hl=pt-BR#inbox',
+                '_blank'
+              ),
+          },
+        });
+      }
     } else {
-      toast.error(data.message);
       setError(data?.message ?? '');
     }
   }
@@ -241,7 +241,7 @@ export default function SignupForm(props: SignupFormProps) {
                 initial={{ opacity: 0, y: -50, scale: 0.3 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.1 } }}
-                className="flex items-center gap-2 p-3 rounded-sm bg-green-100 text-green-600 text-sm"
+                className="flex items-center gap-2 p-3 rounded-md bg-green-100 text-green-600 text-sm"
               >
                 <span>✅</span>
                 <span>{success}</span>
@@ -253,7 +253,7 @@ export default function SignupForm(props: SignupFormProps) {
                 initial={{ opacity: 0, y: -50, scale: 0.3 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.1 } }}
-                className="flex items-center gap-2 p-3 rounded-sm bg-red-100 text-red-600 text-sm"
+                className="flex items-center gap-2 p-3 rounded-md bg-red-100 text-red-600 text-sm"
               >
                 <span>⚠️</span>
                 <span>{error}</span>
@@ -276,7 +276,7 @@ export default function SignupForm(props: SignupFormProps) {
         </form>
       </Form>
 
-      <div className="flex gap-2 justify-center w-full pt-2">
+      <div className="flex gap-2 justify-center w-full pt-4">
         <Button
           size="lg"
           className="w-full"
