@@ -7,6 +7,7 @@ import {
 import { prisma } from '@/services/database';
 import bcrypt from 'bcrypt';
 import { ApiResponse } from '../../types/api-response.types';
+import { generateVerificationToken } from '@/lib/tokens';
 
 export const register = async (
   values: RegisterSchema
@@ -47,12 +48,13 @@ export const register = async (
       },
     });
 
+    const verificationToken = await generateVerificationToken(email);
     // TODO: Enviar email de verificação do email
 
     return {
       type: 'success',
       status: 200,
-      message: 'Usuário criado! Por favor, verifique seu email para continuar.',
+      message: 'Usuário criado. Verifique seu email.',
     };
   } catch (error) {
     return {

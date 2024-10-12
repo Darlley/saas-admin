@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function Register() {
   return (
-    <main className="mx-auto w-full max-w-md md:w-96 md:max-w-sm md:px-0">
+    <main className="mx-auto w-full max-w-md md:w-96 md:max-w-sm md:px-0 py-4">
       <div className="flex">
         <Link href="/" aria-label="Home">
           <Logotipo className="h-10 w-auto" />
