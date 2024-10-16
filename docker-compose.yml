@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:16.4-alpine
+    container_name: saas-postgres
+    restart: "no"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "54322:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    container_name: saas-adminer
+    restart: "no"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:

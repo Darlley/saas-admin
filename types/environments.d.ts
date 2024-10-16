@@ -1,7 +1,6 @@
 namespace NodeJS {
   export interface ProcessEnv {
     AUTH_RESEND_KEY,
-    EMAIL_SERVER,
     EMAIL_FROM,
 
     AUTH_LINKEDIN_ID,
@@ -11,6 +10,6 @@ namespace NodeJS {
     AUTH_GITHUB_SECRET,
 
     AUTH_GOOGLE_ID,
-    AUTH_GOOGLE_SECRET
+    AUTH_GOOGLE_SECRET,
   }
 }
