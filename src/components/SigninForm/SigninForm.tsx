@@ -57,11 +57,8 @@ export default function SigninForm(props: SigninFormProps) {
 
     const data: ApiResponse | any = await login(values);
 
-    console.log("login form", data)
-
     if (data?.type === 'success') {
       setSuccess(data?.message ?? 'Sucesso');
-      // Redirecionar programaticamente após o login bem-sucedido
       return router.push('/dashboard/settings');
     } else {
       setError(data?.message ?? 'Aconteceu um erro');
