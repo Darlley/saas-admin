@@ -6,14 +6,26 @@ import { ApiResponse } from '../../types/api-response.types';
 export async function verifyEmail(token: string): Promise<ApiResponse> {
   try {
     const verificationToken = await prisma.verificationToken.findUnique({
-      where: { identifier_token: { identifier: token, token } },
+      where: {
+        token,
+      },
     });
 
     if (!verificationToken) {
       return {
         type: 'error',
         status: 400,
-        message: 'Token inválido',
+        message: 'Token inválido.',
+      };
+    }
+
+    const hasExpired = new Date(verificationToken.expires) < new Date();
+
+    if (hasExpired) {
+      return {
+        type: 'error',
+        status: 400,
+        message: 'Token expirado.',
       };
     }
 
@@ -25,30 +37,42 @@ export async function verifyEmail(token: string): Promise<ApiResponse> {
       return {
         type: 'error',
         status: 400,
-        message: 'Usuário não encontrado',
+        message: 'Este email não foi encontrado.',
+      };
+    }
+
+    if (user.emailVerified) {
+      return {
+        type: 'error',
+        status: 400,
+        message: 'Este email já foi verificado. Faça login para continuar.',
       };
     }
 
     await prisma.user.update({
       where: { id: user.id },
-      data: { emailVerified: new Date() },
+      data: {
+        emailVerified: new Date(),
+        email: verificationToken.identifier,
+      },
     });
 
     await prisma.verificationToken.delete({
-      where: { identifier_token: { identifier: token, token } },
+      where: {
+        token,
+      },
     });
 
     return {
       type: 'success',
       status: 200,
-      message: 'E-mail verificado com sucesso',
+      message: 'E-mail verificado com sucesso. Faça login para continuar.',
     };
   } catch (error) {
-    console.error('Erro ao verificar e-mail:', error);
     return {
       type: 'error',
       status: 500,
-      message: 'Erro interno do servidor',
+      message: 'Houve algum erro ao verificar seu e-mail.',
     };
   }
 }

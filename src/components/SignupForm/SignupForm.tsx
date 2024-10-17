@@ -163,7 +163,7 @@ export default function SignupForm(props: SignupFormProps) {
                   <span
                     className={`flex items-center gap-2 text-xs ${
                       isValidPassword.minLength
-                        ? 'text-teal-500'
+                        ? 'text-green-500'
                         : 'text-destructive'
                     }`}
                   >
@@ -177,7 +177,7 @@ export default function SignupForm(props: SignupFormProps) {
                   <span
                     className={`flex items-center gap-2 text-xs ${
                       isValidPassword.hasLowercase
-                        ? 'text-teal-500'
+                        ? 'text-green-500'
                         : 'text-destructive'
                     }`}
                   >
@@ -191,7 +191,7 @@ export default function SignupForm(props: SignupFormProps) {
                   <span
                     className={`flex items-center gap-2 text-xs ${
                       isValidPassword.hasUppercase
-                        ? 'text-teal-500'
+                        ? 'text-green-500'
                         : 'text-destructive'
                     }`}
                   >
@@ -205,7 +205,7 @@ export default function SignupForm(props: SignupFormProps) {
                   <span
                     className={`flex items-center gap-2 text-xs ${
                       isValidPassword.hasNumber
-                        ? 'text-teal-500'
+                        ? 'text-green-500'
                         : 'text-destructive'
                     }`}
                   >
@@ -219,7 +219,7 @@ export default function SignupForm(props: SignupFormProps) {
                   <span
                     className={`flex items-center gap-2 text-xs ${
                       isValidPassword.hasSpecialChar
-                        ? 'text-teal-500'
+                        ? 'text-green-500'
                         : 'text-destructive'
                     }`}
                   >
@@ -261,23 +261,24 @@ export default function SignupForm(props: SignupFormProps) {
             )}
           </AnimatePresence>
 
-          <Button size="lg" disabled={isSubmitting}>
-            {isSubmitting ? (
-              <Ellipsis className="size-8 stroke-2 animate-pulse ml-2.5" />
-            ) : (
-              <>Cadastrar</>
-            )}
-          </Button>
-
-          {!!watch('email') && (
-            <Button size="lg" disabled={isSubmitting} variant="link">
-              Enviar link mágico
+          <div className='flex flex-col mb-2'>
+            <Button size="lg" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <Ellipsis className="size-8 stroke-2 animate-pulse ml-2.5" />
+              ) : (
+                <>Cadastrar</>
+              )}
             </Button>
-          )}
+            {!!watch('email') && (
+              <Button size="lg" disabled={isSubmitting} variant="link">
+                Enviar link mágico
+              </Button>
+            )}
+          </div>
         </form>
       </Form>
 
-      <div className="flex gap-2 justify-center w-full pt-4">
+      <div className="flex gap-2 justify-center w-full mt-2">
         <Button
           size="lg"
           className="w-full"

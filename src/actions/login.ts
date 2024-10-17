@@ -5,13 +5,13 @@ import {
   LoginSchema,
 } from '@/components/SigninForm/SigninForm.schemas';
 import { DEFAULT_LOGIN_REDIRECT } from '@/constants/public-routes';
+import { sendVerificationEmail } from '@/lib/mail';
 import { generateVerificationToken } from '@/lib/tokens';
 import { signIn } from '@/services/auth';
 import { UserNotFoundError } from '@/services/auth/customErrors';
 import { prisma } from '@/services/database';
 import { AuthError } from 'next-auth';
 import { EmailNotVerifiedError } from '../services/auth/customErrors';
-import { sendVerificationEmail } from '@/lib/mail';
 
 export const login = async (values: LoginSchema) => {
   const validatedFields = loginSchema.safeParse(values);
@@ -57,7 +57,6 @@ export const login = async (values: LoginSchema) => {
       message: 'Um email de confirmação foi enviado!',
     };
   }
-
 
   try {
     await signIn('credentials', {

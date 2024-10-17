@@ -8,7 +8,8 @@ export const generateVerificationToken = async (email: string) => {
    * Calcula a data de expiração usando uma constante para o tempo de vida
    * 1 hora em milissegundos
    */
-  const EXPIRATION_TIME_MS = 3600 * 1000;
+  // TODO: mudar para 1 hora = const EXPIRATION_TIME_MS = 3600  * 1000;
+  const EXPIRATION_TIME_MS = 86400 * 1000; // 24 horas
 
   const expires = new Date(Date.now() + EXPIRATION_TIME_MS);
 
