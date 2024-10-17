@@ -20,7 +20,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async signIn({ user, account }) {
-      if (account?.type === 'credentials') {
+      if (account?.provider === 'credentials') {
         const userDb = await prisma.user.findUnique({
           where: { id: user.id },
           select: { emailVerified: true },
@@ -61,7 +61,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   pages: {
     signIn: '/login',
-    signOut: '/',
+    signOut: '/login',
     error: '/error',
     verifyRequest: '/verify-request',
     newUser: '/register',

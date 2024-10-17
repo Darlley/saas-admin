@@ -7,7 +7,6 @@
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
 }
  
 generator client {
@@ -68,7 +67,7 @@ model Session {
  
 model VerificationToken {
   identifier String
-  token      String
+  token      String @unique
   expires    DateTime
  
   @@id([identifier, token])

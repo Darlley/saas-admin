@@ -3,8 +3,8 @@ import { compare } from 'bcryptjs';
 import type { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Github from 'next-auth/providers/github';
-import Linkedin from 'next-auth/providers/linkedin';
 import Google from 'next-auth/providers/google';
+import Linkedin from 'next-auth/providers/linkedin';
 
 import { prisma } from '../database';
 
@@ -37,10 +37,7 @@ export default {
 
           if (!userExists || !userExists.password) return null;
 
-          const passwordMatch = await compare(
-            password,
-            userExists.password
-          );
+          const passwordMatch = await compare(password, userExists.password);
 
           if (passwordMatch) return userExists;
         }
@@ -50,3 +47,4 @@ export default {
     }),
   ],
 } satisfies NextAuthConfig;
+

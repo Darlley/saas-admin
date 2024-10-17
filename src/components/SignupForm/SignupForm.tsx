@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Check, LoaderCircleIcon, X } from 'lucide-react';
+import { Check, Ellipsis, X } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { Button } from '../ui/button';
@@ -21,13 +21,14 @@ import { DEFAULT_LOGIN_REDIRECT } from '@/constants/public-routes';
 import GithubIcon from '@/icons/GithubIcon';
 import GoogleIcon from '@/icons/GoogleIcon';
 import LinkedinIcon from '@/icons/LinkedinIcon';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { ApiResponse } from '../../../types/api-response.types';
-import { Separator } from '../ui/separator';
 import { RegisterSchema, registerSchema } from './SignupForm.schemas';
 import { SignupFormProps } from './SignupForm.types';
+
 export default function SignupForm(props: SignupFormProps) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -82,38 +83,25 @@ export default function SignupForm(props: SignupFormProps) {
 
     if (data.type === 'success') {
       setSuccess(data?.message ?? '');
-      toast.success(data.message, {
-        action: {
-          label: 'Gmail',
-          onClick: () =>
-            window.open(
-              'https://mail.google.com/mail/u/0/?hl=pt-BR#inbox',
-              '_blank'
-            ),
-        },
-      });
+      if (watch('email').endsWith('@gmail.com')) {
+        toast.success('Você usa o Gmail?', {
+          action: {
+            label: 'Abra aqui',
+            onClick: () =>
+              window.open(
+                'https://mail.google.com/mail/u/0/?hl=pt-BR#inbox',
+                '_blank'
+              ),
+          },
+        });
+      }
     } else {
-      toast.error(data.message);
       setError(data?.message ?? '');
     }
   }
 
   return (
     <div className="w-full mt-4">
-      {success && (
-        <div className="flex items-center gap-2 p-3 rounded-sm bg-green-100 text-green-600 mb-4 text-sm">
-          <span>✅</span>
-          <span>{success}</span>
-        </div>
-      )}
-
-      {error && (
-        <div className="flex items-center gap-2 p-3 rounded-sm bg-red-100 text-red-600 mb-4 text-sm">
-          <span>⚠️</span>
-          <span>{error}</span>
-        </div>
-      )}
-
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
@@ -175,7 +163,7 @@ export default function SignupForm(props: SignupFormProps) {
                   <span
                     className={`flex items-center gap-2 text-xs ${
                       isValidPassword.minLength
-                        ? 'text-teal-500'
+                        ? 'text-green-500'
                         : 'text-destructive'
                     }`}
                   >
@@ -189,7 +177,7 @@ export default function SignupForm(props: SignupFormProps) {
                   <span
                     className={`flex items-center gap-2 text-xs ${
                       isValidPassword.hasLowercase
-                        ? 'text-teal-500'
+                        ? 'text-green-500'
                         : 'text-destructive'
                     }`}
                   >
@@ -203,7 +191,7 @@ export default function SignupForm(props: SignupFormProps) {
                   <span
                     className={`flex items-center gap-2 text-xs ${
                       isValidPassword.hasUppercase
-                        ? 'text-teal-500'
+                        ? 'text-green-500'
                         : 'text-destructive'
                     }`}
                   >
@@ -217,7 +205,7 @@ export default function SignupForm(props: SignupFormProps) {
                   <span
                     className={`flex items-center gap-2 text-xs ${
                       isValidPassword.hasNumber
-                        ? 'text-teal-500'
+                        ? 'text-green-500'
                         : 'text-destructive'
                     }`}
                   >
@@ -231,7 +219,7 @@ export default function SignupForm(props: SignupFormProps) {
                   <span
                     className={`flex items-center gap-2 text-xs ${
                       isValidPassword.hasSpecialChar
-                        ? 'text-teal-500'
+                        ? 'text-green-500'
                         : 'text-destructive'
                     }`}
                   >
@@ -247,28 +235,50 @@ export default function SignupForm(props: SignupFormProps) {
             )}
           />
 
-          <Button size="lg" disabled={isSubmitting}>
-            Cadastrar
-            {isSubmitting && (
-              <LoaderCircleIcon className="animate-spin ml-2.5" />
+          <AnimatePresence>
+            {success && (
+              <motion.div
+                initial={{ opacity: 0, y: -50, scale: 0.3 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.1 } }}
+                className="flex items-center gap-2 p-3 rounded-md bg-green-100 text-green-600 text-sm"
+              >
+                <span>✅</span>
+                <span>{success}</span>
+              </motion.div>
             )}
-          </Button>
 
-          {!!watch('email') && (
-            <Button size="lg" disabled={isSubmitting} variant="link">
-              Enviar link mágico
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -50, scale: 0.3 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.1 } }}
+                className="flex items-center gap-2 p-3 rounded-md bg-red-100 text-red-600 text-sm"
+              >
+                <span>⚠️</span>
+                <span>{error}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div className='flex flex-col mb-2'>
+            <Button size="lg" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <Ellipsis className="size-8 stroke-2 animate-pulse ml-2.5" />
+              ) : (
+                <>Cadastrar</>
+              )}
             </Button>
-          )}
+            {!!watch('email') && (
+              <Button size="lg" disabled={isSubmitting} variant="link">
+                Enviar link mágico
+              </Button>
+            )}
+          </div>
         </form>
       </Form>
 
-      <div className="flex box-content my-4 items-center w-full justify-center gap-4">
-        <Separator className="max-w-20" />
-        <span>ou</span>
-        <Separator className="max-w-20" />
-      </div>
-
-      <div className="flex gap-2 justify-center w-full">
+      <div className="flex gap-2 justify-center w-full mt-2">
         <Button
           size="lg"
           className="w-full"
