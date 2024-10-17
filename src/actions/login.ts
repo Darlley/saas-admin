@@ -59,11 +59,17 @@ export const login = async (values: LoginSchema) => {
   }
 
   try {
-    await signIn('credentials', {
-        email,
-        password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+    const result = await signIn('credentials', {
+      email,
+      password,
+      redirect: false, // Importante: não redirecionar automaticamente
     });
+
+    console.log("login", result)
+
+    if (result?.error) {
+      return { type: 'error', status: 401, message: 'Credenciais inválidas!' };
+    }
 
     return { type: 'success', status: 200, message: 'Login realizado com sucesso!' };
   } catch (error) {

@@ -23,13 +23,14 @@ import GoogleIcon from '@/icons/GoogleIcon';
 import LinkedinIcon from '@/icons/LinkedinIcon';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { ApiResponse } from '../../../types/api-response.types';
 import { LoginSchema, loginSchema } from './SigninForm.schemas';
 import { SigninFormProps } from './SigninForm.types';
 
 export default function SigninForm(props: SigninFormProps) {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const urlError =
     searchParams.get('error') === 'OAuthAccountNotLinked'
@@ -56,11 +57,14 @@ export default function SigninForm(props: SigninFormProps) {
 
     const data: ApiResponse | any = await login(values);
 
-    if (data?.type === 'error') {
-      setError(data?.message ?? '');
-    }
+    console.log("login form", data)
+
     if (data?.type === 'success') {
-      setSuccess(data?.message ?? '');
+      setSuccess(data?.message ?? 'Sucesso');
+      // Redirecionar programaticamente após o login bem-sucedido
+      return router.push('/dashboard/settings');
+    } else {
+      setError(data?.message ?? 'Aconteceu um erro');
     }
   }
 
