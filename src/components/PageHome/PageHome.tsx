@@ -33,7 +33,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 
 import { PageHomeProps } from './PageHome.types';
 export default function PageHome(props: PageHomeProps) {
-  // const {} = props
   return (
     <>
       <div className="w-full fixed top-0 bg-white/20 backdrop-blur-md z-50">
@@ -55,9 +54,9 @@ export default function PageHome(props: PageHomeProps) {
               <Link href="/login">Entrar</Link>
             </div>
             <Button asChild>
-              <Link href="#pricing">
+              <Link href="/register">
                 <span>
-                  Começar <span className="hidden lg:inline">agora</span>
+                  Criar conta
                 </span>
               </Link>
             </Button>
@@ -178,14 +177,14 @@ export default function PageHome(props: PageHomeProps) {
         >
           <div className="absolute inset-0 -z-10 h-full w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#ffffff20_1px,transparent_1px)]"></div>
 
-          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-center text-3xl md:text-4xl font-bold">
               Cresça seu negócio <br />
               com o <span className="text-primary">melhor investimento!</span>
             </h2>
           </div>
 
-          <div className="max-w-[1400px] mx-auto mt-12 md:mt-16 px-4 2xl:px-0">
+          <div className="container mx-auto mt-12 md:mt-16 px-4 2xl:px-0">
             <Tabs defaultValue="monthly">
               <TabsList className="grid w-full max-w-xs sm:max-w-md grid-cols-2 mx-auto mb-8 bg-primary-foreground">
                 <TabsTrigger
@@ -201,14 +200,14 @@ export default function PageHome(props: PageHomeProps) {
                   Anual
                 </TabsTrigger>
               </TabsList>
-              <TabsContent value="monthly" className="flex">
-                <div className="flex flex-col lg:flex-row lg:flex-wrap w-full justify-center gap-6 lg:gap-8">
+              <TabsContent value="monthly" className="w-full">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center">
                   {plans.map((plan) => (
                     <Card
                       key={plan.name}
                       className={cn(
                         plan.popular && 'border-primary',
-                        'max-w-xs h-full flex flex-col w-full mx-auto lg:mx-0'
+                        'w-full max-w-sm flex flex-col'
                       )}
                     >
                       <CardHeader className="flex flex-col gap-4">
@@ -230,7 +229,7 @@ export default function PageHome(props: PageHomeProps) {
                         </div>
                         {plan.name == 'Free' ? (
                           <Button className="w-full" variant="outline" asChild>
-                            <Link href="register">Criar conta</Link>
+                            <Link href="/dashboard">Começar agora</Link>
                           </Button>
                         ) : (
                           <Button className="w-full">Assinar</Button>
@@ -253,14 +252,14 @@ export default function PageHome(props: PageHomeProps) {
                   ))}
                 </div>
               </TabsContent>
-              <TabsContent value="annual" className="flex">
-                <div className="flex w-full justify-center gap-6 lg:gap-8">
+              <TabsContent value="annual" className="w-full">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center">
                   {plans.map((plan) => (
                     <Card
                       key={plan.name}
                       className={cn(
                         plan.popular && 'border-primary',
-                        'max-w-xs h-full flex flex-col w-full'
+                        'w-full max-w-sm flex flex-col'
                       )}
                     >
                       <CardHeader className="flex flex-col gap-4">
@@ -290,7 +289,7 @@ export default function PageHome(props: PageHomeProps) {
                         </div>
                         {plan.name == 'Free' ? (
                           <Button className="w-full" variant="outline" asChild>
-                            <Link href="register">Criar conta</Link>
+                            <Link href="/dashboard">Começar agora</Link>
                           </Button>
                         ) : (
                           <Button className="w-full">Assinar</Button>
@@ -318,7 +317,7 @@ export default function PageHome(props: PageHomeProps) {
         </section>
 
         <section id="questions" className="py-32">
-          <div className="max-w-[1400px] mx-auto grid grid-cols-12 px-4 2xl:px-0">
+          <div className="container mx-auto grid grid-cols-12 px-4 2xl:px-0">
             <div className="col-span-12 md:col-span-4">
               <h2 className="text-5xl font-bold">
                 Dúvidas

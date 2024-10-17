@@ -7,11 +7,15 @@
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
 }
  
 generator client {
   provider = "prisma-client-js"
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }
  
 model User {
@@ -23,7 +27,7 @@ model User {
   password      String?
   accounts      Account[]
   sessions      Session[]
-  // Optional for WebAuthn support
+  role          UserRole        @default(USER)
   Authenticator Authenticator[]
  
   createdAt DateTime @default(now())
@@ -63,7 +67,7 @@ model Session {
  
 model VerificationToken {
   identifier String
-  token      String
+  token      String @unique
   expires    DateTime
  
   @@id([identifier, token])

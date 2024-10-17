@@ -4,6 +4,8 @@ import {
   registerSchema,
   RegisterSchema,
 } from '@/components/SignupForm/SignupForm.schemas';
+import { sendVerificationEmail } from '@/lib/mail';
+import { generateVerificationToken } from '@/lib/tokens';
 import { prisma } from '@/services/database';
 import bcrypt from 'bcrypt';
 import { ApiResponse } from '../../types/api-response.types';
@@ -35,7 +37,7 @@ export const register = async (
       return {
         type: 'error',
         status: 409,
-        message: 'Email already in use!',
+        message: 'Este email ja esta sendo utilizado!',
       };
     }
 
@@ -47,15 +49,22 @@ export const register = async (
       },
     });
 
+    const verificationToken = await generateVerificationToken(email);
     // TODO: Enviar email de verificação do email
+    await sendVerificationEmail({
+      name,
+      from: process.env.EMAIL_FROM,
+      to: email,
+      url: `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${verificationToken.token}`,
+      subject: 'Confirme seu e-mail',
+    });
 
     return {
       type: 'success',
       status: 200,
-      message: 'User created',
+      message: 'Usuário criado. Verifique seu email.',
     };
   } catch (error) {
-    console.error('Error during registration:', error);
     return {
       type: 'error',
       status: 500,

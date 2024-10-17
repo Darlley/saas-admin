@@ -1,28 +1,5 @@
 # SAAS ADMIN
 
-> [!NOTE]
-> Ajuda e tutoriais
->
-> **AUTHENTICATION** 
-> 1. [Micro-SaaS na Prática: Setup com Next.js 14, Shadcn UI e Autenticação com Next Auth [+ Bônus]](https://youtu.be/Lvxpl0bwYf8) (Vibe Dev)
-> 2. [Next Auth V5 - Advanced Guide (2024)](https://youtu.be/1MTyCvS05V4?t=8970) (Code With Antonio
-)
-
-
-## Features
-
-- 🌐 App Router Next.js
-- 🔐 Autenticação Auth.js com Linkedin, Google e GitHub
-- 💰 Pagamentos utilizando Stripe e Mercado Pago
-- 🎊 React Confetti para pagamentos concluidos
-- 🎲 Banco de Dados Postgres Supabase
-- 💨 ORM Prisma
-- ✅ Validação do Servidor usando Zod
-- 🗂️ Upload de Arquivos com Uploadthing
-- 🎨 Estilização com Tailwindcss e NextUI
-- ✍️ Editor de artigos usando o Tiptap
-- 💿 Zustand para fazer a comunição Back-end/Front-end
-
 ## Running the Application
 
 - Run `pnpm install`
@@ -34,7 +11,29 @@
 - Run `stripe login`
 - Run `stripe --forward-to http://localhost:3000/api/webhook/stripe`
 
-# TODO
+## AUTENTICAÇÃO
+
+> [!NOTE]
+> Ajuda e tutoriais
+> 1. [Next Auth V5 - Advanced Guide (2024)](https://youtu.be/1MTyCvS05V4?t=13964) (Code With Antonio)
+> 2. [Micro-SaaS na Prática: Setup com Next.js 14, Shadcn UI e Autenticação com Next Auth [+ Bônus]](https://youtu.be/Lvxpl0bwYf8) (Vibe Dev)
+
+Principais funcionalidades implementadas:
+
+| Feature | Status |
+|---------|--------|
+| Cadastro de usuário | ✅ Concluído |
+| Confirmação de email | ⚠️ Em andamento |
+| Erros customizados | ✅ Concluído |
+| Login social GitHub | ✅ Concluído |
+| Login social Google | ✅ Concluído |
+| Login social LinkedIn | ⚠️ Em andamento |
+| Login social Apple | ❌ Não feito |
+| Link mágico | ❌ Não feito |
+| Recuperação de senha | ❌ Não feito |
+| Papéis de usuário (user e admin) | ⚠️ Em andamento |
+
+## TODO
 
 Aqui está uma tabela de check-in baseada nas features que você forneceu:
 
