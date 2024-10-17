@@ -60,10 +60,12 @@ export const login = async (values: LoginSchema) => {
 
   try {
     await signIn('credentials', {
-      email,
-      password,
+        email,
+        password,
       redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
+
+    return { type: 'success', status: 200, message: 'Login realizado com sucesso!' };
   } catch (error) {
     console.log('ERROR', error);
     if (error instanceof EmailNotVerifiedError) {
@@ -88,10 +90,6 @@ export const login = async (values: LoginSchema) => {
       }
     }
 
-    return {
-      type: 'error',
-      status: 500,
-      message: 'Algo deu errado durante a autenticação.',
-    };
+    throw error;
   }
 };
