@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Ellipsis } from 'lucide-react';
-import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { Button } from '../ui/button';
 import {
@@ -15,19 +14,13 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 
-import { DEFAULT_LOGIN_REDIRECT } from '@/constants/public-routes';
-import GithubIcon from '@/icons/GithubIcon';
-import GoogleIcon from '@/icons/GoogleIcon';
-import LinkedinIcon from '@/icons/LinkedinIcon';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { resetPassword } from '@/actions/reset-password';
 import { resetSchema, ResetSchema } from './ResetPasswordForm.schemas';
 import { ResetPasswordFormProps } from './ResetPasswordForm.types';
 export default function ResetPasswordForm(props: ResetPasswordFormProps) {
-  const router = useRouter();
-
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -44,6 +37,14 @@ export default function ResetPasswordForm(props: ResetPasswordFormProps) {
   async function handleSubmit(values: ResetSchema) {
     setSuccess(null);
     setError(null);
+
+    const result = await resetPassword(values);
+
+    if (result.type === 'error') {
+      setError(result.message);
+    } else {
+      setSuccess(result.message);
+    }
   }
 
   return (
