@@ -2,6 +2,7 @@ namespace NodeJS {
   export interface ProcessEnv {
     AUTH_RESEND_KEY,
     EMAIL_FROM,
+    NEXT_PUBLIC_EMAIL_FROM,
 
     AUTH_LINKEDIN_ID,
     AUTH_LINKEDIN_SECRET,
