@@ -27,9 +27,8 @@ Principais funcionalidades implementadas:
 | Erros customizados | ✅ Concluído |
 | Login social GitHub | ✅ Concluído |
 | Login social Google | ✅ Concluído |
-| Login social LinkedIn | ⚠️ Em andamento |
-| Login social Apple | ❌ Não feito |
 | Link mágico | ❌ Não feito |
+| 2FA | ❌ Não feito |
 | Recuperação de senha | ✅ Concluído |
 | Papéis de usuário (user e admin) | ⚠️ Em andamento |
 
