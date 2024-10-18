@@ -21,7 +21,7 @@ export async function newPassword(token: string, values: NewPasswordSchema): Pro
       where: {
         token,
       },
-    });
+    });  
 
     if (!verificationToken) {
       return {
@@ -63,6 +63,12 @@ export async function newPassword(token: string, values: NewPasswordSchema): Pro
       },
       data: {
         password: passwordHashed,
+      },
+    });
+
+    await prisma.resetPasswordToken.delete({
+      where: {
+        token,
       },
     });
 

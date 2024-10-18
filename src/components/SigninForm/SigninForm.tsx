@@ -43,7 +43,7 @@ export default function SigninForm(props: SigninFormProps) {
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: 'darlleybrito@gmail.com',
+      email: '',
       password: '',
     },
     mode: 'onBlur',

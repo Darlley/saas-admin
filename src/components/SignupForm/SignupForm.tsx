@@ -27,8 +27,10 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { ApiResponse } from '../../../types/api-response.types';
 import { RegisterSchema, registerSchema } from './SignupForm.schemas';
-import { SignupFormProps } from './SignupForm.types';
 
+const EMAIL_FROM = process.env.NEXT_PUBLIC_EMAIL_FROM!;
+
+import { SignupFormProps } from './SignupForm.types';
 export default function SignupForm(props: SignupFormProps) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -37,9 +39,9 @@ export default function SignupForm(props: SignupFormProps) {
   const form = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      name: 'Darlley',
-      email: 'darlleybrito@gmail.com',
-      password: 'mudar1234@L',
+      name: '',
+      email: '',
+      password: '',
     },
     mode: 'onBlur',
   });
@@ -84,7 +86,7 @@ export default function SignupForm(props: SignupFormProps) {
     if (data.type === 'success') {
       setSuccess(data?.message ?? '');
       if (watch('email').endsWith('@gmail.com')) {
-        const from = "contact@darlley.dev".replace("@", "%40")
+        const from = EMAIL_FROM?.replace("@", "%40")
         const subject = encodeURIComponent("Confirme seu e-mail");
         
         toast.success('Você usa o Gmail?', {

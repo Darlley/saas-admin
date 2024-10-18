@@ -13,14 +13,15 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
-
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
-
 import { resetPassword } from '@/actions/reset-password';
 import { resetSchema, ResetSchema } from './ResetPasswordForm.schemas';
-import { ResetPasswordFormProps } from './ResetPasswordForm.types';
 import { toast } from 'sonner';
+
+const EMAIL_FROM = process.env.NEXT_PUBLIC_EMAIL_FROM!;
+
+import { ResetPasswordFormProps } from './ResetPasswordForm.types';
 export default function ResetPasswordForm(props: ResetPasswordFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -47,7 +48,7 @@ export default function ResetPasswordForm(props: ResetPasswordFormProps) {
     } else {
       setSuccess(result.message);
       if (watch('email').endsWith('@gmail.com')) {
-        const from = "contact@darlley.dev".replace("@", "%40")
+        const from = EMAIL_FROM?.replace("@", "%40")
         const subject = encodeURIComponent("Redefinição de senha");
         
         toast.success('Você usa o Gmail?', {
