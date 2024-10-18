@@ -275,11 +275,9 @@ export default function SignupForm(props: SignupFormProps) {
                 <>Cadastrar</>
               )}
             </Button>
-            {!!watch('email') && (
-              <Button size="lg" disabled={isSubmitting} variant="link">
-                Enviar link mágico
-              </Button>
-            )}
+            {/* <Button size="lg" disabled={isSubmitting} variant="link">
+              Enviar link mágico
+            </Button> */}
           </div>
         </form>
       </Form>
