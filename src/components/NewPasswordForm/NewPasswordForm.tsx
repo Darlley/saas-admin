@@ -16,20 +16,26 @@ import {
 import { Input } from '../ui/input';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import {
-  recoveryPasswordSchema,
-  RecoveryPasswordSchema,
-} from './RecoveryPasswordForm.schemas';
-import { RecoveryPasswordFormProps } from './RecoveryPasswordForm.types';
-export default function RecoveryPasswordForm(props: RecoveryPasswordFormProps) {
+  newPasswordSchema,
+  NewPasswordSchema,
+} from './NewPasswordForm.schemas';
+import { NewPasswordFormProps } from './NewPasswordForm.types';
+import { newPassword } from '@/actions/new-password';
+import { ApiResponse } from '../../../types/api-response.types';
+import { useRouter } from 'next/navigation';
+export default function NewPasswordForm(props: NewPasswordFormProps) {
+  const { token } = props;
+
+  const router = useRouter();
+
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const form = useForm<RecoveryPasswordSchema>({
-    resolver: zodResolver(recoveryPasswordSchema),
+  const form = useForm<NewPasswordSchema>({
+    resolver: zodResolver(newPasswordSchema),
     defaultValues: {
       password: '',
       confirmPassword: '',
@@ -40,9 +46,21 @@ export default function RecoveryPasswordForm(props: RecoveryPasswordFormProps) {
   const { errors, isSubmitting } = form.formState;
   const { watch } = form;
 
-  async function handleSubmit(values: RecoveryPasswordSchema) {
+  async function handleSubmit(values: NewPasswordSchema) {
     setSuccess(null);
     setError(null);
+
+    try {
+      const response: ApiResponse = await newPassword(token, values);
+      if (response.type === 'success') {
+        setSuccess(response?.message || '');
+        return router.push('/login');
+      } else {
+        setError(response?.message || '');
+      }
+    } catch (error: any) {
+      setError(error?.message || '');
+    }
   }
 
   // Valores padrão para as validações

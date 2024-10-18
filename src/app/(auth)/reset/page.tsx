@@ -12,10 +12,10 @@ export default function page() {
             <Logotipo className="h-10 w-auto" />
           </Link>
           <h1 className="mt-2 text-lg font-semibold text-gray-950">
-            Comece agora
+            Qual o email da sua conta?
           </h1>
           <p className="mt-2 text-sm text-gray-500">
-            Ja tem uma conta?{' '}
+            Se lembrou da sua senha?{' '}
             <Link
               href="/login"
               className="font-medium text-blue-600 hover:underline"

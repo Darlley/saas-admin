@@ -8,7 +8,7 @@ export const authRoutes = [
   "/error",
   "/verify-email",
   "/reset",
-  "/recovery"
+  "/new-password"
 ]
 
 export const apiAuthPrefix = '/api/auth'

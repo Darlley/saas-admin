@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-export const recoveryPasswordSchema = z
+export const newPasswordSchema = z
   .object({
     password: z
       .string()
@@ -33,4 +33,4 @@ export const recoveryPasswordSchema = z
     }
   });
 
-export type RecoveryPasswordSchema = z.infer<typeof recoveryPasswordSchema>;
+export type NewPasswordSchema = z.infer<typeof newPasswordSchema>;

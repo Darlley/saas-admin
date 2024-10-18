@@ -1,7 +1,7 @@
 import { Resend } from 'resend';
 
-import EmailTemplate from "@/components/EmailTemplate";
 import EmailVerifyToken from '@/components/EmailVerifyToken';
+import EmailResetPasswordToken from '@/components/EmailResetPasswordToken';
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
@@ -11,7 +11,7 @@ type SendVerificationEmailProps = {
   to: string;
   url: string;
   subject: string;
-}
+};
 
 export async function sendVerificationEmail({
   name,
@@ -20,14 +20,35 @@ export async function sendVerificationEmail({
   url,
   subject,
 }: SendVerificationEmailProps) {
-  const { host } = new URL(url)
-  
+  const { host } = new URL(url);
+
   try {
     await resend.emails.send({
       from,
       to,
       subject,
       react: EmailVerifyToken({ name, from, to, url, subject }),
+    });
+  } catch (error) {
+    throw new Error(`E-mail não pôde ser enviado para ${to}`);
+  }
+}
+
+export async function sendPasswordResetEmail({
+  name,
+  from,
+  to,
+  url,
+  subject,
+}: SendVerificationEmailProps) {
+  const { host } = new URL(url);
+
+  try {
+    await resend.emails.send({
+      from,
+      to,
+      subject,
+      react: EmailResetPasswordToken({ name, from, to, url, subject }),
     });
   } catch (error) {
     throw new Error(`E-mail não pôde ser enviado para ${to}`);

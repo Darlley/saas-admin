@@ -109,7 +109,7 @@ export default function SigninForm(props: SigninFormProps) {
                 <FormDescription>
                   Não se lembra?{' '}
                   <Link
-                    href="/recovery"
+                    href="/reset"
                     className="font-medium text-blue-600 hover:underline"
                   >
                     Recuperar senha
