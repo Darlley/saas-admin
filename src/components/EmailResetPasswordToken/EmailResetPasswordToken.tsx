@@ -14,8 +14,8 @@ import {
 } from '@react-email/components';
 import config from '../../../email-tailwind.config';
 
-import { EmailVerifyTokenProps } from './EmailVerifyToken.types';
-export default function EmailVerifyToken(props: EmailVerifyTokenProps) {
+import { EmailResetPasswordTokenProps } from './EmailResetPasswordToken.types';
+export default function EmailResetPasswordToken (props: EmailResetPasswordTokenProps) {
   const { name, from, to, url, subject } = props;
   return (
     <Tailwind config={config}>
@@ -33,9 +33,7 @@ export default function EmailVerifyToken(props: EmailVerifyTokenProps) {
               />
               <Hr className="border-border my-5" />
               <Text className="text-muted-foreground text-base leading-6 text-left">
-                Olá {name} 🤝 Obrigado por se registrar no nosso template de
-                micro-SaaS para desenvolvedores. Estamos empolgados para
-                ajudá-lo a iniciar seu projeto rapidamente!
+                Olá {name} 🤝 Vi aqui que você quer redefinir sua senha.
               </Text>
               <Text className="text-muted-foreground text-base leading-6 text-left">
                 Para começar, por favor confirme seu e-mail clicando no botão
@@ -47,12 +45,7 @@ export default function EmailVerifyToken(props: EmailVerifyTokenProps) {
               <Hr className="border-border my-5" />
 
               <Text className="text-muted-foreground text-base leading-6 text-left">
-                Após confirmar seu e-mail, você terá acesso completo ao painel
-                de controle, onde poderá começar a personalizar seu projeto.
-              </Text>
-              <Text className="text-muted-foreground text-base leading-6 text-left">
-                Se tiver alguma dúvida, não hesite em responder este e-mail (
-                {from}). Boa codificação!
+                Após confirmar seu e-mail, você será redirecionado para a página de redefinição de senha.
               </Text>
               <Text className="text-muted-foreground text-base leading-6 text-left">
                 — Darlley Brasil
@@ -69,5 +62,5 @@ export default function EmailVerifyToken(props: EmailVerifyTokenProps) {
         </Body>
       </Html>
     </Tailwind>
-  );
+  )
 }

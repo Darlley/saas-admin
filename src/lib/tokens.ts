@@ -5,11 +5,15 @@ export const generateVerificationToken = async (email: string) => {
   const token = uuidv4();
 
   /**
-   * Calcula a data de expiração usando uma constante para o tempo de vida
+   * Calcula a data de expiração
    * 1 hora em milissegundos
+   * 
+   * Atualmente esta configurado para 24 horas em desenvolvimento
+   * Mude para 1 hora em produção.
    */
-  // TODO: mudar para 1 hora = const EXPIRATION_TIME_MS = 3600  * 1000;
-  const EXPIRATION_TIME_MS = 86400 * 1000; // 24 horas
+  
+  // const EXPIRATION_TIME_MS = 86400 * 1000; // TODO: 24 horas
+  const EXPIRATION_TIME_MS = 3600 * 1000; // TODO: 1 hora
 
   const expires = new Date(Date.now() + EXPIRATION_TIME_MS);
 
@@ -39,4 +43,35 @@ export const generateVerificationToken = async (email: string) => {
   });
 
   return verificationToken;
+};
+
+export const generateResetPasswordToken = async (email: string) => {
+  const token = uuidv4();
+
+  const EXPIRATION_TIME_MS = 3600 * 1000; // 1 hora
+  const expires = new Date(Date.now() + EXPIRATION_TIME_MS);
+
+  const resetPasswordTokenExists = await prisma.resetPasswordToken.findFirst({
+    where: {
+      email,
+    },
+  });
+
+  if (resetPasswordTokenExists) {
+    await prisma.resetPasswordToken.delete({
+      where: {
+        email,
+      },
+    });
+  }
+
+  const resetPasswordToken = await prisma.resetPasswordToken.create({
+    data: {
+      email,
+      token,
+      expires,
+    },
+  });
+
+  return resetPasswordToken;
 };

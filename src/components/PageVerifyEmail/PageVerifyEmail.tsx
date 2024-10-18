@@ -5,20 +5,17 @@ import { Button } from '@/components/ui/button';
 import Logotipo from '@/icons/Logotipo';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { ApiResponse } from '../../../types/api-response.types';
 import { PageVerifyEmailProps } from './PageVerifyEmail.types';
 
-const SUPPORT_EMAIL = process.env.NEXT_PUBLIC_SUPPORT_EMAIL;
+const EMAIL_FROM = process.env.NEXT_PUBLIC_EMAIL_FROM;
 
 export default function PageVerifyEmail(props: PageVerifyEmailProps) {
   const { token } = props;
 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-
-  const router = useRouter();
 
   const onSubmit = useCallback(async (token: string) => {
     try {
@@ -58,7 +55,8 @@ export default function PageVerifyEmail(props: PageVerifyEmailProps) {
             </motion.div>
           </AnimatePresence>
           <p className="mt-2 text-sm text-gray-500">
-            Por favor, tente novamente ou entre em contato com o suporte pelo email {SUPPORT_EMAIL}.
+            Por favor, tente novamente ou entre em contato com o suporte pelo
+            email {EMAIL_FROM}.
           </p>
           <div className="mt-6 flex gap-2">
             <Button asChild>

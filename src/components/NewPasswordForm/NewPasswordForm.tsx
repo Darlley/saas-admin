@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Check, Ellipsis, X } from 'lucide-react';
-import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { Button } from '../ui/button';
 import {
@@ -16,38 +15,53 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 
-import { register } from '@/actions/register';
-import { DEFAULT_LOGIN_REDIRECT } from '@/constants/public-routes';
-import GithubIcon from '@/icons/GithubIcon';
-import GoogleIcon from '@/icons/GoogleIcon';
-import LinkedinIcon from '@/icons/LinkedinIcon';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
+
+import {
+  newPasswordSchema,
+  NewPasswordSchema,
+} from './NewPasswordForm.schemas';
+import { NewPasswordFormProps } from './NewPasswordForm.types';
+import { newPassword } from '@/actions/new-password';
 import { ApiResponse } from '../../../types/api-response.types';
-import { RegisterSchema, registerSchema } from './SignupForm.schemas';
+import { useRouter } from 'next/navigation';
+export default function NewPasswordForm(props: NewPasswordFormProps) {
+  const { token } = props;
 
-const EMAIL_FROM = process.env.NEXT_PUBLIC_EMAIL_FROM!;
-
-import { SignupFormProps } from './SignupForm.types';
-export default function SignupForm(props: SignupFormProps) {
   const router = useRouter();
+
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const form = useForm<RegisterSchema>({
-    resolver: zodResolver(registerSchema),
+  const form = useForm<NewPasswordSchema>({
+    resolver: zodResolver(newPasswordSchema),
     defaultValues: {
-      name: '',
-      email: '',
       password: '',
+      confirmPassword: '',
     },
     mode: 'onBlur',
   });
 
   const { errors, isSubmitting } = form.formState;
   const { watch } = form;
+
+  async function handleSubmit(values: NewPasswordSchema) {
+    setSuccess(null);
+    setError(null);
+
+    try {
+      const response: ApiResponse = await newPassword(token, values);
+      if (response.type === 'success') {
+        setSuccess(response?.message || '');
+        return router.push('/login');
+      } else {
+        setError(response?.message || '');
+      }
+    } catch (error: any) {
+      setError(error?.message || '');
+    }
+  }
 
   // Valores padrão para as validações
   const [isValidPassword, setIsValidPassword] = useState({
@@ -77,34 +91,6 @@ export default function SignupForm(props: SignupFormProps) {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  async function handleSubmit(values: RegisterSchema) {
-    setSuccess(null);
-    setError(null);
-
-    const data: ApiResponse = await register(values);
-
-    if (data.type === 'success') {
-      setSuccess(data?.message ?? '');
-      if (watch('email').endsWith('@gmail.com')) {
-        const from = EMAIL_FROM?.replace("@", "%40")
-        const subject = encodeURIComponent("Confirme seu e-mail");
-        
-        toast.success('Você usa o Gmail?', {
-          action: {
-            label: 'Abra aqui',
-            onClick: () =>
-              window.open(
-                `https://mail.google.com/mail/u/0/?hl=pt-BR#advanced-search/from=${from}&subject=${subject}`,
-                '_blank'
-              ),
-          },
-        });
-      }
-    } else {
-      setError(data?.message ?? '');
-    }
-  }
-
   return (
     <div className="w-full mt-4">
       <Form {...form}>
@@ -114,48 +100,10 @@ export default function SignupForm(props: SignupFormProps) {
         >
           <FormField
             control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Nome</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="Insira seu nome"
-                    type="text"
-                    className="p-4 h-10"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="Insira seu email"
-                    type="email"
-                    className="p-4 h-10"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
             name="password"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Senha</FormLabel>
+                <FormLabel>Nova Senha</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -240,6 +188,25 @@ export default function SignupForm(props: SignupFormProps) {
             )}
           />
 
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Confirmar Senha</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="********"
+                    type="password"
+                    className="p-4 h-10"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <AnimatePresence>
             {success && (
               <motion.div
@@ -266,61 +233,15 @@ export default function SignupForm(props: SignupFormProps) {
             )}
           </AnimatePresence>
 
-          <div className='flex flex-col mb-2'>
-            <Button size="lg" disabled={isSubmitting}>
-              {isSubmitting ? (
-                <Ellipsis className="size-8 stroke-2 animate-pulse ml-2.5" />
-              ) : (
-                <>Cadastrar</>
-              )}
-            </Button>
-            {!!watch('email') && (
-              <Button size="lg" disabled={isSubmitting} variant="link">
-                Enviar link mágico
-              </Button>
+          <Button size="lg" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <Ellipsis className="size-8 stroke-2 animate-pulse ml-2.5" />
+            ) : (
+              <>Confirmar</>
             )}
-          </div>
+          </Button>
         </form>
       </Form>
-
-      <div className="flex gap-2 justify-center w-full mt-2">
-        <Button
-          size="lg"
-          className="w-full"
-          variant="outline"
-          onClick={() =>
-            signIn('github', {
-              callbackUrl: DEFAULT_LOGIN_REDIRECT,
-            })
-          }
-        >
-          <GithubIcon className="size-6" />
-        </Button>
-        <Button
-          size="lg"
-          className="w-full"
-          variant="outline"
-          onClick={() =>
-            signIn('google', {
-              callbackUrl: DEFAULT_LOGIN_REDIRECT,
-            })
-          }
-        >
-          <GoogleIcon className="size-6" />
-        </Button>
-        <Button
-          size="lg"
-          variant="outline"
-          className="w-full"
-          onClick={() =>
-            signIn('linkedin', {
-              callbackUrl: DEFAULT_LOGIN_REDIRECT,
-            })
-          }
-        >
-          <LinkedinIcon className="size-6" />
-        </Button>
-      </div>
     </div>
   );
 }

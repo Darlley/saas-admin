@@ -43,7 +43,7 @@ export default function SigninForm(props: SigninFormProps) {
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: 'darlleybrito@gmail.com',
+      email: '',
       password: '',
     },
     mode: 'onBlur',
@@ -57,11 +57,8 @@ export default function SigninForm(props: SigninFormProps) {
 
     const data: ApiResponse | any = await login(values);
 
-    console.log("login form", data)
-
     if (data?.type === 'success') {
       setSuccess(data?.message ?? 'Sucesso');
-      // Redirecionar programaticamente após o login bem-sucedido
       return router.push('/dashboard/settings');
     } else {
       setError(data?.message ?? 'Aconteceu um erro');
@@ -112,7 +109,7 @@ export default function SigninForm(props: SigninFormProps) {
                 <FormDescription>
                   Não se lembra?{' '}
                   <Link
-                    href="/recovery"
+                    href="/reset"
                     className="font-medium text-blue-600 hover:underline"
                   >
                     Recuperar senha

@@ -4,7 +4,6 @@ import {
   loginSchema,
   LoginSchema,
 } from '@/components/SigninForm/SigninForm.schemas';
-import { DEFAULT_LOGIN_REDIRECT } from '@/constants/public-routes';
 import { sendVerificationEmail } from '@/lib/mail';
 import { generateVerificationToken } from '@/lib/tokens';
 import { signIn } from '@/services/auth';
@@ -65,13 +64,15 @@ export const login = async (values: LoginSchema) => {
       redirect: false, // Importante: não redirecionar automaticamente
     });
 
-    console.log("login", result)
-
     if (result?.error) {
       return { type: 'error', status: 401, message: 'Credenciais inválidas!' };
     }
 
-    return { type: 'success', status: 200, message: 'Login realizado com sucesso!' };
+    return {
+      type: 'success',
+      status: 200,
+      message: 'Login realizado com sucesso!',
+    };
   } catch (error) {
     console.log('ERROR', error);
     if (error instanceof EmailNotVerifiedError) {
