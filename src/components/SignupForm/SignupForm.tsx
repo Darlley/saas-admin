@@ -84,12 +84,15 @@ export default function SignupForm(props: SignupFormProps) {
     if (data.type === 'success') {
       setSuccess(data?.message ?? '');
       if (watch('email').endsWith('@gmail.com')) {
+        const from = "contact@darlley.dev".replace("@", "%40")
+        const subject = encodeURIComponent("Confirme seu e-mail");
+        
         toast.success('Você usa o Gmail?', {
           action: {
             label: 'Abra aqui',
             onClick: () =>
               window.open(
-                'https://mail.google.com/mail/u/0/?hl=pt-BR#inbox',
+                `https://mail.google.com/mail/u/0/?hl=pt-BR#advanced-search/from=${from}&subject=${subject}`,
                 '_blank'
               ),
           },
