@@ -29,6 +29,7 @@ import { ApiResponse } from '../../../types/api-response.types';
 import { RegisterSchema, registerSchema } from './SignupForm.schemas';
 
 const EMAIL_FROM = process.env.NEXT_PUBLIC_EMAIL_FROM!;
+const RESEND_KEY = process.env.NEXT_PUBLIC_AUTH_RESEND_KEY!;
 
 import { SignupFormProps } from './SignupForm.types';
 export default function SignupForm(props: SignupFormProps) {
@@ -85,7 +86,7 @@ export default function SignupForm(props: SignupFormProps) {
 
     if (data.type === 'success') {
       setSuccess(data?.message ?? '');
-      if (watch('email').endsWith('@gmail.com')) {
+      if (RESEND_KEY && watch('email').endsWith('@gmail.com')) {
         const from = EMAIL_FROM?.replace("@", "%40")
         const subject = encodeURIComponent("Confirme seu e-mail");
         
