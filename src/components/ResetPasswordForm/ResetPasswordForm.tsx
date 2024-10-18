@@ -20,6 +20,7 @@ import { resetSchema, ResetSchema } from './ResetPasswordForm.schemas';
 import { toast } from 'sonner';
 
 const EMAIL_FROM = process.env.NEXT_PUBLIC_EMAIL_FROM!;
+const RESEND_KEY = process.env.NEXT_PUBLIC_AUTH_RESEND_KEY!;
 
 import { ResetPasswordFormProps } from './ResetPasswordForm.types';
 export default function ResetPasswordForm(props: ResetPasswordFormProps) {
@@ -47,7 +48,7 @@ export default function ResetPasswordForm(props: ResetPasswordFormProps) {
       setError(result.message);
     } else {
       setSuccess(result.message);
-      if (watch('email').endsWith('@gmail.com')) {
+      if (RESEND_KEY && watch('email').endsWith('@gmail.com')) {
         const from = EMAIL_FROM?.replace("@", "%40")
         const subject = encodeURIComponent("Redefinição de senha");
         
