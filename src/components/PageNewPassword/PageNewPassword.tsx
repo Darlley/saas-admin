@@ -16,7 +16,7 @@ export default function PageNewPassword(props: PageNewPasswordProps) {
               <Link href="/" aria-label="Home">
                 <Logotipo className="h-10 w-auto" />
               </Link>
-              <h1 className="mt-2 text-lg font-semibold text-gray-950">
+              <h1 className="mt-2 text-lg font-semibold text-gray-950 dark:text-secondary-foreground">
                 Crie uma nova senha
               </h1>
               <p className="mt-2 text-sm text-gray-500">
@@ -38,10 +38,10 @@ export default function PageNewPassword(props: PageNewPasswordProps) {
               <Link href="/" aria-label="Home">
                 <Logotipo className="h-10 w-auto" />
               </Link>
-              <h1 className="mt-2 text-lg font-semibold text-gray-950">
+              <h1 className="mt-2 text-lg font-semibold text-gray-950 dark:text-secondary-foreground">
                 Não foi possível processar sua solicitação...
               </h1>
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-gray-500 dark:text-secondary-foreground">
                 Por favor, forneça um token válido para criar uma nova senha.
               </p>
             </header>

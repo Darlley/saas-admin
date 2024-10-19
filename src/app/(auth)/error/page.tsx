@@ -15,10 +15,10 @@ export default function ErrorPage() {
           <Link href="/" aria-label="Home">
             <Logotipo className="h-10 w-auto" />
           </Link>
-          <h1 className="mt-2 text-lg font-semibold text-gray-950">
+          <h1 className="mt-2 text-lg font-semibold text-gray-950 dark:text-secondary-foreground">
             Parece que algo deu errado
           </h1>
-          <p className="mt-2 text-sm text-gray-500">
+          <p className="mt-2 text-sm text-gray-500 dark:text-secondary-foreground">
             Vamos tentar novamente?
           </p>
         </header>
