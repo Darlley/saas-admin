@@ -32,6 +32,7 @@ import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 
 import { PageHomeProps } from './PageHome.types';
+import DropdownProfile from '../DropdownProfile';
 export default function PageHome(props: PageHomeProps) {
   return (
     <>

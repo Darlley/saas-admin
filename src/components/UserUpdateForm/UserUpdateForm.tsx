@@ -43,10 +43,10 @@ export default function UserUpdateForm(props: UserUpdateFormProps) {
     console.log(values);
     const response: ApiResponse = await updateUserInfo(values);
 
-    if (response.type === 'error') {
-      toast.error(response.message);
-    } else {
+    if (response.type === 'success') {
       toast.success(response.message);
+    } else {
+      toast.error(response.message);
     }
   }
 
@@ -69,7 +69,7 @@ export default function UserUpdateForm(props: UserUpdateFormProps) {
                 <FormItem className="space-y-2">
                   <FormLabel>Qual seu Nome Completo?</FormLabel>
                   <FormControl>
-                    <Input {...field} className="p-4 h-10" />
+                    <Input {...field} type="text" className="p-4 h-10" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

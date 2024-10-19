@@ -15,6 +15,7 @@ import { EmailNotVerifiedError } from '../services/auth/customErrors';
 const RESEND_KEY = process.env.AUTH_RESEND_KEY!
 
 export const login = async (values: LoginSchema) => {
+  console.log(values);
   const validatedFields = loginSchema.safeParse(values);
 
   if (!validatedFields.success) {

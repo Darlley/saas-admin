@@ -1,6 +1,5 @@
 'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Collapsible,
   CollapsibleContent,
@@ -9,9 +8,7 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
@@ -34,18 +31,12 @@ import {
   SidebarProvider,
 } from '@/components/ui/sidebar';
 import {
-  BadgeCheck,
-  Bell,
   ChevronRight,
-  ChevronsUpDown,
-  CreditCard,
   Flame,
   Folder,
   Frame,
-  LogOut,
   MoreHorizontal,
   Share,
-  Sparkles,
   SquareTerminal,
   Trash2,
 } from 'lucide-react';
@@ -62,6 +53,7 @@ import {
   CardTitle,
 } from '../ui/card';
 import { DashboardPanelProps } from './DashboardPanel.types';
+import DropdownProfile from '../DropdownProfile';
 export default function DashboardPanel(props: DashboardPanelProps) {
   const { children } = props;
   const { data: session } = useSession();
@@ -198,89 +190,7 @@ export default function DashboardPanel(props: DashboardPanelProps) {
         <SidebarFooter>
           <SidebarMenu>
             <SidebarMenuItem>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton
-                    size="lg"
-                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                  >
-                    <Avatar className="h-8 w-8 rounded-lg">
-                      <AvatarImage
-                        src={session?.user.image}
-                        alt={session?.user.name}
-                      />
-                      <AvatarFallback className="rounded-lg  uppercase">
-                        {session?.user?.name.slice(0, 2)}
-                      </AvatarFallback>
-                    </Avatar>
-
-                    <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-semibold">
-                        {session?.user.name}
-                      </span>
-                      <span className="truncate text-xs">
-                        {session?.user.email}
-                      </span>
-                    </div>
-                    <ChevronsUpDown className="ml-auto size-4" />
-                  </SidebarMenuButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-                  side="bottom"
-                  align="end"
-                  sideOffset={4}
-                >
-                  <DropdownMenuLabel className="p-0 font-normal">
-                    <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                      <Avatar className="h-8 w-8 rounded-lg">
-                        <AvatarImage
-                          src={session?.user.avatar}
-                          alt={session?.user.name}
-                        />
-                        <AvatarFallback className="rounded-lg uppercase">
-                          {session?.user?.name.slice(0, 2)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="grid flex-1 text-left text-sm leading-tight">
-                        <span className="truncate font-semibold">
-                          {session?.user.name}
-                        </span>
-                        <span className="truncate text-xs">
-                          {session?.user.email}
-                        </span>
-                      </div>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      <Sparkles />
-                      Upgrade to Pro
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      <BadgeCheck />
-                      Account
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <CreditCard />
-                      Billing
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Bell />
-                      Notifications
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <LogOut />
-                    Log out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <DropdownProfile />
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>

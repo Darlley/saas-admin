@@ -1,4 +1,4 @@
-'use servver';
+'use server';
 
 import { UserUpdateSchema, userUpdateSchema } from '@/components/UserUpdateForm/UserUpdateForm.schemas';
 import { prisma } from '@/services/database';
