@@ -3,7 +3,7 @@ import { Resend } from 'resend';
 import EmailVerifyToken from '@/components/EmailVerifyToken';
 import EmailResetPasswordToken from '@/components/EmailResetPasswordToken';
 
-const resend = new Resend(process.env.AUTH_RESEND_KEY);
+const resend = process.env.AUTH_RESEND_KEY ? new Resend(process.env.AUTH_RESEND_KEY!) : null;
 
 type SendVerificationEmailProps = {
   name: string;
@@ -23,7 +23,7 @@ export async function sendVerificationEmail({
   const { host } = new URL(url);
 
   try {
-    await resend.emails.send({
+    await resend?.emails.send({
       from,
       to,
       subject,
@@ -44,7 +44,7 @@ export async function sendPasswordResetEmail({
   const { host } = new URL(url);
 
   try {
-    await resend.emails.send({
+    await resend?.emails.send({
       from,
       to,
       subject,

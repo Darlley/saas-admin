@@ -10,6 +10,8 @@ import { prisma } from '@/services/database';
 import bcrypt from 'bcrypt';
 import { ApiResponse } from '../../types/api-response.types';
 
+const RESEND_KEY = process.env.AUTH_RESEND_KEY!
+
 export const register = async (
   values: RegisterSchema
 ): Promise<ApiResponse> => {
@@ -49,15 +51,16 @@ export const register = async (
       },
     });
 
-    const verificationToken = await generateVerificationToken(email);
-    // TODO: Enviar email de verificação do email
-    await sendVerificationEmail({
-      name,
-      from: process.env.EMAIL_FROM,
-      to: email,
-      url: `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${verificationToken.token}`,
-      subject: 'Confirme seu e-mail',
-    });
+    if (RESEND_KEY) {
+      const verificationToken = await generateVerificationToken(email);
+      await sendVerificationEmail({
+        name,
+        from: process.env.EMAIL_FROM || '', // Verifica se EMAIL_FROM está definido
+        to: email,
+        url: `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${verificationToken.token}`,
+        subject: 'Confirme seu e-mail',
+      });
+    }
 
     return {
       type: 'success',

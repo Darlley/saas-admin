@@ -12,7 +12,10 @@ import { prisma } from '@/services/database';
 import { AuthError } from 'next-auth';
 import { EmailNotVerifiedError } from '../services/auth/customErrors';
 
+const RESEND_KEY = process.env.AUTH_RESEND_KEY!
+
 export const login = async (values: LoginSchema) => {
+  console.log(values);
   const validatedFields = loginSchema.safeParse(values);
 
   if (!validatedFields.success) {
@@ -39,16 +42,16 @@ export const login = async (values: LoginSchema) => {
     };
   }
 
-  if (!userExists.emailVerified) {
+  if (!userExists.emailVerified && RESEND_KEY) {
     const verificationToken = await generateVerificationToken(userExists.email);
 
     await sendVerificationEmail({
       name: userExists.name || email,
-      from: process.env.EMAIL_FROM,
+      from: process.env.EMAIL_FROM || '', // Verifica se EMAIL_FROM está definido
       to: email,
       url: `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${verificationToken.token}`,
       subject: 'Confirme seu e-mail',
-    });
+    })
 
     return {
       type: 'success',
