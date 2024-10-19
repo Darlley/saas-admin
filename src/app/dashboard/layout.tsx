@@ -18,7 +18,7 @@ export default function DashboardLayout({
 }) {
   return (
     <SessionProvider>
-      <DashboardPanel>{children}</DashboardPanel>;
+      <DashboardPanel>{children}</DashboardPanel>
     </SessionProvider>
   );
 }

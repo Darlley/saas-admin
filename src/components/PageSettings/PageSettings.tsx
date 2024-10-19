@@ -39,8 +39,6 @@ export default function PageSettings(props: PageSettingsProps) {
         <h1 className="text-2xl sm:text-3xl font-bold mb-6">Editar Perfil</h1>
         <UserUpdateForm session={session} />
       </div>
-      
-      <pre>{JSON.stringify(session, null, 2)}</pre>
     </div>
   );
 }

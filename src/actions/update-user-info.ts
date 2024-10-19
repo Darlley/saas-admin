@@ -5,6 +5,7 @@ import { prisma } from '@/services/database';
 import { ApiResponse } from '../../types/api-response.types';
 
 export async function updateUserInfo(values: UserUpdateSchema): Promise<ApiResponse> {
+  console.log(values);
   const validatedFields = userUpdateSchema.safeParse(values);
 
   if (!validatedFields.success) {

@@ -22,6 +22,7 @@ import { updateUserInfo } from '@/actions/update-user-info';
 import { Ellipsis } from 'lucide-react';
 import { toast } from 'sonner';
 import { ApiResponse } from '../../../types/api-response.types';
+import { Separator } from '../ui/separator';
 import { UserUpdateFormProps } from './UserUpdateForm.types';
 
 export default function UserUpdateForm(props: UserUpdateFormProps) {
@@ -30,23 +31,30 @@ export default function UserUpdateForm(props: UserUpdateFormProps) {
   const form = useForm<UserUpdateSchema>({
     resolver: zodResolver(userUpdateSchema),
     defaultValues: {
-      name: session?.user.name,
-      email: session?.user.email,
-      image: session?.user.image,
+      name: session?.user.name ?? '',
+      email: session?.user.email ?? '',
+      image: session?.user.image ?? '',
     },
     mode: 'onBlur',
   });
 
   const { errors, isSubmitting } = form.formState;
 
-  async function handleSubmit(values: UserUpdateSchema) {
-    console.log(values);
-    const response: ApiResponse = await updateUserInfo(values);
+  const { watch } = form;
 
-    if (response.type === 'success') {
-      toast.success(response.message);
-    } else {
-      toast.error(response.message);
+  async function handleSubmit(values: UserUpdateSchema) {
+    console.log('handleSubmit', values);
+    try {
+      const response: ApiResponse = await updateUserInfo(values);
+
+      if (response.type === 'success') {
+        toast.success(response.message);
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar informações:', error);
+      toast.error('Ocorreu um erro ao atualizar as informações');
     }
   }
 
@@ -92,8 +100,10 @@ export default function UserUpdateForm(props: UserUpdateFormProps) {
           </div>
         </div>
 
+        <Separator orientation="horizontal" />
+
         {/* Imagem de Perfil */}
-        <div className="flex flex-col lg:flex-row lg:items-start gap-6 pt-6 border-t">
+        <div className="flex flex-col lg:flex-row lg:items-start gap-6">
           <div className="w-full lg:w-1/3">
             <h2 className="text-xl font-semibold">Imagem de Perfil</h2>
             <p className="text-sm text-muted-foreground mt-1">
@@ -114,12 +124,12 @@ export default function UserUpdateForm(props: UserUpdateFormProps) {
               </div>
             </div>
             <Tabs defaultValue="upload" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="upload">Upload</TabsTrigger>
-                <TabsTrigger value="url">URL Externa</TabsTrigger>
+              <TabsList className="grid w-max grid-cols-2">
+                <TabsTrigger value="upload">Enviar arquivo</TabsTrigger>
+                <TabsTrigger value="url">Enviar link</TabsTrigger>
               </TabsList>
               <TabsContent value="upload">
-                <Input id="picture" type="file" className="p-2.5 h-10" />
+                <Input id="picture" type="file" className="p-[9px] h-10" />
               </TabsContent>
               <TabsContent value="url">
                 <Input
