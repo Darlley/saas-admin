@@ -44,6 +44,7 @@ import {
 import Logotipo from '@/icons/Logotipo';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import DropdownProfile from '../DropdownProfile';
 import { Button } from '../ui/button';
 import {
   Card,
@@ -53,14 +54,13 @@ import {
   CardTitle,
 } from '../ui/card';
 import { DashboardPanelProps } from './DashboardPanel.types';
-import DropdownProfile from '../DropdownProfile';
 export default function DashboardPanel(props: DashboardPanelProps) {
   const { children } = props;
   const { data: session } = useSession();
 
   return (
     <SidebarProvider>
-      <Sidebar variant="floating">
+      <Sidebar variant="floating" className="dark:border-primary">
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
