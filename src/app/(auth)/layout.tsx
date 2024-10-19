@@ -15,7 +15,7 @@ export default function AuthLayout({
 }) {
   return (
     <div className="h-svh max-h-full overflow-hidden w-full flex justify-start bg-gradient-radial dark:from-gray-800 dark:to-slate-950">
-      <div className="w-full h-full max-h-full overflow-y-auto md:w-2/3 lg:w-1/2 bg-white border-r shadow-xl">
+      <div className="w-full h-full max-h-full overflow-y-auto md:w-2/3 lg:w-1/2 bg-white dark:bg-transparent border-r shadow-xl">
         {children}
       </div>
       <div className="relative hidden md:block w-full md:w-1/3 lg:w-1/2 h-full">
