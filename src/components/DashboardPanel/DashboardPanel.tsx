@@ -69,11 +69,6 @@ export default function DashboardPanel(props: DashboardPanelProps) {
 
   return (
     <SidebarProvider
-      style={
-        {
-          '--sidebar-width': '19rem',
-        } as React.CSSProperties
-      }
     >
       <Sidebar variant="floating">
         <SidebarHeader>
