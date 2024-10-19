@@ -49,7 +49,6 @@ import {
   SquareTerminal,
   Trash2,
 } from 'lucide-react';
-import React from 'react';
 
 import Logotipo from '@/icons/Logotipo';
 import { useSession } from 'next-auth/react';
@@ -68,8 +67,7 @@ export default function DashboardPanel(props: DashboardPanelProps) {
   const { data: session } = useSession();
 
   return (
-    <SidebarProvider
-    >
+    <SidebarProvider>
       <Sidebar variant="floating">
         <SidebarHeader>
           <SidebarMenu>
