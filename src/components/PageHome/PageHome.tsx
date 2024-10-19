@@ -31,12 +31,12 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 
+import ThemeToggle from '../ThemeToggle';
 import { PageHomeProps } from './PageHome.types';
-import DropdownProfile from '../DropdownProfile';
 export default function PageHome(props: PageHomeProps) {
   return (
     <>
-      <div className="w-full fixed top-0 bg-white/20 backdrop-blur-md z-50">
+      <div className="w-full fixed top-0 bg-white/20 dark:bg-secondary/20 backdrop-blur-md z-50">
         <nav className="px-4 2xl:px-0 py-4 container mx-auto flex w-full justify-between">
           <div className="flex items-center md:gap-x-12">
             <Link href="#" aria-label="Home">
@@ -54,13 +54,12 @@ export default function PageHome(props: PageHomeProps) {
             <div className="hidden md:block">
               <Link href="/login">Entrar</Link>
             </div>
-            <Button asChild>
+            <Button asChild className="hidden md:block">
               <Link href="/register">
-                <span>
-                  Criar conta
-                </span>
+                <span>Criar conta</span>
               </Link>
             </Button>
+            <ThemeToggle />
             <div className="-mr-1 md:hidden">
               <Sheet>
                 <SheetTrigger asChild>
@@ -75,7 +74,7 @@ export default function PageHome(props: PageHomeProps) {
                 </SheetTrigger>
                 <SheetContent side="left" className="flex flex-col">
                   <nav className="flex flex-col gap-2 items-start px-2 text-sm font-medium lg:px-4">
-                    <Link href="/" aria-label="Home">
+                    <Link href="/" aria-label="Home" className="mb-4">
                       <Logotipo className="size-8" />
                     </Link>
                     {ClientNavigation.map((item, index) => (
@@ -89,20 +88,14 @@ export default function PageHome(props: PageHomeProps) {
                     ))}
                   </nav>
                   <div className="mt-auto">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>Upgrade to Pro</CardTitle>
-                        <CardDescription>
-                          Unlock all features and get unlimited access to our
-                          support team.
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <Button size="sm" className="w-full">
-                          Upgrade
-                        </Button>
-                      </CardContent>
-                    </Card>
+                    <div className='mb-4'>
+                      <Link href="/login">Entrar</Link>
+                    </div>
+                    <Button asChild>
+                      <Link href="/register">
+                        <span>Criar conta</span>
+                      </Link>
+                    </Button>
                   </div>
                 </SheetContent>
               </Sheet>
@@ -112,7 +105,7 @@ export default function PageHome(props: PageHomeProps) {
       </div>
 
       <header className="h-svh py-6 mx-auto container flex-1 flex-grow flex flex-col text-center items-center justify-center">
-        <h1 className="mx-auto max-w-4xl font-display text-5xl font-medium tracking-tight text-slate-900 sm:text-7xl">
+        <h1 className="mx-auto max-w-4xl font-display text-5xl font-medium tracking-tight text-slate-900 dark:text-secondary-foreground sm:text-7xl">
           Faça uma frase de efeito{' '}
           <span className="relative whitespace-nowrap text-primary">
             <svg
@@ -127,7 +120,7 @@ export default function PageHome(props: PageHomeProps) {
           </span>{' '}
           na sua headline
         </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
+        <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-secondary-foreground dark:text-secondary-foreground">
           Descreva seu modelo de negócio, qual dor do cliente seu micro-saas
           pode ajudar a solucionar?
         </p>
@@ -169,12 +162,14 @@ export default function PageHome(props: PageHomeProps) {
         <section id="resources" className="py-24 h-full w-full">
           <div className="container mx-auto">Recursos</div>
         </section>
+
         <section id="testimonials" className="py-24 h-full w-full">
           <div className="container mx-auto">Testemunhos</div>
         </section>
+
         <section
           id="pricing"
-          className="bg-secondary/20 py-24 h-full w-full border-b dark:border-secondary-foreground/20"
+          className="bg-secondary/20 dark:bg-none py-24 h-full w-full border-b dark:border-secondary-foreground/20"
         >
           <div className="absolute inset-0 -z-10 h-full w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#ffffff20_1px,transparent_1px)]"></div>
 
@@ -399,18 +394,20 @@ export default function PageHome(props: PageHomeProps) {
       <footer className="w-full bg-secondary border-t border-slate-400/10">
         <div className="container mx-auto">
           <div className="flex flex-col items-center  py-10 sm:flex-row-reverse sm:justify-between">
-            <div className="flex gap-x-6">
-              <Link href="#" className="group" aria-label="TaxPal on X">
-                <svg className="size-6" aria-hidden="true" viewBox="0 0 24 24">
-                  <path d="M13.3174 10.7749L19.1457 4H17.7646L12.7039 9.88256L8.66193 4H4L10.1122 12.8955L4 20H5.38119L10.7254 13.7878L14.994 20H19.656L13.3171 10.7749H13.3174ZM11.4257 12.9738L10.8064 12.0881L5.87886 5.03974H8.00029L11.9769 10.728L12.5962 11.6137L17.7652 19.0075H15.6438L11.4257 12.9742V12.9738Z" />
-                </svg>
-              </Link>
-              <Link href="#" className="group" aria-label="TaxPal on GitHub">
-                <svg className="size-6" aria-hidden="true" viewBox="0 0 24 24">
-                  <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z" />
-                </svg>
-              </Link>
+            <div className="flex flex-col md:flex-row-reverse items-center gap-y-4 md:gap-x-6">
 
+              <div className='flex items-center gap-4'>
+                <Link href="#" className="group" aria-label="TaxPal on X">
+                  <svg className="size-6 dark:stroke-secondary-foreground" aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="M13.3174 10.7749L19.1457 4H17.7646L12.7039 9.88256L8.66193 4H4L10.1122 12.8955L4 20H5.38119L10.7254 13.7878L14.994 20H19.656L13.3171 10.7749H13.3174ZM11.4257 12.9738L10.8064 12.0881L5.87886 5.03974H8.00029L11.9769 10.728L12.5962 11.6137L17.7652 19.0075H15.6438L11.4257 12.9742V12.9738Z" />
+                  </svg>
+                </Link>
+                <Link href="#" className="group" aria-label="TaxPal on GitHub">
+                  <svg className="size-6 dark:fill-secondary-foreground" aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z" />
+                  </svg>
+                </Link>
+              </div>
               <p>
                 Desenvolvido por{' '}
                 <Link
@@ -421,7 +418,7 @@ export default function PageHome(props: PageHomeProps) {
                 </Link>
               </p>
             </div>
-            <p className="text-sm">
+            <p className="text-sm mt-2">
               &copy; {new Date().getFullYear()} Microo-SaaS. Todos os direitos
               reservados.
             </p>
