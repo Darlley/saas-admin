@@ -1,7 +1,8 @@
+import { ThemeProvider } from '@/theme-provider';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import './globals.css';
 import { Toaster } from 'sonner';
+import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -32,8 +33,15 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${inter.className} relative`}>
-        {children}
-        <Toaster closeButton richColors />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster closeButton richColors />
+        </ThemeProvider>
       </body>
     </html>
   );
