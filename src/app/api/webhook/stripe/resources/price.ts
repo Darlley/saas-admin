@@ -7,16 +7,33 @@ import Stripe from "stripe";
  */
 export async function createPrice(price: Stripe.Price) {
   try {
-    await prisma.price.create({
+    const product = await prisma.product.findUnique({
+      where: { stripeId: price.product as string },
+    });
+
+    if (!product) {
+      console.log(`Produto ${price.product} não encontrado. Aguardando criação.`);
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      return createPrice(price);
+    }
+
+    const createdPrice = await prisma.price.create({
       data: {
         stripePriceId: price.id,
-        amount: price.unit_amount ? price.unit_amount / 100 : 0, // Convertendo para float
+        amount: price.unit_amount ? price.unit_amount / 100 : 0,
         interval: price.recurring?.interval || 'one_time',
-        product: { connect: { stripeId: price.product as string } },
-        subscription: { connect: { stripeId: price.id } }, // Isso pode precisar de ajuste dependendo da lógica do seu aplicativo
+        product: { connect: { id: product.id } },
+        subscription: { create: {
+          stripeId: price.id, // Isso pode precisar ser ajustado dependendo da lógica do Stripe
+          interval: price.recurring?.interval || 'one_time',
+          status: 'active', // Você pode precisar ajustar isso
+          currentPeriodEnd: Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60, // 30 dias a partir de agora
+          currentPeriodStart: Math.floor(Date.now() / 1000),
+        }},
       },
     });
-    console.log(`Preço criado com sucesso: ${price.id}`);
+    console.log(`Preço criado com sucesso: ${createdPrice.stripePriceId}`);
+    return createdPrice;
   } catch (error) {
     console.error(`Erro ao criar preço ${price.id}:`, error);
     throw error;
@@ -29,12 +46,15 @@ export async function createPrice(price: Stripe.Price) {
  */
 export async function deletePrice(price: Stripe.Price) {
   try {
-    await prisma.price.delete({
+    // Ao invés de deletar, podemos marcar como inativo ou fazer soft delete
+    const deletedPrice = await prisma.price.update({
       where: { stripePriceId: price.id },
+      data: { subscription: { update: { status: 'canceled' } } },
     });
-    console.log(`Preço excluído com sucesso: ${price.id}`);
+    console.log(`Preço marcado como inativo: ${deletedPrice.stripePriceId}`);
+    return deletedPrice;
   } catch (error) {
-    console.error(`Erro ao excluir preço ${price.id}:`, error);
+    console.error(`Erro ao marcar preço como inativo ${price.id}:`, error);
     throw error;
   }
 }
@@ -45,15 +65,15 @@ export async function deletePrice(price: Stripe.Price) {
  */
 export async function updatePrice(price: Stripe.Price) {
   try {
-    await prisma.price.update({
+    const updatedPrice = await prisma.price.update({
       where: { stripePriceId: price.id },
       data: {
-        amount: price.unit_amount ? price.unit_amount / 100 : 0, // Convertendo para float
+        amount: price.unit_amount ? price.unit_amount / 100 : 0,
         interval: price.recurring?.interval || 'one_time',
-        product: { connect: { stripeId: price.product as string } },
       },
     });
-    console.log(`Preço atualizado com sucesso: ${price.id}`);
+    console.log(`Preço atualizado com sucesso: ${updatedPrice.stripePriceId}`);
+    return updatedPrice;
   } catch (error) {
     console.error(`Erro ao atualizar preço ${price.id}:`, error);
     throw error;

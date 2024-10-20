@@ -54,24 +54,24 @@ export async function POST(req: Request) {
     case 'product.updated':
       await updateProduct(event.data.object as Stripe.Product);
       break;
-    // case 'plan.created':
-    //   await createPlan(event.data.object as Stripe.Plan);
-    //   break;
-    // case 'plan.updated':
-    //   await updatePlan(event.data.object as Stripe.Plan);
-    //   break;
-    // case 'plan.deleted':
-    //   await deletePlan((event.data.object as Stripe.Plan).id);
-    //   break;
-    // case 'price.created':
-    //   await createPrice(event.data.object as Stripe.Price);
-    //   break;
-    // case 'price.deleted':
-    //   await deletePrice(event.data.object as Stripe.Price);
-    //   break;
-    // case 'price.updated':
-    //   await updatePrice(event.data.object as Stripe.Price);
-    //   break;
+    case 'plan.created':
+      await createPlan(event.data.object as Stripe.Plan);
+      break;
+    case 'plan.updated':
+      await updatePlan(event.data.object as Stripe.Plan);
+      break;
+    case 'plan.deleted':
+      await deletePlan((event.data.object as Stripe.Plan));
+      break;
+    case 'price.created':
+      await createPrice(event.data.object as Stripe.Price);
+      break;
+    case 'price.deleted':
+      await deletePrice(event.data.object as Stripe.Price);
+      break;
+    case 'price.updated':
+      await updatePrice(event.data.object as Stripe.Price);
+      break;
     default:
       console.log(`Tipo de evento não tratado: ${event.type}`);
   }
