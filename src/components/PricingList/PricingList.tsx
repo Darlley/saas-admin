@@ -93,7 +93,7 @@ export default function PricingList() {
                 >
                   <CardHeader className="flex flex-col gap-4">
                     <CardTitle className="flex items-center justify-between">
-                      <span className="text-primary">{product.name} #{price.id}</span>
+                      <span className="text-primary">{product.name}</span>
                       {product.popular && (
                         <Badge className="animate-pulse">Popular</Badge>
                       )}
