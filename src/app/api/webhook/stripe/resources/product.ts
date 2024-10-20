@@ -16,6 +16,7 @@ export async function createProduct(product: Stripe.Product) {
         name: product.name,
         description: product.description || undefined,
         active: product.active,
+        marketing_features: product.marketing_features?.map(feature => feature.name).filter((name): name is string => name !== undefined) || [],
       },
     });
     console.log(
@@ -60,6 +61,7 @@ export async function updateProduct(product: Stripe.Product) {
         name: product.name,
         description: product.description || undefined,
         active: product.active,
+        marketing_features: product.marketing_features?.map(feature => feature.name).filter((name): name is string => name !== undefined) || [],
       },
     });
     console.log(`Produto atualizado com sucesso: ${product.id}`);

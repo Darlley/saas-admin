@@ -22,7 +22,7 @@ interface Product {
   name: string;
   description: string | null;
   popular?: boolean;
-  features?: string[];
+  marketing_features?: string[];
   prices: Price[];
   active: boolean;
   createdAt: Date;
@@ -118,7 +118,7 @@ export default function PricingList() {
                   </CardHeader>
                   <CardContent className="border-t pt-4">
                     <ul className="space-y-2">
-                      {product.features?.map((feature) => (
+                      {product?.marketing_features?.map((feature) => (
                         <li
                           key={feature}
                           className="flex items-center gap-x-3 text-sm"

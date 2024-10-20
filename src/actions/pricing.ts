@@ -12,6 +12,7 @@ export async function getProductsWithPrices() {
           orderBy: { amount: 'asc' },
         },
       },
+      orderBy: { name: 'asc' },
     })
 
     return products

@@ -133,15 +133,16 @@ model Price {
 }
 
 model Product {
-  id          String   @id @default(cuid())
-  stripeId    String   @unique
-  name        String
-  description String?
-  active      Boolean  @default(true)
-  prices      Price[]
-  plans       Plan[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                String   @id @default(cuid())
+  stripeId          String   @unique
+  name              String
+  description       String?
+  active            Boolean  @default(true)
+  marketing_features String[] // Adicionando o novo campo
+  prices            Price[]
+  plans             Plan[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model Plan {
