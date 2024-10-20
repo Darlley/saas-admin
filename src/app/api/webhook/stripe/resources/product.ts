@@ -52,6 +52,7 @@ export async function deleteProduct(product: Stripe.Product) {
  * @param product - O produto do Stripe.
  */
 export async function updateProduct(product: Stripe.Product) {
+  console.log("features", product.marketing_features);
   try {
     await prisma.product.update({
       where: { stripeId: product.id },

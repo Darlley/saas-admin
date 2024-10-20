@@ -33,6 +33,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 
 import ThemeToggle from '../ThemeToggle';
 import { PageHomeProps } from './PageHome.types';
+import PricingList from '../PricingList';
 export default function PageHome(props: PageHomeProps) {
   return (
     <>
@@ -181,134 +182,7 @@ export default function PageHome(props: PageHomeProps) {
           </div>
 
           <div className="container mx-auto mt-12 md:mt-16 px-4 2xl:px-0">
-            <Tabs defaultValue="monthly">
-              <TabsList className="grid w-full max-w-xs sm:max-w-md grid-cols-2 mx-auto mb-8 bg-primary-foreground">
-                <TabsTrigger
-                  value="monthly"
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-                >
-                  Mensal
-                </TabsTrigger>
-                <TabsTrigger
-                  value="annual"
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-                >
-                  Anual
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent value="monthly" className="w-full">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center">
-                  {plans.map((plan) => (
-                    <Card
-                      key={plan.name}
-                      className={cn(
-                        plan.popular && 'border-primary',
-                        'w-full max-w-sm flex flex-col'
-                      )}
-                    >
-                      <CardHeader className="flex flex-col gap-4">
-                        <CardTitle className="flex items-center justify-between">
-                          <span className="text-primary">{plan.name}</span>
-                          {plan.popular && (
-                            <Badge className="animate-pulse">Popular</Badge>
-                          )}
-                        </CardTitle>
-                        <CardDescription>{plan.description}</CardDescription>
-                        <div>
-                          <span className="text-5xl font-semibold">
-                            {new Intl.NumberFormat('pt-BR', {
-                              style: 'currency',
-                              currency: 'BRL',
-                            }).format(plan.monthlyPrice)}
-                          </span>
-                          <sub>/mês</sub>
-                        </div>
-                        {plan.name == 'Free' ? (
-                          <Button className="w-full" variant="outline" asChild>
-                            <Link href="/dashboard">Começar agora</Link>
-                          </Button>
-                        ) : (
-                          <Button className="w-full">Assinar</Button>
-                        )}
-                      </CardHeader>
-                      <CardContent className="border-t pt-4">
-                        <ul className="space-y-2">
-                          {plan.features.map((feature) => (
-                            <li
-                              key={feature}
-                              className="flex items-center gap-x-3 text-sm"
-                            >
-                              <CheckCircle className="size-5 stroke-primary" />
-                              {feature}
-                            </li>
-                          ))}
-                        </ul>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </TabsContent>
-              <TabsContent value="annual" className="w-full">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center">
-                  {plans.map((plan) => (
-                    <Card
-                      key={plan.name}
-                      className={cn(
-                        plan.popular && 'border-primary',
-                        'w-full max-w-sm flex flex-col'
-                      )}
-                    >
-                      <CardHeader className="flex flex-col gap-4">
-                        <CardTitle className="flex items-center justify-between">
-                          <span className="text-primary">{plan.name}</span>
-                          {plan.popular && (
-                            <Badge className="animate-pulse">Popular</Badge>
-                          )}
-                        </CardTitle>
-                        <CardDescription>{plan.description}</CardDescription>
-                        <div>
-                          <span className="text-5xl font-semibold">
-                            {new Intl.NumberFormat('pt-BR', {
-                              style: 'currency',
-                              currency: 'BRL',
-                            }).format(plan.annualPrice / 12)}
-                          </span>
-                          <sub>/mês</sub>
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          Equivalente a{' '}
-                          {new Intl.NumberFormat('pt-BR', {
-                            style: 'currency',
-                            currency: 'BRL',
-                          }).format(plan.annualPrice)}
-                          /ano
-                        </div>
-                        {plan.name == 'Free' ? (
-                          <Button className="w-full" variant="outline" asChild>
-                            <Link href="/dashboard">Começar agora</Link>
-                          </Button>
-                        ) : (
-                          <Button className="w-full">Assinar</Button>
-                        )}
-                      </CardHeader>
-                      <CardContent className="border-t pt-4">
-                        <ul className="space-y-2">
-                          {plan.features.map((feature) => (
-                            <li
-                              key={feature}
-                              className="flex items-center gap-x-3 text-sm"
-                            >
-                              <CheckCircle className="size-5 stroke-primary" />
-                              {feature}
-                            </li>
-                          ))}
-                        </ul>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </TabsContent>
-            </Tabs>
+            <PricingList />
           </div>
         </section>
 

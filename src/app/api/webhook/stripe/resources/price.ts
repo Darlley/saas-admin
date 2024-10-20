@@ -23,13 +23,6 @@ export async function createPrice(price: Stripe.Price) {
         amount: price.unit_amount ? price.unit_amount / 100 : 0,
         interval: price.recurring?.interval || 'one_time',
         product: { connect: { id: product.id } },
-        subscription: { create: {
-          stripeId: price.id, // Isso pode precisar ser ajustado dependendo da lógica do Stripe
-          interval: price.recurring?.interval || 'one_time',
-          status: 'active', // Você pode precisar ajustar isso
-          currentPeriodEnd: Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60, // 30 dias a partir de agora
-          currentPeriodStart: Math.floor(Date.now() / 1000),
-        }},
       },
     });
     console.log(`Preço criado com sucesso: ${createdPrice.stripePriceId}`);
@@ -49,7 +42,15 @@ export async function deletePrice(price: Stripe.Price) {
     // Ao invés de deletar, podemos marcar como inativo ou fazer soft delete
     const deletedPrice = await prisma.price.update({
       where: { stripePriceId: price.id },
-      data: { subscription: { update: { status: 'canceled' } } },
+      data: { 
+        active: false,
+        subscriptions: {
+          updateMany: {
+            where: { status: { not: 'canceled' } },
+            data: { status: 'canceled' }
+          }
+        }
+      },
     });
     console.log(`Preço marcado como inativo: ${deletedPrice.stripePriceId}`);
     return deletedPrice;

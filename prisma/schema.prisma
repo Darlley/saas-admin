@@ -107,24 +107,26 @@ model Subscription {
   currentPeriodEnd   Int
   currentPeriodStart Int
 
-  User   User?   @relation(fields: [userId], references: [id])
+  User   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
   userId String?
 
-  prices Price[]
+  price   Price?  @relation(fields: [priceId], references: [id])
+  priceId Int?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Price {
-  id             Int      @id @default(autoincrement())
-  stripePriceId  String   @unique
+  id             Int           @id @default(autoincrement())
+  stripePriceId  String        @unique
   amount         Float
   interval       String
-  subscription   Subscription @relation(fields: [subscriptionId], references: [id])
-  subscriptionId Int
-  product        Product  @relation(fields: [productId], references: [id])
+  product        Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId      String
+  active         Boolean       @default(true)
+
+  subscriptions  Subscription[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -137,7 +139,7 @@ model Product {
   description String?
   active      Boolean  @default(true)
   prices      Price[]
-  plans       Plan[]   // Adicionando relação com Plan
+  plans       Plan[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -152,7 +154,7 @@ model Plan {
   interval       String
   intervalCount  Int
   active         Boolean  @default(true)
-  product        Product  @relation(fields: [productId], references: [id])
+  product        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
