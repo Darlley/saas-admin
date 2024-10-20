@@ -9,6 +9,7 @@ import { generateVerificationToken } from '@/lib/tokens';
 import { prisma } from '@/services/database';
 import bcrypt from 'bcrypt';
 import { ApiResponse } from '../../types/api-response.types';
+import { stripe } from '@/services/stripe';
 
 const RESEND_KEY = process.env.AUTH_RESEND_KEY!
 
@@ -43,12 +44,22 @@ export const register = async (
       };
     }
 
-    await prisma.user.create({
+    const createdUser = await prisma.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
       },
+    });
+
+    const stripeCustomer = await stripe.customers.create({
+      email: email,
+      name: name,
+    });
+
+    await prisma.user.update({
+      where: { id: createdUser.id },
+      data: { stripeCustomerId: stripeCustomer.id },
     });
 
     if (RESEND_KEY) {
