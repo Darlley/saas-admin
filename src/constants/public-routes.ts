@@ -9,6 +9,7 @@ export const authRoutes = [
   '/login',
   '/register',
   "/verify-email",
+  "/api/webhook/stripe"
 ]
 
 export const apiAuthPrefix = '/api/auth'

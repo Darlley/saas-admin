@@ -1,8 +1,16 @@
-import { prisma } from "@/services/database";
-import { stripe } from "@/services/stripe";
-import { Prisma } from "@prisma/client";
-import { headers } from "next/headers";
-import Stripe from "stripe";
+import { prisma } from '@/services/database';
+import { stripe } from '@/services/stripe';
+import { Prisma } from '@prisma/client';
+import { headers } from 'next/headers';
+import { NextResponse } from 'next/server';
+import Stripe from 'stripe';
+import { createPlan, deletePlan, updatePlan } from './resources/plan';
+import { createPrice, deletePrice, updatePrice } from './resources/price';
+import {
+  createProduct,
+  deleteProduct,
+  updateProduct,
+} from './resources/product';
 
 /**
  * Manipula webhooks do Stripe para processar eventos de assinatura.
@@ -11,16 +19,20 @@ import Stripe from "stripe";
  */
 export async function POST(req: Request) {
   const body = await req.text();
-  const signature = headers().get("stripe-signature") as string;
+  const signature = headers().get('stripe-signature') as string;
 
   let event: Stripe.Event;
 
   try {
-    // Verifica a assinatura do webhook para garantir que veio do Stripe
-    event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET!);
+    event = stripe.webhooks.constructEvent(
+      body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
+    console.log('Evento Stripe recebido:', event.type);
   } catch (error) {
-    console.error("Erro na verificação do webhook:", error);
-    return new Response("Erro no webhook", { status: 400 });
+    console.error('Erro na verificação do webhook:', error);
+    return new Response('Erro no webhook', { status: 400 });
   }
 
   const session = event.data.object as Stripe.Checkout.Session;
@@ -32,60 +44,76 @@ export async function POST(req: Request) {
     case 'invoice.payment_succeeded':
       await handleInvoicePaymentSucceeded(session);
       break;
-    case 'plan.created':
-      await handlePlanCreated(event.data.object);
-      break;
-    case 'plan.deleted':
-    case 'plan.updated':
-      const plan = event.data.object;
-      // Lógica para lidar com eventos de plano
-      break;
     case 'product.created':
-    case 'product.deleted':
-    case 'product.updated':
-    case 'price.created':
-    case 'price.deleted':
-    case 'price.updated':
-      const price = event.data.object;
-      // Lógica para lidar com eventos de preço
+      console.log('Evento product.created detectado');
+      await createProduct(event.data.object as Stripe.Product);
       break;
+    case 'product.deleted':
+      await deleteProduct(event.data.object as Stripe.Product);
+      break;
+    case 'product.updated':
+      await updateProduct(event.data.object as Stripe.Product);
+      break;
+    // case 'plan.created':
+    //   await createPlan(event.data.object as Stripe.Plan);
+    //   break;
+    // case 'plan.updated':
+    //   await updatePlan(event.data.object as Stripe.Plan);
+    //   break;
+    // case 'plan.deleted':
+    //   await deletePlan((event.data.object as Stripe.Plan).id);
+    //   break;
+    // case 'price.created':
+    //   await createPrice(event.data.object as Stripe.Price);
+    //   break;
+    // case 'price.deleted':
+    //   await deletePrice(event.data.object as Stripe.Price);
+    //   break;
+    // case 'price.updated':
+    //   await updatePrice(event.data.object as Stripe.Price);
+    //   break;
     default:
       console.log(`Tipo de evento não tratado: ${event.type}`);
   }
 
-  return new Response("Webhook recebido", { status: 200 });
+  return NextResponse.json({ received: true }, { status: 200 });
 }
 
 /**
  * Manipula o evento de conclusão de checkout.
  * @param session - A sessão de checkout do Stripe.
  */
-async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) {
-  const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
+async function handleCheckoutSessionCompleted(
+  session: Stripe.Checkout.Session
+) {
+  const subscription = await stripe.subscriptions.retrieve(
+    session.subscription as string
+  );
   const customerId = session.customer as string;
   const user = await prisma.user.findUnique({
     where: { stripeCustomerId: customerId },
   });
 
-  if (!user) throw new Error("User not found.");
+  if (!user) throw new Error('User not found.');
 
-  
   // Cancela a assinatura anterior, se existir
   const existingSubscription = await prisma.subscription.findUnique({
-    where: { stripeId: subscription.id }
+    where: { stripeId: subscription.id },
   });
-  
+
   // Apaga qualquer assinatura existente do usuário
   await prisma.subscription.deleteMany({
-    where: { userId: user.id }
+    where: { userId: user.id },
   });
-  
+
   if (existingSubscription) {
     try {
       await stripe.subscriptions.cancel(existingSubscription.stripeId);
     } catch (error) {
       if (error instanceof Stripe.errors.StripeInvalidRequestError) {
-        console.warn(`Assinatura não encontrada no Stripe: ${existingSubscription.stripeId}`);
+        console.warn(
+          `Assinatura não encontrada no Stripe: ${existingSubscription.stripeId}`
+        );
       } else {
         throw error; // Lança outros erros
       }
@@ -115,7 +143,9 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
  * @param session - A sessão de checkout do Stripe.
  */
 async function handleInvoicePaymentSucceeded(session: Stripe.Checkout.Session) {
-  const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
+  const subscription = await stripe.subscriptions.retrieve(
+    session.subscription as string
+  );
   const customerId = session.customer as string;
 
   const user = await prisma.user.findUnique({
@@ -123,7 +153,7 @@ async function handleInvoicePaymentSucceeded(session: Stripe.Checkout.Session) {
   });
 
   if (!user) {
-    console.error("Usuário não encontrado para o customerId:", customerId);
+    console.error('Usuário não encontrado para o customerId:', customerId);
     return;
   }
 
@@ -144,7 +174,10 @@ async function handleInvoicePaymentSucceeded(session: Stripe.Checkout.Session) {
       data: subscriptionData,
     });
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === 'P2025'
+    ) {
       // Se a assinatura não existir, cria uma nova
       await prisma.subscription.create({
         data: subscriptionData,
@@ -155,7 +188,4 @@ async function handleInvoicePaymentSucceeded(session: Stripe.Checkout.Session) {
       throw error;
     }
   }
-}
-
-async function handleProductCreated(customer: Stripe.Customer) {
 }

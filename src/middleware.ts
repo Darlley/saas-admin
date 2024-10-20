@@ -19,6 +19,7 @@ export default auth((req) => {
 
   // Se a rota é uma API auth, não faz nada
   if (isApiAuthRoute) {
+    console.log('isApiAuthRoute');
     return undefined;
   }
 
