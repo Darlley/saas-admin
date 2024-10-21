@@ -52,8 +52,8 @@ export async function POST(request: NextRequest) {
       mode: 'subscription',
       client_reference_id: userId,
       customer: customer.id,
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/payment/success`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/payment/cancelled`,
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?payment=success`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?payment=cancelled`,
       billing_address_collection: 'auto',
       customer_update: {
         address: 'auto',
