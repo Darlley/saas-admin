@@ -107,10 +107,10 @@ model Subscription {
   currentPeriodEnd   Int
   currentPeriodStart Int
 
-  User   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
-  userId String?
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 
-  price   Price?  @relation(fields: [priceId], references: [id])
+  price   Price? @relation(fields: [priceId], references: [id])
   priceId Int?
 
   createdAt DateTime @default(now())

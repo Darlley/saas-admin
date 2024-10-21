@@ -1,6 +1,5 @@
 import DashboardPanel from '@/components/DashboardPanel';
 import { Metadata } from 'next';
-import { SessionProvider } from 'next-auth/react';
 import React from 'react';
 
 export const metadata: Metadata = {
@@ -16,9 +15,5 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <SessionProvider>
-      <DashboardPanel>{children}</DashboardPanel>
-    </SessionProvider>
-  );
+  return <DashboardPanel>{children}</DashboardPanel>;
 }

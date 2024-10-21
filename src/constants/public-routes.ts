@@ -2,16 +2,18 @@ export const publicRoutes = [
   '/',
   "/error",
   "/reset",
-  "/new-password"
+  "/new-password",
+  "/api/checkout",
 ]
 
 export const authRoutes = [
   '/login',
   '/register',
   "/verify-email",
-  "/api/webhook/stripe"
-]
+  "/api/webhook/stripe",
 
-export const apiAuthPrefix = '/api/auth'
+];
+
+export const apiAuthPrefix = '/api/auth';
 
 export const DEFAULT_LOGIN_REDIRECT = '/dashboard/settings'

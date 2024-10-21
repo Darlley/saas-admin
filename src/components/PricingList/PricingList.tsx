@@ -6,6 +6,9 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { getProductsWithPrices } from '@/actions/pricing';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import {
@@ -44,21 +47,59 @@ interface Price {
 }
 
 export default function PricingList() {
+  const { data: session } = useSession();
+  const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     async function fetchProducts() {
       const fetchedProducts = await getProductsWithPrices();
       // Filtra os produtos para incluir apenas os dois primeiros preços ativos
-      const productsWithTwoPrices = fetchedProducts.map(product => ({
+      const productsWithTwoPrices = fetchedProducts.map((product) => ({
         ...product,
-        prices: product.prices.filter(price => price.active).slice(0, 2)
+        prices: product.prices.filter((price) => price.active).slice(0, 2),
       }));
       setProducts(productsWithTwoPrices);
     }
 
     fetchProducts();
   }, []);
+
+  const handleSubscribe = async (priceId: string) => {
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          priceId,
+        }),
+      });
+
+      if (response.status === 401) {
+        // Usuário não está autenticado, redirecionar para login
+        router.push('/login');
+        return;
+      }
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Resposta do servidor:", errorText);
+        throw new Error(`Falha ao iniciar o checkout: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      if (data.url) {
+        router.push(data.url);
+      } else {
+        throw new Error("URL de checkout não encontrada na resposta");
+      }
+    } catch (error) {
+      console.error("Erro ao processar a assinatura:", error);
+      toast.error("Falha ao iniciar o checkout. Por favor, tente novamente.");
+    }
+  };
 
   return (
     <Tabs defaultValue="first">
@@ -108,12 +149,21 @@ export default function PricingList() {
                       </span>
                       <sub>/{price.interval === 'month' ? 'mês' : 'ano'}</sub>
                     </div>
-                    {product.name === 'Free' ? (
-                      <Button className="w-full" variant="outline" asChild>
+                    {price.amount === 0 ? (
+                      <Button
+                        className="w-full"
+                        variant="outline"
+                        asChild
+                      >
                         <Link href="/dashboard">Começar agora</Link>
                       </Button>
                     ) : (
-                      <Button className="w-full">Assinar</Button>
+                      <Button
+                        className="w-full"
+                        onClick={() => handleSubscribe(price.stripePriceId)}
+                      >
+                        Assinar
+                      </Button>
                     )}
                   </CardHeader>
                   <CardContent className="border-t pt-4">
