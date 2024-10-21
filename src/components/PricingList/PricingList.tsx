@@ -5,7 +5,7 @@ import { CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-import { getProductsWithPrices } from '@/actions/pricing';
+import { getProductsWithPlans } from '@/actions/pricing';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -26,40 +26,50 @@ interface Product {
   description: string | null;
   popular?: boolean;
   marketing_features?: string[];
-  prices: Price[];
+  plans: Plan[];
   active: boolean;
   createdAt: Date;
   updatedAt: Date;
   stripeId: string;
 }
 
-interface Price {
-  id: number;
+interface Plan {
+  id: string;
+  stripeId: string;
   productId: string;
+  nickname: string | null;
   amount: number;
-  interval: string;
+  currency: string;
+  interval: 'day' | 'week' | 'month' | 'quarter' | 'semester' | 'year' | 'custom';
+  intervalCount: number;
   active: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  stripePriceId: string;
-  // Remova subscriptionId se não estiver presente nos dados reais
-  // subscriptionId: number;
 }
 
 export default function PricingList() {
   const { data: session } = useSession();
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
+  const [intervalOptions, setIntervalOptions] = useState<Array<{ interval: string; intervalCount: number }>>([]);
+  const [selectedInterval, setSelectedInterval] = useState<string>('');
 
   useEffect(() => {
     async function fetchProducts() {
-      const fetchedProducts = await getProductsWithPrices();
-      // Filtra os produtos para incluir apenas os dois primeiros preços ativos
-      const productsWithTwoPrices = fetchedProducts.map((product) => ({
-        ...product,
-        prices: product.prices.filter((price) => price.active).slice(0, 2),
-      }));
-      setProducts(productsWithTwoPrices);
+      const fetchedProducts = await getProductsWithPlans();
+      setProducts(fetchedProducts as Product[]);
+
+      const uniqueIntervalOptions = Array.from(new Set(fetchedProducts.flatMap(product => 
+        product.plans.map(plan => `${plan.interval}-${plan.intervalCount}`)
+      ))).map(option => {
+        const [interval, intervalCount] = option.split('-');
+        return { interval, intervalCount: parseInt(intervalCount) };
+      }).sort((a, b) => {
+        const order = ['day', 'week', 'month', 'quarter', 'semester', 'year'];
+        const intervalDiff = order.indexOf(a.interval) - order.indexOf(b.interval);
+        return intervalDiff !== 0 ? intervalDiff : a.intervalCount - b.intervalCount;
+      });
+
+      setIntervalOptions(uniqueIntervalOptions);
+      setSelectedInterval(`${uniqueIntervalOptions[0]?.interval}-${uniqueIntervalOptions[0]?.intervalCount}` || '');
     }
 
     fetchProducts();
@@ -102,27 +112,32 @@ export default function PricingList() {
   };
 
   return (
-    <Tabs defaultValue="first">
-      <TabsList className="grid w-full max-w-xs sm:max-w-md grid-cols-2 mx-auto mb-8 bg-primary-foreground">
-        <TabsTrigger
-          value="first"
-          className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-        >
-          Mensal
-        </TabsTrigger>
-        <TabsTrigger
-          value="second"
-          className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-        >
-          Anual
-        </TabsTrigger>
+    <Tabs value={selectedInterval} onValueChange={setSelectedInterval} className='flex flex-col gap-10'>
+      <TabsList className="mx-auto">
+        {intervalOptions?.length > 0 ? intervalOptions?.map(({ interval, intervalCount }) => (
+          <TabsTrigger
+            key={`${interval}-${intervalCount}`}
+            value={`${interval}-${intervalCount}`}
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+          >
+            {translateInterval(interval, intervalCount)}
+          </TabsTrigger>
+        )) : (
+          <TabsTrigger
+            value="default"
+            disabled
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+          >
+            Ative o Webhook e crie os planos no Stripe
+          </TabsTrigger>
+        )}
       </TabsList>
-      {['first', 'second'].map((tabValue, index) => (
-        <TabsContent key={tabValue} value={tabValue} className="w-full">
+      {intervalOptions.map(({ interval, intervalCount }) => (
+        <TabsContent key={`${interval}-${intervalCount}`} value={`${interval}-${intervalCount}`} className="w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center">
             {products.map((product) => {
-              const price = product.prices[index];
-              if (!price) return null;
+              const plans = product.plans.filter(p => p.interval === interval && p.intervalCount === intervalCount && p.active);
+              if (plans.length === 0) return null;
 
               return (
                 <Card
@@ -140,31 +155,35 @@ export default function PricingList() {
                       )}
                     </CardTitle>
                     <CardDescription>{product.description}</CardDescription>
-                    <div>
-                      <span className="text-5xl font-semibold">
-                        {new Intl.NumberFormat('pt-BR', {
-                          style: 'currency',
-                          currency: 'BRL',
-                        }).format(price.amount)}
-                      </span>
-                      <sub>/{price.interval === 'month' ? 'mês' : 'ano'}</sub>
-                    </div>
-                    {price.amount === 0 ? (
-                      <Button
-                        className="w-full"
-                        variant="outline"
-                        asChild
-                      >
-                        <Link href="/dashboard">Começar agora</Link>
-                      </Button>
-                    ) : (
-                      <Button
-                        className="w-full"
-                        onClick={() => handleSubscribe(price.stripePriceId)}
-                      >
-                        Assinar
-                      </Button>
-                    )}
+                    {plans.map((plan) => (
+                      <div key={plan.id} className="mt-2">
+                        <div>
+                          <span className="text-3xl font-semibold">
+                            {new Intl.NumberFormat('pt-BR', {
+                              style: 'currency',
+                              currency: plan.currency,
+                            }).format(plan.amount)}
+                          </span>
+                          <sub>/{translateInterval(plan.interval, plan.intervalCount)}</sub>
+                        </div>
+                        {plan.amount === 0 ? (
+                          <Button
+                            className="w-full mt-2"
+                            variant="outline"
+                            asChild
+                          >
+                            <Link href="/dashboard">Começar agora</Link>
+                          </Button>
+                        ) : (
+                          <Button
+                            className="w-full mt-2"
+                            onClick={() => handleSubscribe(plan.stripeId)}
+                          >
+                            Assinar {plan.nickname || ''}
+                          </Button>
+                        )}
+                      </div>
+                    ))}
                   </CardHeader>
                   <CardContent className="border-t pt-4">
                     <ul className="space-y-2">
@@ -187,4 +206,25 @@ export default function PricingList() {
       ))}
     </Tabs>
   );
+}
+
+function translateInterval(interval: string, intervalCount: number = 1): string {
+  const translations: Record<string, { exato: string; singular: string; plural: string }> = {
+    day: { exato: 'dia', singular: 'diário', plural: 'diários' },
+    week: { exato: 'semana', singular: 'semanal', plural: 'semanais' },
+    month: { exato: 'mês', singular: 'mensal', plural: 'mensais' },
+    quarter: { exato: 'trimestre', singular: 'trimestral', plural: 'trimestrais' },
+    semester: { exato: 'semestre', singular: 'semestral', plural: 'semestrais' },
+    year: { exato: 'ano', singular: 'anual', plural: 'anuais' },
+  };
+
+  const translation = translations[interval] || { exato: interval, singular: `${interval}al`, plural: `${interval}ais` };
+  
+  if (intervalCount === 1) {
+    return translation.singular.charAt(0).toUpperCase() + translation.singular.slice(1);
+  } else if (interval === 'month' && intervalCount === 12) {
+    return 'Anual';
+  } else {
+    return `A cada ${intervalCount} ${translation.exato}${intervalCount > 1 ? 's' : ''}`;
+  }
 }
