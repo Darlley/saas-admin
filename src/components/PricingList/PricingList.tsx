@@ -40,7 +40,14 @@ interface Plan {
   nickname: string | null;
   amount: number;
   currency: string;
-  interval: 'day' | 'week' | 'month' | 'quarter' | 'semester' | 'year' | 'custom';
+  interval:
+    | 'day'
+    | 'week'
+    | 'month'
+    | 'quarter'
+    | 'semester'
+    | 'year'
+    | 'custom';
   intervalCount: number;
   active: boolean;
 }
@@ -49,7 +56,9 @@ export default function PricingList() {
   const { data: session } = useSession();
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
-  const [intervalOptions, setIntervalOptions] = useState<Array<{ interval: string; intervalCount: number }>>([]);
+  const [intervalOptions, setIntervalOptions] = useState<
+    Array<{ interval: string; intervalCount: number }>
+  >([]);
   const [selectedInterval, setSelectedInterval] = useState<string>('');
 
   useEffect(() => {
@@ -57,19 +66,33 @@ export default function PricingList() {
       const fetchedProducts = await getProductsWithPlans();
       setProducts(fetchedProducts as Product[]);
 
-      const uniqueIntervalOptions = Array.from(new Set(fetchedProducts.flatMap(product => 
-        product.plans.map(plan => `${plan.interval}-${plan.intervalCount}`)
-      ))).map(option => {
-        const [interval, intervalCount] = option.split('-');
-        return { interval, intervalCount: parseInt(intervalCount) };
-      }).sort((a, b) => {
-        const order = ['day', 'week', 'month', 'quarter', 'semester', 'year'];
-        const intervalDiff = order.indexOf(a.interval) - order.indexOf(b.interval);
-        return intervalDiff !== 0 ? intervalDiff : a.intervalCount - b.intervalCount;
-      });
+      const uniqueIntervalOptions = Array.from(
+        new Set(
+          fetchedProducts.flatMap((product) =>
+            product.plans.map(
+              (plan) => `${plan.interval}-${plan.intervalCount}`
+            )
+          )
+        )
+      )
+        .map((option) => {
+          const [interval, intervalCount] = option.split('-');
+          return { interval, intervalCount: parseInt(intervalCount) };
+        })
+        .sort((a, b) => {
+          const order = ['day', 'week', 'month', 'quarter', 'semester', 'year'];
+          const intervalDiff =
+            order.indexOf(a.interval) - order.indexOf(b.interval);
+          return intervalDiff !== 0
+            ? intervalDiff
+            : a.intervalCount - b.intervalCount;
+        });
 
       setIntervalOptions(uniqueIntervalOptions);
-      setSelectedInterval(`${uniqueIntervalOptions[0]?.interval}-${uniqueIntervalOptions[0]?.intervalCount}` || '');
+      setSelectedInterval(
+        `${uniqueIntervalOptions[0]?.interval}-${uniqueIntervalOptions[0]?.intervalCount}` ||
+          ''
+      );
     }
 
     fetchProducts();
@@ -77,10 +100,10 @@ export default function PricingList() {
 
   const handleSubscribe = async (priceId: string) => {
     try {
-      const response = await fetch("/api/checkout", {
-        method: "POST",
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           priceId,
@@ -95,34 +118,42 @@ export default function PricingList() {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("Resposta do servidor:", errorText);
-        throw new Error(`Falha ao iniciar o checkout: ${response.status} ${response.statusText}`);
+        console.error('Resposta do servidor:', errorText);
+        throw new Error(
+          `Falha ao iniciar o checkout: ${response.status} ${response.statusText}`
+        );
       }
 
       const data = await response.json();
       if (data.url) {
         router.push(data.url);
       } else {
-        throw new Error("URL de checkout não encontrada na resposta");
+        throw new Error('URL de checkout não encontrada na resposta');
       }
     } catch (error) {
-      console.error("Erro ao processar a assinatura:", error);
-      toast.error("Falha ao iniciar o checkout. Por favor, tente novamente.");
+      console.error('Erro ao processar a assinatura:', error);
+      toast.error('Falha ao iniciar o checkout. Por favor, tente novamente.');
     }
   };
 
   return (
-    <Tabs value={selectedInterval} onValueChange={setSelectedInterval} className='flex flex-col gap-10'>
+    <Tabs
+      value={selectedInterval}
+      onValueChange={setSelectedInterval}
+      className="flex flex-col gap-10"
+    >
       <TabsList className="mx-auto">
-        {intervalOptions?.length > 0 ? intervalOptions?.map(({ interval, intervalCount }) => (
-          <TabsTrigger
-            key={`${interval}-${intervalCount}`}
-            value={`${interval}-${intervalCount}`}
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-          >
-            {translateInterval(interval, intervalCount)}
-          </TabsTrigger>
-        )) : (
+        {intervalOptions?.length > 0 ? (
+          intervalOptions?.map(({ interval, intervalCount }) => (
+            <TabsTrigger
+              key={`${interval}-${intervalCount}`}
+              value={`${interval}-${intervalCount}`}
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            >
+              {translateInterval(interval, intervalCount)}
+            </TabsTrigger>
+          ))
+        ) : (
           <TabsTrigger
             value="default"
             disabled
@@ -133,10 +164,19 @@ export default function PricingList() {
         )}
       </TabsList>
       {intervalOptions.map(({ interval, intervalCount }) => (
-        <TabsContent key={`${interval}-${intervalCount}`} value={`${interval}-${intervalCount}`} className="w-full">
+        <TabsContent
+          key={`${interval}-${intervalCount}`}
+          value={`${interval}-${intervalCount}`}
+          className="w-full"
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center">
             {products.map((product) => {
-              const plans = product.plans.filter(p => p.interval === interval && p.intervalCount === intervalCount && p.active);
+              const plans = product.plans.filter(
+                (p) =>
+                  p.interval === interval &&
+                  p.intervalCount === intervalCount &&
+                  p.active
+              );
               if (plans.length === 0) return null;
 
               return (
@@ -158,28 +198,49 @@ export default function PricingList() {
                     {plans.map((plan) => (
                       <div key={plan.id} className="mt-2">
                         <div>
-                          <span className="text-3xl font-semibold">
-                            {new Intl.NumberFormat('pt-BR', {
-                              style: 'currency',
-                              currency: plan.currency,
-                            }).format(plan.amount)}
-                          </span>
-                          <sub>/{translateInterval(plan.interval, plan.intervalCount)}</sub>
+                          {session ? (
+                            <span className="text-3xl font-semibold">
+                              {new Intl.NumberFormat('pt-BR', {
+                                style: 'currency',
+                                currency: plan.currency,
+                              }).format(plan.amount)}
+                            </span>
+                          ) : (
+                            <span className="text-3xl font-semibold blur-md">
+                              R$ --,--
+                            </span>
+                          )}
+                          <sub>
+                            /
+                            {translateInterval(
+                              plan.interval,
+                              plan.intervalCount
+                            )}
+                          </sub>
                         </div>
-                        {plan.amount === 0 ? (
-                          <Button
-                            className="w-full mt-2"
-                            variant="outline"
-                            asChild
-                          >
-                            <Link href="/dashboard">Começar agora</Link>
-                          </Button>
+                        {session ? (
+                          plan.amount === 0 ? (
+                            <Button
+                              className="w-full mt-2"
+                              variant="outline"
+                              asChild
+                            >
+                              <Link href="/dashboard">Começar agora</Link>
+                            </Button>
+                          ) : (
+                            <Button
+                              className="w-full mt-2"
+                              onClick={() => handleSubscribe(plan.stripeId)}
+                            >
+                              Assinar {plan.nickname || ''}
+                            </Button>
+                          )
                         ) : (
                           <Button
                             className="w-full mt-2"
-                            onClick={() => handleSubscribe(plan.stripeId)}
+                            onClick={() => router.push('/login')}
                           >
-                            Assinar {plan.nickname || ''}
+                            Fazer login para ver preços
                           </Button>
                         )}
                       </div>
@@ -208,23 +269,46 @@ export default function PricingList() {
   );
 }
 
-function translateInterval(interval: string, intervalCount: number = 1): string {
-  const translations: Record<string, { exato: string; singular: string; plural: string }> = {
+function translateInterval(
+  interval: string,
+  intervalCount: number = 1
+): string {
+  const translations: Record<
+    string,
+    { exato: string; singular: string; plural: string }
+  > = {
     day: { exato: 'dia', singular: 'diário', plural: 'diários' },
     week: { exato: 'semana', singular: 'semanal', plural: 'semanais' },
     month: { exato: 'mês', singular: 'mensal', plural: 'mensais' },
-    quarter: { exato: 'trimestre', singular: 'trimestral', plural: 'trimestrais' },
-    semester: { exato: 'semestre', singular: 'semestral', plural: 'semestrais' },
+    quarter: {
+      exato: 'trimestre',
+      singular: 'trimestral',
+      plural: 'trimestrais',
+    },
+    semester: {
+      exato: 'semestre',
+      singular: 'semestral',
+      plural: 'semestrais',
+    },
     year: { exato: 'ano', singular: 'anual', plural: 'anuais' },
   };
 
-  const translation = translations[interval] || { exato: interval, singular: `${interval}al`, plural: `${interval}ais` };
-  
+  const translation = translations[interval] || {
+    exato: interval,
+    singular: `${interval}al`,
+    plural: `${interval}ais`,
+  };
+
   if (intervalCount === 1) {
-    return translation.singular.charAt(0).toUpperCase() + translation.singular.slice(1);
+    return (
+      translation.singular.charAt(0).toUpperCase() +
+      translation.singular.slice(1)
+    );
   } else if (interval === 'month' && intervalCount === 12) {
     return 'Anual';
   } else {
-    return `A cada ${intervalCount} ${translation.exato}${intervalCount > 1 ? 's' : ''}`;
+    return `A cada ${intervalCount} ${translation.exato}${
+      intervalCount > 1 ? 's' : ''
+    }`;
   }
 }
