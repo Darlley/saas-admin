@@ -1,14 +1,29 @@
 import Logotipo from '@/icons/Logotipo';
 import { type Metadata } from 'next';
 import Link from 'next/link';
-
 import SignupForm from '@/components/SignupForm';
+import { stripe } from '@/services/stripe';
 
 export const metadata: Metadata = {
   title: 'Sign Up',
 };
 
-export default function Register() {
+export default async function Register({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
+  let email = '';
+
+  if (searchParams.session_id) {
+    try {
+      const session = await stripe.checkout.sessions.retrieve(searchParams.session_id as string);
+      email = session?.customer_details?.email || '';
+    } catch (error) {
+      console.error('Erro ao recuperar detalhes da sessão:', error);
+    }
+  }
+
   return (
     <main className="py-4 h-full">
       <div className="mx-auto w-full h-full max-w-md md:w-96 md:max-w-sm flex flex-col justify-center">
@@ -30,7 +45,7 @@ export default function Register() {
             em sua conta
           </p>
         </header>
-        <SignupForm />
+        <SignupForm prefilledEmail={email} />
       </div>
     </main>
   );

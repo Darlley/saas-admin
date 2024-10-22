@@ -27,12 +27,12 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { ApiResponse } from '../../../types/api-response.types';
 import { RegisterSchema, registerSchema } from './SignupForm.schemas';
+import { SignupFormProps } from './SignupForm.types';
 
 const EMAIL_FROM = process.env.NEXT_PUBLIC_EMAIL_FROM!;
 const RESEND_KEY = process.env.NEXT_PUBLIC_AUTH_RESEND_KEY!;
 
-import { SignupFormProps } from './SignupForm.types';
-export default function SignupForm(props: SignupFormProps) {
+export default function SignupForm({ prefilledEmail = '' }: SignupFormProps) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -41,7 +41,7 @@ export default function SignupForm(props: SignupFormProps) {
     resolver: zodResolver(registerSchema),
     defaultValues: {
       name: '',
-      email: '',
+      email: prefilledEmail,
       password: '',
     },
     mode: 'onBlur',
@@ -87,9 +87,9 @@ export default function SignupForm(props: SignupFormProps) {
     if (data.type === 'success') {
       setSuccess(data?.message ?? '');
       if (RESEND_KEY && watch('email').endsWith('@gmail.com')) {
-        const from = EMAIL_FROM?.replace("@", "%40")
-        const subject = encodeURIComponent("Confirme seu e-mail");
-        
+        const from = EMAIL_FROM?.replace('@', '%40');
+        const subject = encodeURIComponent('Confirme seu e-mail');
+
         toast.success('Você usa o Gmail?', {
           action: {
             label: 'Abra aqui',
@@ -144,8 +144,14 @@ export default function SignupForm(props: SignupFormProps) {
                     placeholder="Insira seu email"
                     type="email"
                     className="p-4 h-10"
+                    disabled={!!prefilledEmail}
                   />
                 </FormControl>
+                {prefilledEmail && (
+                  <FormDescription>
+                    Use o mesmo email fornecido durante o checkout.
+                  </FormDescription>
+                )}
                 <FormMessage />
               </FormItem>
             )}
@@ -267,7 +273,7 @@ export default function SignupForm(props: SignupFormProps) {
             )}
           </AnimatePresence>
 
-          <div className='flex flex-col mb-2'>
+          <div className="flex flex-col mb-2">
             <Button size="lg" disabled={isSubmitting}>
               {isSubmitting ? (
                 <Ellipsis className="size-8 stroke-2 animate-pulse ml-2.5" />

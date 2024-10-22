@@ -12,7 +12,7 @@ export async function handleCheckoutSessionCompleted(
   const subscriptionId = session.subscription as string;
   const customerId = session.customer as string;
 
-  // Busca a assinatura, o usuário e o preço em paralelo
+  // Busca a assinatura e o usuário em paralelo
   const [subscription, user] = await Promise.all([
     stripe.subscriptions.retrieve(subscriptionId, {
       expand: ['items.data.price.product']
@@ -23,7 +23,11 @@ export async function handleCheckoutSessionCompleted(
     })
   ]);
 
-  if (!user) throw new Error(`Usuário não encontrado para o customerId: ${customerId}`);
+  if (!user) {
+    console.log(`Usuário não encontrado para o customerId: ${customerId}. Isso é esperado para compras sem conta.`);
+    // Aqui você pode decidir se quer criar um registro temporário ou simplesmente retornar
+    return;
+  }
 
   // Procura o item principal da assinatura
   const mainSubscriptionItem = subscription.items.data.find(item => item.price.type === 'recurring');

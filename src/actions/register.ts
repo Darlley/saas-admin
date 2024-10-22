@@ -10,9 +10,24 @@ import { prisma } from '@/services/database';
 import bcrypt from 'bcrypt';
 import { ApiResponse } from '../../types/api-response.types';
 import { stripe } from '@/services/stripe';
+import Stripe from 'stripe';
 
 const RESEND_KEY = process.env.AUTH_RESEND_KEY!
 
+/**
+ * Registra um novo usuário no sistema.
+ * 
+ * Este método realiza as seguintes operações:
+ * 1. Valida os campos de entrada
+ * 2. Verifica se o usuário já existe
+ * 3. Cria um novo usuário no banco de dados
+ * 4. Busca ou cria um cliente Stripe associado ao usuário
+ * 5. Atualiza o usuário com o ID do cliente Stripe
+ * 6. Envia um e-mail de verificação (se configurado)
+ * 
+ * @param values - Objeto contendo os dados de registro (nome, email, senha)
+ * @returns Uma promessa que resolve para um objeto ApiResponse indicando o resultado da operação
+ */
 export const register = async (
   values: RegisterSchema
 ): Promise<ApiResponse> => {
@@ -52,14 +67,26 @@ export const register = async (
       },
     });
 
-    const stripeCustomer = await stripe.customers.create({
-      email: email,
-      name: name,
-    });
+    // Buscar cliente Stripe existente com assinatura ativa ou criar um novo
+    let stripeCustomerId: string;
+    const existingCustomers = await stripe.customers.list({ email: email });
 
+    const customerWithActiveSubscription = await findCustomerWithActiveSubscription(existingCustomers.data);
+
+    if (customerWithActiveSubscription) {
+      stripeCustomerId = customerWithActiveSubscription.id;
+    } else {
+      const newCustomer = await stripe.customers.create({
+        email: email,
+        name: name,
+      });
+      stripeCustomerId = newCustomer.id;
+    }
+
+    // Atualizar o usuário com o Stripe Customer ID
     await prisma.user.update({
       where: { id: createdUser.id },
-      data: { stripeCustomerId: stripeCustomer.id },
+      data: { stripeCustomerId: stripeCustomerId },
     });
 
     if (RESEND_KEY) {
@@ -86,3 +113,27 @@ export const register = async (
     };
   }
 };
+
+/**
+ * Busca um cliente Stripe com uma assinatura ativa.
+ * 
+ * Este método percorre uma lista de clientes Stripe e verifica se algum deles
+ * possui uma assinatura ativa. Retorna o primeiro cliente encontrado com uma
+ * assinatura ativa ou null se nenhum for encontrado.
+ * 
+ * @param customers - Array de objetos Stripe.Customer para verificar
+ * @returns Uma promessa que resolve para um Stripe.Customer com assinatura ativa ou null
+ */
+async function findCustomerWithActiveSubscription(customers: Stripe.Customer[]): Promise<Stripe.Customer | null> {
+  for (const customer of customers) {
+    const subscriptions = await stripe.subscriptions.list({
+      customer: customer.id,
+      status: 'active',
+    });
+
+    if (subscriptions.data.length > 0) {
+      return customer;
+    }
+  }
+  return null;
+}
