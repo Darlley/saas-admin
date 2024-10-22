@@ -45,7 +45,9 @@ import Logotipo from '@/icons/Logotipo';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import DropdownProfile from '../DropdownProfile';
+import ThemeToggle from '../ThemeToggle';
 import { Button } from '../ui/button';
+
 import {
   Card,
   CardContent,
@@ -54,8 +56,10 @@ import {
   CardTitle,
 } from '../ui/card';
 import { DashboardPanelProps } from './DashboardPanel.types';
+
 export default function DashboardPanel(props: DashboardPanelProps) {
   const { children } = props;
+
   const { data: session } = useSession();
 
   return (
@@ -64,17 +68,16 @@ export default function DashboardPanel(props: DashboardPanelProps) {
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton size="lg" asChild>
-                <Link href="/dashboard">
-                  <div>
-                    <Logotipo className="size-8" />
-                  </div>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">Admin SaaS</span>
-                    <span className="truncate text-xs">Boilerplate nextjs</span>
-                  </div>
-                </Link>
-              </SidebarMenuButton>
+              <div className="flex items-center gap-x-2">
+                <div>
+                  <Logotipo className="size-8" />
+                </div>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">Admin SaaS</span>
+                  <span className="truncate text-xs">Boilerplate nextjs</span>
+                </div>
+                <ThemeToggle />
+              </div>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarHeader>
@@ -84,37 +87,86 @@ export default function DashboardPanel(props: DashboardPanelProps) {
             <SidebarGroupLabel>Plataforma</SidebarGroupLabel>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  color="primary"
-                  className="bg-primary text-primary-foreground"
-                >
-                  <Link href="/onboarding">
-                    <Flame />
-                    <span>Onboarding</span>
-                  </Link>
+                <SidebarMenuButton tooltip="Onboarding">
+                  <Flame />
+                  <span>Onboarding</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              <Collapsible asChild defaultOpen={true}>
+
+              <Collapsible
+                asChild
+                defaultOpen={true}
+                className="group/collapsible"
+              >
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild tooltip="Configurações">
-                    <Link href="/dashboard/settings">
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton tooltip="Configurações">
                       <SquareTerminal />
                       <span>Configurações</span>
-                    </Link>
-                  </SidebarMenuButton>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuAction className="data-[state=open]:rotate-90">
-                      <ChevronRight />
-                      <span className="sr-only">Configurações</span>
-                    </SidebarMenuAction>
+                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                    </SidebarMenuButton>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
-                    <SidebarMenuSub>
+                    <SidebarMenuSub className="">
                       <SidebarMenuSubItem>
                         <SidebarMenuSubButton asChild>
-                          <Link href="/dashboard/settings/#image">
-                            <span>Alternar imagem</span>
+                          <Link href="/dashboard/settings/user">
+                            <span>Seu usuário</span>
+                          </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton asChild>
+                          <Link href="/dashboard/settings/user">
+                            <span>Pagamento</span>
+                          </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton asChild>
+                          <Link href="/dashboard/settings/user">
+                            <span>Seu usuário</span>
+                          </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </SidebarMenuItem>
+              </Collapsible>
+
+              <Collapsible
+                asChild
+                defaultOpen={false}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton tooltip="Configurações">
+                      <SquareTerminal />
+                      <span>Configurações</span>
+                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub className="">
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton asChild>
+                          <Link href="/dashboard/settings/user">
+                            <span>Seu usuário</span>
+                          </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton asChild>
+                          <Link href="/dashboard/settings/user">
+                            <span>Pagamento</span>
+                          </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton asChild>
+                          <Link href="/dashboard/settings/user">
+                            <span>Seu usuário</span>
                           </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
@@ -124,6 +176,7 @@ export default function DashboardPanel(props: DashboardPanelProps) {
               </Collapsible>
             </SidebarMenu>
           </SidebarGroup>
+
           <SidebarGroup className="group-data-[collapsible=icon]:hidden">
             <SidebarGroupLabel>Projetos</SidebarGroupLabel>
             <SidebarMenu>
@@ -172,10 +225,10 @@ export default function DashboardPanel(props: DashboardPanelProps) {
           <div className="px-2">
             <Card x-chunk="dashboard-02-chunk-0">
               <CardHeader className="p-2 pt-0 md:p-4">
-                <CardTitle>Upgrade to Pro</CardTitle>
+                <CardTitle>Upgrade para Pro</CardTitle>
                 <CardDescription>
-                  Unlock all features and get unlimited access to our support
-                  team.
+                  Desbloqueie todos os recursos e obtenha acesso ilimitado à
+                  nossa equipe de suporte.
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
@@ -190,7 +243,7 @@ export default function DashboardPanel(props: DashboardPanelProps) {
         <SidebarFooter>
           <SidebarMenu>
             <SidebarMenuItem>
-              <DropdownProfile />
+              <DropdownProfile session={session} />
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>

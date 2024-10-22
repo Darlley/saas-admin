@@ -20,10 +20,14 @@ import {
 } from '../ui/dialog';
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 
+import { auth } from '@/services/auth';
 import PricingList from '../PricingList';
 import ThemeToggle from '../ThemeToggle';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { PageHomeProps } from './PageHome.types';
-export default function PageHome(props: PageHomeProps) {
+export default async function PageHome(props: PageHomeProps) {
+  const session = await auth();
+
   return (
     <>
       <div className="w-full fixed top-0 bg-white/20 dark:bg-secondary/20 backdrop-blur-md z-50">
@@ -41,14 +45,36 @@ export default function PageHome(props: PageHomeProps) {
             </div>
           </div>
           <div className="flex items-center gap-x-5 md:gap-x-8">
-            <div className="hidden md:block">
-              <Link href="/login">Entrar</Link>
-            </div>
-            <Button asChild className="hidden md:block">
-              <Link href="/register">
-                <span>Criar conta</span>
+            {session ? (
+              <Link href="/dashboard" className="flex items-center gap-x-2">
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarImage
+                    src={session.user.image}
+                    alt={session.user.name}
+                  />
+                  <AvatarFallback className="rounded-lg uppercase">
+                    {session.user.name.slice(0, 2)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">
+                    {session.user.name}
+                  </span>
+                  <span className="truncate text-xs">{session.user.email}</span>
+                </div>
               </Link>
-            </Button>
+            ) : (
+              <>
+                <div className="hidden md:block">
+                  <Link href="/login">Entrar</Link>
+                </div>
+                <Button asChild className="hidden md:block">
+                  <Link href="/register">
+                    <span>Criar conta</span>
+                  </Link>
+                </Button>
+              </>
+            )}
             <ThemeToggle />
             <div className="-mr-1 md:hidden">
               <Sheet>

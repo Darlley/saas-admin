@@ -1,5 +1,4 @@
 'use client';
-
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -19,12 +18,13 @@ import {
   PanelsTopLeftIcon,
 } from 'lucide-react';
 
-import { signOut, useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
+import Link from 'next/link';
 
 import { DropdownProfileProps } from './DropdownProfile.types';
 export default function DropdownProfile(props: DropdownProfileProps) {
-  const { data: session } = useSession();
-  
+  const { session } = props;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -80,19 +80,18 @@ export default function DropdownProfile(props: DropdownProfileProps) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <House className="stroke-1 size-6 mr-2" />
-            Site
+          <DropdownMenuItem asChild>
+            <Link href="/">
+              <House className="stroke-1 size-6 mr-2" />
+              Site
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <PanelsTopLeftIcon className="stroke-1 size-6 mr-2" />
-            Dashboard
+          <DropdownMenuItem asChild>
+            <Link href="/dashboard">
+              <PanelsTopLeftIcon className="stroke-1 size-6 mr-2" />
+              Dashboard
+            </Link>
           </DropdownMenuItem>
-
-          {/* <DropdownMenuItem>
-                      <Bell className='stroke-1 size-6 mr-2' />
-                      Notifications
-                    </DropdownMenuItem> */}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>

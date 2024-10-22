@@ -37,6 +37,7 @@ export default function PageSettings(props: PageSettingsProps) {
 
       <div className="flex-grow p-4 w-full">
         <h1 className="text-2xl sm:text-3xl font-bold mb-6">Editar Perfil</h1>
+        {/* Componente de formulário para atualização de dados do usuário */}
         <UserUpdateForm session={session} />
       </div>
     </div>

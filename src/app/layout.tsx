@@ -40,7 +40,7 @@ export default function RootLayout({
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
-          >
+            >
             {children}
             <Toaster closeButton richColors />
           </ThemeProvider>
