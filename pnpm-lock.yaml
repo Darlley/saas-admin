@@ -158,6 +158,9 @@ importers:
       react:
         specifier: ^18.3.1
         version: 18.3.1
+      react-confetti:
+        specifier: ^6.1.0
+        version: 6.1.0(react@18.3.1)
       react-day-picker:
         specifier: 8.10.1
         version: 8.10.1(date-fns@4.1.0)(react@18.3.1)
@@ -179,6 +182,9 @@ importers:
       sonner:
         specifier: ^1.5.0
         version: 1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      stripe:
+        specifier: ^17.2.1
+        version: 17.2.1
       tailwind-merge:
         specifier: ^2.5.2
         version: 2.5.2
@@ -3630,8 +3636,18 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
+  qs@6.13.0:
+    resolution: {integrity: sha512-+38qI9SOr8tfZ4QmJNplMUxqjbe7LKvvZgWdExBOmd+egZTtjLB67Gu0HRX3u/XOq7UU2Nx6nsjvS16Z9uwfpg==}
+    engines: {node: '>=0.6'}
+
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
+
+  react-confetti@6.1.0:
+    resolution: {integrity: sha512-7Ypx4vz0+g8ECVxr88W9zhcQpbeujJAVqL14ZnXJ3I23mOI9/oBVTQ3dkJhUmB0D6XOtCZEM6N0Gm9PMngkORw==}
+    engines: {node: '>=10.18'}
+    peerDependencies:
+      react: ^16.3.0 || ^17.0.1 || ^18.0.0
 
   react-day-picker@8.10.1:
     resolution: {integrity: sha512-TMx7fNbhLk15eqcMt+7Z7S2KF7mfTId/XJDjKE8f+IUcFn0l08/kI4FiYTL/0yuOLmEcbR4Fwe3GJf/NiiMnPA==}
@@ -3971,6 +3987,10 @@ packages:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
 
+  stripe@17.2.1:
+    resolution: {integrity: sha512-Mwb0SitV/UjxTLSUiTlUQ0VDE/gfyQ7OHDGdvDdvKIH4CNNqobPKlzlWhoZHFFU0OA/YsZyBtPULK4JG86BAAg==}
+    engines: {node: '>=12.*'}
+
   styled-jsx@5.1.1:
     resolution: {integrity: sha512-pW7uC1l4mBZ8ugbiZrcIsiIvVx1UmTfw7UkC3Um2tmfUq9Bhk8IiyEIPl6F8agHgjzku6j0xQEZbfA5uSgSaCw==}
     engines: {node: '>= 12.0.0'}
@@ -4067,6 +4087,9 @@ packages:
 
   tslib@2.7.0:
     resolution: {integrity: sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==}
+
+  tween-functions@1.2.0:
+    resolution: {integrity: sha512-PZBtLYcCLtEcjL14Fzb1gSxPBeL7nWvGhO5ZFPGqziCcr8uvHp0NDmdjBchp6KHL+tExcg0m3NISmKxhU394dA==}
 
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
@@ -7846,7 +7869,16 @@ snapshots:
 
   punycode@2.3.1: {}
 
+  qs@6.13.0:
+    dependencies:
+      side-channel: 1.0.6
+
   queue-microtask@1.2.3: {}
+
+  react-confetti@6.1.0(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      tween-functions: 1.2.0
 
   react-day-picker@8.10.1(date-fns@4.1.0)(react@18.3.1):
     dependencies:
@@ -8273,6 +8305,11 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
+  stripe@17.2.1:
+    dependencies:
+      '@types/node': 20.16.2
+      qs: 6.13.0
+
   styled-jsx@5.1.1(@babel/core@7.24.5)(react@18.3.1):
     dependencies:
       client-only: 0.0.1
@@ -8386,6 +8423,8 @@ snapshots:
       strip-bom: 3.0.0
 
   tslib@2.7.0: {}
+
+  tween-functions@1.2.0: {}
 
   type-check@0.4.0:
     dependencies:

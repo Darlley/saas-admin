@@ -13,5 +13,8 @@ namespace NodeJS {
 
     AUTH_GOOGLE_ID,
     AUTH_GOOGLE_SECRET,
+
+    STRIPE_PUBLISHABLE_KEY,
+    STRIPE_SECRET_KEY,
   }
 }

@@ -35,8 +35,14 @@ export default function PageSettings(props: PageSettingsProps) {
         </div>
       </header>
 
-      <div className="flex-grow p-4 w-full">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-6">Editar Perfil</h1>
+      <div className="space-y-6 px-4 pb-4">
+        <div>
+          <h1 className="text-xl font-medium">Perfil do usuário</h1>
+          <p className="text-sm text-muted-foreground">
+            Atualize suas informações pessoais e gerencie as configurações da sua conta.
+          </p>
+        </div>
+        <Separator />
         <UserUpdateForm session={session} />
       </div>
     </div>

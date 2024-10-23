@@ -1,5 +1,6 @@
 import { ThemeProvider } from '@/theme-provider';
 import type { Metadata } from 'next';
+import { SessionProvider } from 'next-auth/react';
 import { Inter } from 'next/font/google';
 import { Toaster } from 'sonner';
 import './globals.css';
@@ -33,15 +34,17 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${inter.className} relative`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <Toaster closeButton richColors />
-        </ThemeProvider>
+        <SessionProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+            >
+            {children}
+            <Toaster closeButton richColors />
+          </ThemeProvider>
+        </SessionProvider>
       </body>
     </html>
   );
