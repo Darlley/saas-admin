@@ -22,6 +22,14 @@ import { updateUserInfo } from '@/actions/update-user-info';
 import { Ellipsis } from 'lucide-react';
 import { toast } from 'sonner';
 import { ApiResponse } from '../../../types/api-response.types';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '../ui/card';
 import { Separator } from '../ui/separator';
 import { UserUpdateFormProps } from './UserUpdateForm.types';
 
@@ -70,33 +78,65 @@ export default function UserUpdateForm(props: UserUpdateFormProps) {
             </p>
           </div>
           <div className="w-full lg:w-2/3 mt-4 lg:mt-0 flex flex-col gap-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <FormLabel>Qual seu Nome Completo?</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="text" className="p-4 h-10" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <Card>
+              <CardHeader>
+                <CardTitle>Nome</CardTitle>
+                <CardDescription>
+                  Isto aparecerá para os outros usuários.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <FormLabel>Nome Completo</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="text" className="p-4 h-10" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <FormLabel>Qual seu Email?</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="email" className="p-4 h-10" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <Card>
+              <CardHeader>
+                <CardTitle>Email</CardTitle>
+                <CardDescription>
+                  Isto aparecerá para os outros usuários.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <FormLabel>Melhor Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="email"
+                          readOnly
+                          className="p-4 h-10"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+              <CardFooter className="text-xs rounded-b-lg border-b bg-secondary py-4">
+                <p>
+                  Esta alteração não pode ser feita pelo usuário. Caso seja
+                  necessário, entre em contato com o suporte pelo email{' '}
+                  {process.env.NEXT_PUBLIC_EMAIL_FROM}.
+                </p>
+              </CardFooter>
+            </Card>
           </div>
         </div>
 
@@ -111,34 +151,44 @@ export default function UserUpdateForm(props: UserUpdateFormProps) {
             </p>
           </div>
           <div className="w-full lg:w-2/3">
-            <div className="flex items-center space-x-4 mb-4">
-              <Avatar className="w-20 h-20">
-                <AvatarImage src="/placeholder.svg" alt="Preview" />
-                <AvatarFallback>DB</AvatarFallback>
-              </Avatar>
-              <div>
-                <h3 className="text-lg font-medium">Foto atual</h3>
-                <p className="text-sm text-muted-foreground">
-                  JPG, GIF ou PNG. Máximo 1MB.
-                </p>
-              </div>
-            </div>
-            <Tabs defaultValue="upload" className="w-full">
-              <TabsList className="grid w-max grid-cols-2">
-                <TabsTrigger value="upload">Enviar arquivo</TabsTrigger>
-                <TabsTrigger value="url">Enviar link</TabsTrigger>
-              </TabsList>
-              <TabsContent value="upload">
-                <Input id="picture" type="file" className="p-[9px] h-10" />
-              </TabsContent>
-              <TabsContent value="url">
-                <Input
-                  type="url"
-                  placeholder="https://exemplo.com/imagem.jpg"
-                  className="p-4 h-10"
-                />
-              </TabsContent>
-            </Tabs>
+            <Card>
+              <CardHeader>
+                <CardTitle>Imagem de perfil</CardTitle>
+                <CardDescription>
+                  Isto aparecerá para os outros usuários.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center space-x-4 mb-4">
+                  <Avatar className="w-20 h-20">
+                    <AvatarImage src="/placeholder.svg" alt="Preview" />
+                    <AvatarFallback>DB</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <h3 className="text-lg font-medium">Foto atual</h3>
+                    <p className="text-sm text-muted-foreground">
+                      JPG, GIF ou PNG. Máximo 1MB.
+                    </p>
+                  </div>
+                </div>
+                <Tabs defaultValue="upload" className="w-full">
+                  <TabsList className="grid w-max grid-cols-2">
+                    <TabsTrigger value="upload">Enviar arquivo</TabsTrigger>
+                    <TabsTrigger value="url">Enviar link</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="upload">
+                    <Input id="picture" type="file" className="p-[9px] h-10" />
+                  </TabsContent>
+                  <TabsContent value="url">
+                    <Input
+                      type="url"
+                      placeholder="https://exemplo.com/imagem.jpg"
+                      className="p-4 h-10"
+                    />
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+            </Card>
           </div>
         </div>
 

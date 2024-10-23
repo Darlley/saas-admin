@@ -1,5 +1,24 @@
 # SAAS ADMIN
 
+## INDICE
+
+1. [Landing Page](#landing-page)
+2. [Autenticação](#autenticação)
+
+## Landing Page
+
+- [x] Navbar
+- [x] Hero
+- [ ] Prova social
+- [ ] Benefícios
+- [] Funcionalidades
+- [] Como funciona
+- [x] Planos / Preço
+- [] Depoimentos
+- [x] FAQ
+- [] CTA
+- [x] Footer
+
 ## Running the Application
 
 - Run `pnpm install`

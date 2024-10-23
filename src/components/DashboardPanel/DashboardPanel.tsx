@@ -110,22 +110,22 @@ export default function DashboardPanel(props: DashboardPanelProps) {
                     <SidebarMenuSub className="">
                       <SidebarMenuSubItem>
                         <SidebarMenuSubButton asChild>
-                          <Link href="/dashboard/settings/user">
-                            <span>Seu usuário</span>
+                          <Link href="/dashboard/settings">
+                            <span>Usuário</span>
                           </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                       <SidebarMenuSubItem>
                         <SidebarMenuSubButton asChild>
-                          <Link href="/dashboard/settings/user">
-                            <span>Pagamento</span>
+                          <Link href="/dashboard/settings/theme">
+                            <span>Tema</span>
                           </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                       <SidebarMenuSubItem>
                         <SidebarMenuSubButton asChild>
-                          <Link href="/dashboard/settings/user">
-                            <span>Seu usuário</span>
+                          <Link href="/dashboard/settings/billing">
+                            <span>Assinatura</span>
                           </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
