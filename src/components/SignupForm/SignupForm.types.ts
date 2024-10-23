@@ -1,1 +1,3 @@
-export interface SignupFormProps {}
+export interface SignupFormProps {
+  prefilledEmail?: string;
+}
