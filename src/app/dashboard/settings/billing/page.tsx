@@ -1,8 +1,7 @@
-import PageBilling from '@/components/PageBilling'
-import React from 'react'
+import PageBilling from '@/components/PageBilling';
+import { auth } from '@/services/auth';
 
-export default function page() {
-  return (
-    <PageBilling />
-  )
+export default async function page() {
+  const session = await auth();
+  return <PageBilling session={session} />;
 }

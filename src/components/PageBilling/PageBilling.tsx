@@ -9,7 +9,8 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 
-import PricingList from '../PricingList';
+import { getUserWithId } from '@/actions/getUserWithId';
+import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import {
   Card,
@@ -20,9 +21,48 @@ import {
   CardTitle,
 } from '../ui/card';
 import { Progress } from '../ui/progress';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '../ui/table';
 import { PageBillingProps } from './PageBilling.types';
-export default function PageBilling(props: PageBillingProps) {
-  // const {} = props
+import PricingList from '../PricingList';
+export default async function PageBilling(props: PageBillingProps) {
+  const { session } = props;
+  const user = await getUserWithId(session?.user?.id);
+
+  // Extraindo o último subscription em uma variável
+  const lastSubscription =
+    user?.Subscriptions?.[user?.Subscriptions?.length - 1];
+
+  // Extraindo price e product da última subscription
+  const price = lastSubscription?.price;
+  const product = price?.product;
+
+  const translations: Record<
+    string,
+    { exato: string; singular: string; plural: string }
+  > = {
+    day: { exato: 'dia', singular: 'diário', plural: 'diários' },
+    week: { exato: 'semana', singular: 'semanal', plural: 'semanais' },
+    month: { exato: 'mês', singular: 'mensal', plural: 'mensais' },
+    quarter: {
+      exato: 'trimestre',
+      singular: 'trimestral',
+      plural: 'trimestrais',
+    },
+    semester: {
+      exato: 'semestre',
+      singular: 'semestral',
+      plural: 'semestrais',
+    },
+    year: { exato: 'ano', singular: 'anual', plural: 'anuais' },
+  };
+
   return (
     <div>
       <header className="flex h-16 shrink-0 items-center gap-2">
@@ -58,8 +98,24 @@ export default function PageBilling(props: PageBillingProps) {
           <CardHeader>
             <CardTitle>Uso do plano</CardTitle>
             <CardDescription>
-              Atualmente você está no plano <strong>Free</strong>. O próximo
-              pagamento será em 10/10/2024.
+              Atualmente você está no plano{' '}
+              <strong className="uppercase">
+                {product?.name} (
+                {translations[lastSubscription?.interval ?? '']?.singular})
+              </strong>
+              . O próximo pagamento será em{' '}
+              <span className="text-primary">
+                {lastSubscription?.currentPeriodEnd
+                  ? new Intl.DateTimeFormat('pt-BR', {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                    }).format(
+                      new Date(lastSubscription.currentPeriodEnd * 1000)
+                    )
+                  : 'data não disponível'}
+              </span>
+              .
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -79,10 +135,69 @@ export default function PageBilling(props: PageBillingProps) {
               <Button>Atualizar plano</Button>
             </div>
             <Separator />
-            <div className="w-full">
-              <PricingList readonly />
+            <div className="w-full flex items-start flex-col gap-2">
+              <h2 className="text-lg font-medium">Assinaturas</h2>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Produto</TableHead>
+                    <TableHead>Frequência</TableHead>
+                    <TableHead>Próxima Fatura</TableHead>
+                    <TableHead>Status</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {user?.Subscriptions.map((subscription) => (
+                    <TableRow key={subscription.id}>
+                      <TableCell className="uppercase">
+                        {subscription?.price?.product?.name}{' '}
+                      </TableCell>
+                      <TableCell className="uppercase">
+                        {translations[subscription?.interval ?? '']?.singular}
+                      </TableCell>
+                      <TableCell>
+                        {subscription.currentPeriodEnd
+                          ? `${new Intl.DateTimeFormat('pt-BR', {
+                              day: 'numeric',
+                              month: 'long',
+                              year: 'numeric',
+                            }).format(
+                              new Date(subscription.currentPeriodEnd * 1000)
+                            )} - ${new Intl.NumberFormat('pt-BR', {
+                              style: 'currency',
+                              currency: 'BRL',
+                            }).format(subscription.price?.amount || 0)}`
+                          : 'Não disponível'}
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={
+                            subscription.status === 'active'
+                              ? 'default'
+                              : 'secondary'
+                          }
+                        >
+                          {subscription.status === 'active'
+                            ? 'Ativa'
+                            : 'Cancelada'}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
           </CardFooter>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Planos disponíveis</CardTitle>
+            <CardDescription></CardDescription>
+          </CardHeader>
+          <CardContent>
+            <PricingList readonly />
+          </CardContent>
         </Card>
       </div>
     </div>

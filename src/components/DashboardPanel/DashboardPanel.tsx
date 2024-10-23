@@ -45,7 +45,6 @@ import Logotipo from '@/icons/Logotipo';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import DropdownProfile from '../DropdownProfile';
-import ThemeToggle from '../ThemeToggle';
 import { Button } from '../ui/button';
 
 import {

@@ -28,7 +28,7 @@
 
 - Download [Stripe CLI](https://docs.stripe.com/stripe-cli) (Webhook)
 - Run `stripe login`
-- Run `stripe --forward-to http://localhost:3000/api/webhook/stripe`
+- Run `stripe listen --forward-to http://localhost:3000/api/webhook/stripe`
 
 ## AUTENTICAÇÃO
 
