@@ -66,6 +66,7 @@ export default async function PageBilling(props: PageBillingProps) {
 
   // Crie itens nos metadados do preço no Stripe. Adicione "_limit" ao final de cada chave para definir limites de uso.
   // Exemplo: "api_calls_limit": "1000" para limitar chamadas de API a 1000 por período de cobrança.
+  // Para cada chave criada no Stripe, adicione a mesma no objeto abaixo com um limite e um título para serem mostradas no card.
   const manualLimits: Record<string, { limit: number; title: string }> = {
     create_limit: { limit: 100, title: 'Criação' },
     api_calls_limit: { limit: 100, title: 'Chamadas de API' },

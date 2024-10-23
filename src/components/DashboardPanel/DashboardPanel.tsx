@@ -6,23 +6,14 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
@@ -30,16 +21,7 @@ import {
   SidebarMenuSubItem,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import {
-  ChevronRight,
-  Flame,
-  Folder,
-  Frame,
-  MoreHorizontal,
-  Share,
-  SquareTerminal,
-  Trash2,
-} from 'lucide-react';
+import { ChevronRight, Flame, SquareTerminal } from 'lucide-react';
 
 import Logotipo from '@/icons/Logotipo';
 import { useSession } from 'next-auth/react';
@@ -131,114 +113,26 @@ export default function DashboardPanel(props: DashboardPanelProps) {
                   </CollapsibleContent>
                 </SidebarMenuItem>
               </Collapsible>
-
-              <Collapsible
-                asChild
-                defaultOpen={false}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton tooltip="Configurações">
-                      <SquareTerminal />
-                      <span>Configurações</span>
-                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <SidebarMenuSub className="">
-                      <SidebarMenuSubItem>
-                        <SidebarMenuSubButton asChild>
-                          <Link href="/dashboard/settings/user">
-                            <span>Seu usuário</span>
-                          </Link>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                      <SidebarMenuSubItem>
-                        <SidebarMenuSubButton asChild>
-                          <Link href="/dashboard/settings/user">
-                            <span>Pagamento</span>
-                          </Link>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                      <SidebarMenuSubItem>
-                        <SidebarMenuSubButton asChild>
-                          <Link href="/dashboard/settings/user">
-                            <span>Seu usuário</span>
-                          </Link>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                </SidebarMenuItem>
-              </Collapsible>
             </SidebarMenu>
           </SidebarGroup>
-
-          <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-            <SidebarGroupLabel>Projetos</SidebarGroupLabel>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href="#">
-                    <Frame />
-                    <span>Novo SaaS</span>
-                  </Link>
-                </SidebarMenuButton>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <SidebarMenuAction showOnHover>
-                      <MoreHorizontal />
-                      <span className="sr-only">Mais</span>
-                    </SidebarMenuAction>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    className="w-48"
-                    side="bottom"
-                    align="end"
-                  >
-                    <DropdownMenuItem>
-                      <Folder className="text-muted-foreground" />
-                      <span>Ver Projeto</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Share className="text-muted-foreground" />
-                      <span>Compartilhar Projeto</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                      <Trash2 className="text-muted-foreground" />
-                      <span>Excluir Projeto</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroup>
-          <SidebarGroup className="mt-auto">
-            <SidebarGroupContent>
-              <SidebarMenu></SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-          <div className="px-2">
-            <Card x-chunk="dashboard-02-chunk-0">
-              <CardHeader className="p-2 pt-0 md:p-4">
-                <CardTitle>Upgrade para Pro</CardTitle>
-                <CardDescription>
-                  Desbloqueie todos os recursos e obtenha acesso ilimitado à
-                  nossa equipe de suporte.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
-                <Button size="sm" className="w-full">
-                  Upgrade
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
         </SidebarContent>
 
         <SidebarFooter>
+          <Card x-chunk="dashboard-02-chunk-0">
+            <CardHeader className="p-2 pt-0 md:p-4">
+              <CardTitle>Upgrade para Pro</CardTitle>
+              <CardDescription>
+                Desbloqueie todos os recursos e obtenha acesso ilimitado à nossa
+                equipe de suporte.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
+              <Button size="sm" className="w-full">
+                Upgrade
+              </Button>
+            </CardContent>
+          </Card>
+
           <SidebarMenu>
             <SidebarMenuItem>
               <DropdownProfile session={session} />
