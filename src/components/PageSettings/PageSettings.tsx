@@ -35,7 +35,7 @@ export default function PageSettings(props: PageSettingsProps) {
         </div>
       </header>
 
-      <div className="space-y-6 p-4">
+      <div className="space-y-6 px-4 pb-4">
         <div>
           <h1 className="text-xl font-medium">Perfil do usuário</h1>
           <p className="text-sm text-muted-foreground">

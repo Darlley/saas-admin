@@ -46,7 +46,7 @@ interface Plan {
   active: boolean;
 }
 
-export default function PricingList({ blur }: PricingListProps) {
+export default function PricingList({ readonly = false }: PricingListProps) {
   const { data: session } = useSession();
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
@@ -172,63 +172,54 @@ export default function PricingList({ blur }: PricingListProps) {
                     {plans.map((plan) => (
                       <div key={plan.id} className="mt-2">
                         <div>
-                          {!blur ? (
-                            <span className="text-3xl font-semibold">
-                              {new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: plan.currency,
-                              }).format(plan.amount)}
-                            </span>
-                          ) : (
-                            <span className="text-3xl font-semibold blur-md">
-                              R$ --,--
-                            </span>
-                          )}
+                          <span className="text-3xl font-semibold">
+                            {new Intl.NumberFormat('pt-BR', {
+                              style: 'currency',
+                              currency: plan.currency,
+                            }).format(plan.amount)}
+                          </span>
                           <sub>
                             /{translateInterval(plan.interval, plan.intervalCount)}
                           </sub>
                         </div>
-                        {!blur ? (
-                          plan.amount === 0 ? (
-                            <Button
-                              className="w-full mt-2"
-                              variant="outline"
-                              asChild
-                            >
-                              <Link href="/dashboard">Começar agora</Link>
-                            </Button>
-                          ) : (
-                            <Button
-                              className="w-full mt-2"
-                              onClick={() => handleSubscribe(plan.stripeId)}
-                            >
-                              Assinar {plan.nickname || ''}
-                            </Button>
-                          )
-                        ) : (
-                          <Button
-                            className="w-full mt-2"
-                            onClick={() => router.push('/login')}
-                          >
-                            Fazer login para ver preços
-                          </Button>
+                        {!readonly && (
+                          <>
+                            {plan.amount === 0 ? (
+                              <Button
+                                className="w-full mt-2"
+                                variant="outline"
+                                asChild
+                              >
+                                <Link href="/dashboard">Começar agora</Link>
+                              </Button>
+                            ) : (
+                              <Button
+                                className="w-full mt-2"
+                                onClick={() => handleSubscribe(plan.stripeId)}
+                              >
+                                Assinar {plan.nickname || ''}
+                              </Button>
+                            )}
+                          </>
                         )}
                       </div>
                     ))}
                   </CardHeader>
-                  <CardContent className="border-t pt-4">
-                    <ul className="space-y-2">
-                      {product?.marketing_features?.map((feature) => (
-                        <li
-                          key={feature}
-                          className="flex items-center gap-x-3 text-sm"
-                        >
-                          <CheckCircle className="size-5 stroke-primary" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
+                  {product?.marketing_features && product?.marketing_features?.length > 0 && (
+                    <CardContent className="border-t pt-4">
+                      <ul className="space-y-2">
+                        {product.marketing_features.map((feature) => (
+                          <li
+                            key={feature}
+                            className="flex items-center gap-x-3 text-sm"
+                          >
+                            <CheckCircle className="size-5 stroke-primary" />
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  )}
                 </Card>
               );
             })}

@@ -22,18 +22,18 @@ export default function PageTheme(props: PageThemeProps) {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">Configurações</BreadcrumbLink>
+                <BreadcrumbLink href="/dashboard/settings">Configurações</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbPage>Tema</BreadcrumbPage>
+                <BreadcrumbPage>Preferências</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </div>
       </header>
 
-      <div className="space-y-6 p-4">
+      <div className="space-y-6 px-4 pb-4">
         <div>
           <h1 className="text-lg font-medium">Aparência</h1>
           <p className="text-sm text-muted-foreground">

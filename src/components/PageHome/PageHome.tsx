@@ -197,7 +197,7 @@ export default async function PageHome(props: PageHomeProps) {
           </div>
 
           <div className="container mx-auto mt-12 md:mt-16 px-4 2xl:px-0">
-            <PricingList blur={false} />
+            <PricingList />
           </div>
         </section>
 
