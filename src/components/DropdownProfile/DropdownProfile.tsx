@@ -73,13 +73,6 @@ export default function DropdownProfile(props: DropdownProfileProps) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <CreditCard className="stroke-1 size-6 mr-2" />
-            Gerenciar assinatura
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
           <DropdownMenuItem asChild>
             <Link href="/">
               <House className="stroke-1 size-6 mr-2" />

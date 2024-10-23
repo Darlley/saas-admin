@@ -21,7 +21,7 @@ import {
   SidebarMenuSubItem,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import { ChevronRight, Flame, SquareTerminal } from 'lucide-react';
+import { ChevronRight, Ellipsis, SquareTerminal } from 'lucide-react';
 
 import Logotipo from '@/icons/Logotipo';
 import { useSession } from 'next-auth/react';
@@ -29,6 +29,8 @@ import Link from 'next/link';
 import DropdownProfile from '../DropdownProfile';
 import { Button } from '../ui/button';
 
+import { createBillingPortalSession } from '@/actions/createBillingPortalSession';
+import { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -42,6 +44,20 @@ export default function DashboardPanel(props: DashboardPanelProps) {
   const { children } = props;
 
   const { data: session } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleUpdatePlan = async (userId: string) => {
+    setIsLoading(true);
+    try {
+      const url = await createBillingPortalSession(userId);
+      window.location.href = url;
+    } catch (error) {
+      console.error('Erro ao abrir o portal de faturamento:', error);
+      // Aqui você pode adicionar uma notificação de erro para o usuário
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <SidebarProvider>
@@ -66,12 +82,12 @@ export default function DashboardPanel(props: DashboardPanelProps) {
           <SidebarGroup>
             <SidebarGroupLabel>Plataforma</SidebarGroupLabel>
             <SidebarMenu>
-              <SidebarMenuItem>
+              {/* <SidebarMenuItem>
                 <SidebarMenuButton tooltip="Onboarding">
                   <Flame />
                   <span>Onboarding</span>
                 </SidebarMenuButton>
-              </SidebarMenuItem>
+              </SidebarMenuItem> */}
 
               <Collapsible
                 asChild
@@ -120,15 +136,23 @@ export default function DashboardPanel(props: DashboardPanelProps) {
         <SidebarFooter>
           <Card x-chunk="dashboard-02-chunk-0">
             <CardHeader className="p-2 pt-0 md:p-4">
-              <CardTitle>Upgrade para Pro</CardTitle>
+              <CardTitle>Atualizar plano</CardTitle>
               <CardDescription>
                 Desbloqueie todos os recursos e obtenha acesso ilimitado à nossa
                 equipe de suporte.
               </CardDescription>
             </CardHeader>
             <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
-              <Button size="sm" className="w-full">
-                Upgrade
+              <Button
+                size="sm"
+                className="w-full"
+                onClick={() => handleUpdatePlan(session?.user?.id)}
+              >
+                {isLoading ? (
+                  <Ellipsis className="size-8 stroke-2 animate-pulse ml-2.5" />
+                ) : (
+                  <>Atualizar plano</>
+                )}
               </Button>
             </CardContent>
           </Card>
