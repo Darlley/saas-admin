@@ -72,7 +72,7 @@ export default function UserUpdateForm(props: UserUpdateFormProps) {
         {/* Informações Pessoais */}
         <div className="flex flex-col lg:flex-row items-start gap-6 ">
           <div className="w-full lg:w-1/3">
-            <h2 className="text-xl font-semibold">Informações Pessoais</h2>
+            <h2 className="text-lg font-semibold">Informações Pessoais</h2>
             <p className="text-sm text-muted-foreground mt-1">
               Atualize suas informações pessoais aqui.
             </p>
@@ -145,7 +145,7 @@ export default function UserUpdateForm(props: UserUpdateFormProps) {
         {/* Imagem de Perfil */}
         <div className="flex flex-col lg:flex-row lg:items-start gap-6">
           <div className="w-full lg:w-1/3">
-            <h2 className="text-xl font-semibold">Imagem de Perfil</h2>
+            <h2 className="text-lg font-semibold">Imagem de Perfil</h2>
             <p className="text-sm text-muted-foreground mt-1">
               Adicione ou atualize sua foto de perfil.
             </p>

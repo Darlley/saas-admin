@@ -33,9 +33,9 @@ export default function PageTheme(props: PageThemeProps) {
         </div>
       </header>
 
-      <div className="space-y-6 px-4">
+      <div className="space-y-6 p-4">
         <div>
-          <h3 className="text-lg font-medium">Aparência</h3>
+          <h1 className="text-lg font-medium">Aparência</h1>
           <p className="text-sm text-muted-foreground">
             Personalize a aparência do aplicativo. Alterne automaticamente entre
             os temas claro, escure ou o mesmo do seu sitema.
