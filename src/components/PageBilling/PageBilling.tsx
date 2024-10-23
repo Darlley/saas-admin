@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,7 +11,9 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 
-import { getUserWithId } from '@/actions/getUserWithId';
+import { createBillingPortalSession } from '@/actions/createBillingPortalSession';
+import { Ellipsis } from 'lucide-react';
+import { useState } from 'react';
 import PricingList from '../PricingList';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
@@ -32,9 +36,10 @@ import {
 } from '../ui/table';
 import { PageBillingProps } from './PageBilling.types';
 
-export default async function PageBilling(props: PageBillingProps) {
-  const { session } = props;
-  const user = await getUserWithId(session?.user?.id);
+export default function PageBilling(props: PageBillingProps) {
+  const { user } = props;
+
+  const [isLoading, setIsLoading] = useState(false);
 
   // Extraindo o último subscription em uma variável
   const lastSubscription =
@@ -72,6 +77,19 @@ export default async function PageBilling(props: PageBillingProps) {
     api_calls_limit: { limit: 100, title: 'Chamadas de API' },
   };
 
+  const handleUpdatePlan = async (userId: string) => {
+    setIsLoading(true);
+    try {
+      const url = await createBillingPortalSession(userId);
+      window.location.href = url;
+    } catch (error) {
+      console.error('Erro ao abrir o portal de faturamento:', error);
+      // Aqui você pode adicionar uma notificação de erro para o usuário
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div>
       <header className="flex h-16 shrink-0 items-center gap-2">
@@ -101,7 +119,6 @@ export default async function PageBilling(props: PageBillingProps) {
             pagamento.
           </p>
         </div>
-        <Separator />
 
         <Card>
           <CardHeader>
@@ -175,7 +192,13 @@ export default async function PageBilling(props: PageBillingProps) {
           <CardFooter className="flex flex-col gap-4">
             <div className="w-full flex items-center justify-between">
               <p>Para aumentar o limite, atualize seu plano.</p>
-              <Button>Atualizar plano</Button>
+              <Button onClick={() => handleUpdatePlan(user?.id)} disabled={isLoading}>
+                {isLoading ? (
+                  <Ellipsis className="size-8 stroke-2 animate-pulse ml-2.5" />
+                ) : (
+                  <>Atualizar plano</>
+                )}
+              </Button>
             </div>
             <Separator />
             <div className="w-full flex items-start flex-col gap-2">
@@ -190,7 +213,7 @@ export default async function PageBilling(props: PageBillingProps) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {user?.Subscriptions.map((subscription) => (
+                  {user?.Subscriptions.map((subscription: any) => (
                     <TableRow key={subscription.id}>
                       <TableCell className="uppercase">
                         {subscription?.price?.product?.name}{' '}
@@ -236,7 +259,6 @@ export default async function PageBilling(props: PageBillingProps) {
         <Card>
           <CardHeader>
             <CardTitle>Planos disponíveis</CardTitle>
-            <CardDescription></CardDescription>
           </CardHeader>
           <CardContent>
             <PricingList readonly />
