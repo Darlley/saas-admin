@@ -76,7 +76,6 @@ export default function DashboardPanel(props: DashboardPanelProps) {
                   <span className="truncate font-semibold">Admin SaaS</span>
                   <span className="truncate text-xs">Boilerplate nextjs</span>
                 </div>
-                <ThemeToggle />
               </div>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -118,7 +117,7 @@ export default function DashboardPanel(props: DashboardPanelProps) {
                       <SidebarMenuSubItem>
                         <SidebarMenuSubButton asChild>
                           <Link href="/dashboard/settings/theme">
-                            <span>Tema</span>
+                            <span>Preferências</span>
                           </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
