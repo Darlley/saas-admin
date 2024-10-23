@@ -10,6 +10,7 @@ import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 
 import { getUserWithId } from '@/actions/getUserWithId';
+import PricingList from '../PricingList';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import {
@@ -30,7 +31,7 @@ import {
   TableRow,
 } from '../ui/table';
 import { PageBillingProps } from './PageBilling.types';
-import PricingList from '../PricingList';
+
 export default async function PageBilling(props: PageBillingProps) {
   const { session } = props;
   const user = await getUserWithId(session?.user?.id);
@@ -61,6 +62,13 @@ export default async function PageBilling(props: PageBillingProps) {
       plural: 'semestrais',
     },
     year: { exato: 'ano', singular: 'anual', plural: 'anuais' },
+  };
+
+  // Crie itens nos metadados do preço no Stripe. Adicione "_limit" ao final de cada chave para definir limites de uso.
+  // Exemplo: "api_calls_limit": "1000" para limitar chamadas de API a 1000 por período de cobrança.
+  const manualLimits: Record<string, { limit: number; title: string }> = {
+    create_limit: { limit: 100, title: 'Criação' },
+    api_calls_limit: { limit: 100, title: 'Chamadas de API' },
   };
 
   return (
@@ -98,36 +106,70 @@ export default async function PageBilling(props: PageBillingProps) {
           <CardHeader>
             <CardTitle>Uso do plano</CardTitle>
             <CardDescription>
-              Atualmente você está no plano{' '}
-              <strong className="uppercase">
-                {product?.name} (
-                {translations[lastSubscription?.interval ?? '']?.singular})
-              </strong>
-              . O próximo pagamento será em{' '}
-              <span className="text-primary">
-                {lastSubscription?.currentPeriodEnd
-                  ? new Intl.DateTimeFormat('pt-BR', {
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric',
-                    }).format(
-                      new Date(lastSubscription.currentPeriodEnd * 1000)
-                    )
-                  : 'data não disponível'}
-              </span>
-              .
+              {user?.Subscriptions && user.Subscriptions.length > 0 ? (
+                <>
+                  Atualmente você está no plano{' '}
+                  <strong className="uppercase">
+                    {product?.name} (
+                    {translations[lastSubscription?.interval ?? '']?.singular})
+                  </strong>
+                  . O próximo pagamento será em{' '}
+                  <span className="text-primary">
+                    {lastSubscription?.currentPeriodEnd
+                      ? new Intl.DateTimeFormat('pt-BR', {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric',
+                        }).format(
+                          new Date(lastSubscription.currentPeriodEnd * 1000)
+                        )
+                      : 'data não disponível'}
+                  </span>
+                  .
+                </>
+              ) : (
+                'Atualmente você não tem nenhuma assinatura ativa'
+              )}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              <header className="flex items-center justify-between">
-                <span className="text-muted-foreground text-sm">20/100</span>
-                <span className="text-muted-foreground text-sm">20%</span>
-              </header>
-              <main>
-                <Progress value={20} />
-              </main>
-            </div>
+            {user?.Subscriptions &&
+            user.Subscriptions.length > 0 &&
+            price?.metadata &&
+            Object.keys(price?.metadata).length > 0 ? (
+              <div className="space-y-4">
+                {Object.entries(price?.metadata as Record<string, any>).map(
+                  ([key, value]) => {
+                    if (key in manualLimits) {
+                      const currentValue = Number(value);
+                      const { limit: limitValue, title } = manualLimits[key];
+                      const percentage = Math.round(
+                        (currentValue / limitValue) * 100
+                      );
+
+                      return (
+                        <div key={key} className="space-y-2">
+                          <header className="flex items-center justify-between">
+                            <span className="text-muted-foreground text-sm">
+                              {title} - {currentValue}/{limitValue}
+                            </span>
+                            <span className="text-muted-foreground text-sm">
+                              {percentage}%
+                            </span>
+                          </header>
+                          <main>
+                            <Progress value={percentage} />
+                          </main>
+                        </div>
+                      );
+                    }
+                    return null;
+                  }
+                )}
+              </div>
+            ) : (
+              <div className="h-2 rounded-full w-full bg-destructive" />
+            )}
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
             <div className="w-full flex items-center justify-between">
@@ -165,7 +207,7 @@ export default async function PageBilling(props: PageBillingProps) {
                               new Date(subscription.currentPeriodEnd * 1000)
                             )} - ${new Intl.NumberFormat('pt-BR', {
                               style: 'currency',
-                              currency: 'BRL',
+                              currency: subscription.price?.currency || 'BRL',
                             }).format(subscription.price?.amount || 0)}`
                           : 'Não disponível'}
                       </TableCell>

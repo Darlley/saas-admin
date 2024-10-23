@@ -133,7 +133,7 @@ export default function PricingList({ readonly = false }: PricingListProps) {
             disabled
             className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
           >
-            Ative o Webhook e crie os planos no Stripe
+            Nenhuma oferta no momento {/* Ative o Webhook (stripe listen --forward-to http://localhost:3000/api/webhook/stripe) e crie os planos no Stripe */}
           </TabsTrigger>
         )}
       </TabsList>
@@ -182,26 +182,13 @@ export default function PricingList({ readonly = false }: PricingListProps) {
                             /{translateInterval(plan.interval, plan.intervalCount)}
                           </sub>
                         </div>
-                        {!readonly && (
-                          <>
-                            {plan.amount === 0 ? (
-                              <Button
-                                className="w-full mt-2"
-                                variant="outline"
-                                asChild
-                              >
-                                <Link href="/dashboard">Começar agora</Link>
-                              </Button>
-                            ) : (
-                              <Button
-                                className="w-full mt-2"
-                                onClick={() => handleSubscribe(plan.stripeId)}
-                              >
-                                Assinar {plan.nickname || ''}
-                              </Button>
-                            )}
-                          </>
-                        )}
+                        
+                        <Button
+                          className="w-full mt-2"
+                          onClick={() => handleSubscribe(plan.stripeId)}
+                        >
+                          Assinar {plan.nickname || ''}
+                        </Button>
                       </div>
                     ))}
                   </CardHeader>

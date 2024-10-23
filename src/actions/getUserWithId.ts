@@ -22,6 +22,8 @@ export async function getUserWithId(id: string) {
               stripePriceId: true,
               amount: true,
               interval: true,
+              currency: true,
+              metadata: true,
               product: {
                 select: {
                   id: true,

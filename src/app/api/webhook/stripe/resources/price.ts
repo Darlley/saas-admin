@@ -22,7 +22,9 @@ export async function createPrice(price: Stripe.Price) {
         stripePriceId: price.id,
         amount: price.unit_amount ? price.unit_amount / 100 : 0,
         interval: price.recurring?.interval || 'one_time',
+        currency: price.currency,
         product: { connect: { id: product.id } },
+        metadata: price.metadata || {}, // Adicionando metadados
       },
     });
     console.log(`Preço criado com sucesso: ${createdPrice.stripePriceId}`);
@@ -71,6 +73,8 @@ export async function updatePrice(price: Stripe.Price) {
       data: {
         amount: price.unit_amount ? price.unit_amount / 100 : 0,
         interval: price.recurring?.interval || 'one_time',
+        currency: price.currency,
+        metadata: price.metadata || {}, // Adicionando metadados
       },
     });
     console.log(`Preço atualizado com sucesso: ${updatedPrice.stripePriceId}`);

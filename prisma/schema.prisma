@@ -123,9 +123,11 @@ model Price {
   stripePriceId  String        @unique
   amount         Float
   interval       String
+  currency       String
   product        Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId      String
   active         Boolean       @default(true)
+  metadata       Json?
 
   subscriptions  Subscription[]
 

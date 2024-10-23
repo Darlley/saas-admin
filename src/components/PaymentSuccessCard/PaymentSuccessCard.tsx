@@ -108,7 +108,7 @@ export default function PaymentSuccessCard(props: PaymentSuccessCardProps) {
                 size="lg"
                 variant="default"
               >
-                <Link href="/dashboard">Aproveitar esta oferta exclusiva</Link>
+                <Link href="/dashboard">Começar</Link>
               </Button>
             </CardFooter>
           </Card>
