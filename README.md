@@ -2,8 +2,52 @@
 
 ## INDICE
 
-1. [Landing Page](#landing-page)
-2. [Autenticação](#autenticação)
+1. Setup
+2. Landing Page
+3. Autenticação
+
+## SETUP
+
+### Setup the project
+
+1. Rename `.env-examples` to `.env`
+2. Run `pnpm install` to install the dependencies
+3. Run `docker compose up -d` or (setup a Supabase new project) to start the database
+
+> [!NOTE]
+> Open database in `http://localhost:8080/` with Adminer Container
+> - Set `PostgreSQL` to System
+> - Set `postgres` to Server
+> - Set `postgres` to User
+> - Set `postgres` to Password
+> - Set `postgres` to Database
+
+4. Run `pnpm prisma db push` to setup the database
+5. Run `pnpm prisma generate` to generate the Prisma client
+6. Run `npx auth secret` to generate the secret key for the authentication 
+7. Copy the secret key and paste in the `.env` file
+8. Run `pnpm dev` to start the application
+
+### Setup the Stripe
+
+1. Go to `https://stripe.com/br`
+2. Create a new account
+3. Get the API keys (Publishable key and Secret key)
+4. Paste the API keys in the `.env` file
+
+### Setup the Auth
+
+> [!NOTE]
+> Até o momento a autenticação está configurada com Credentials, se quiser configurar com outros métodos, como Google, GitHub, etc, basta gerar o secret key e configurar no `.env`
+> - [GitHub](https://authjs.dev/providers/github)
+> - [Google](https://authjs.dev/providers/google)
+
+1. Crie uma nova conta (email + password)
+2. Faça login
+
+> [!NOTE]
+> Após a criação da conta você pode verificar que haverá um novo cliente para o seu email no Dashboard do Stripe.
+
 
 ## Landing Page
 
