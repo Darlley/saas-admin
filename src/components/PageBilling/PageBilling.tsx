@@ -43,7 +43,7 @@ export default function PageBilling(props: PageBillingProps) {
 
   // Extraindo o último subscription em uma variável
   const lastSubscription =
-    user?.Subscriptions?.[user?.Subscriptions?.length - 1];
+    user?.Subscriptions?.[0];
 
   // Extraindo price e product da última subscription
   const price = lastSubscription?.price;

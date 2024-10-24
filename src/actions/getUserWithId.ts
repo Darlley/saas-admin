@@ -37,7 +37,10 @@ export async function getUserWithId(id: string) {
               }
             }
           }
-        }
+        },
+        orderBy: {
+          createdAt: 'desc'
+        },
       },
     },
   });
