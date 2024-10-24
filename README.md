@@ -119,9 +119,10 @@ A criação e atualização de produtos monitora alterações
 > O campo `Lista de recursos de marketing` do produto é usado para adicionar os items da lista de recursos do seu produto.
 
 A criação e atualização de preços monitora alterações
-- no campo de `valor` do preço
-- no campo de `moeda` do preço
-- no campo de `metadados` do preço
+- no campo de `valor`
+- no campo de `moeda`
+- no campo de `Período de faturamento`
+- no campo de `metadados`
 
 > [!NOTE]
 > O campo de `metadados` do preço é usado para adicionar as limitações de uso da assinatura, como `max_usuarios_limit`, `max_integracoes_limit`, etc. e cada limite será listado em um componente de progresso
