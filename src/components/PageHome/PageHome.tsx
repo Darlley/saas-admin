@@ -185,7 +185,7 @@ export default async function PageHome(props: PageHomeProps) {
 
         <section
           id="pricing"
-          className="bg-secondary/20 dark:bg-none py-24 h-svh w-full border-b dark:border-secondary-foreground/20"
+          className="bg-secondary/20 dark:bg-none py-24 min-h-svh w-full border-b dark:border-secondary-foreground/20"
         >
           <div className="absolute inset-0 -z-10 h-full w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#ffffff20_1px,transparent_1px)]"></div>
 
