@@ -125,7 +125,10 @@ A criação e atualização de preços monitora alterações
 - no campo de `metadados`
 
 > [!NOTE]
-> O campo de `metadados` do preço é usado para adicionar as limitações de uso da assinatura, como `max_usuarios_limit`, `max_integracoes_limit`, etc. e cada limite será listado em um componente de progresso
+> O campo de `metadados` do preço é usado para adicionar as limitações de uso da assinatura, como `max_usuarios_limit`, `max_integracoes_limit`, etc. e cada limite será listado em um componente de progresso. Para funcionar você configurar as mesmas chaves na variavel `manualLimits` no componente `PageBilling.tsx`.
+
+Para testar o checkout você pode usrar o cartão de testes do próprio Stripe.
+
 
 ## PORTAL STRIPE
 
