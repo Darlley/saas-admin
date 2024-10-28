@@ -23,6 +23,7 @@ export async function createPrice(price: Stripe.Price) {
         amount: price.unit_amount ? price.unit_amount / 100 : 0,
         interval: price.recurring?.interval || 'one_time',
         currency: price.currency,
+        active: price.active,
         product: { connect: { id: product.id } },
         metadata: price.metadata || {}, // Adicionando metadados
       },
