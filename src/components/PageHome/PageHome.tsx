@@ -13,18 +13,25 @@ import { Button } from '../ui/button';
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '../ui/dialog';
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
 import { auth } from '@/services/auth';
 import PricingList from '../PricingList';
 import ThemeToggle from '../ThemeToggle';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { PageHomeProps } from './PageHome.types';
+
 export default async function PageHome(props: PageHomeProps) {
   const session = await auth();
 
@@ -137,7 +144,7 @@ export default async function PageHome(props: PageHomeProps) {
           na sua headline
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-secondary-foreground dark:text-secondary-foreground">
-          Descreva seu modelo de negócio, qual dor do cliente seu micro-saas
+          Descreva seu modelo de negócio, qual dor do cliente seu SaaS Admin
           pode ajudar a solucionar?
         </p>
         <div className="mt-10 flex justify-center gap-x-6">
@@ -158,17 +165,16 @@ export default async function PageHome(props: PageHomeProps) {
               </Button>
             </DialogTrigger>
             <DialogContent className="w-11/12 lg:w-8/12 h-max max-w-full !rounded-none p-0 border-none">
-              <DialogHeader className="p-2 text-sm">
-                <DialogTitle>Demonstração</DialogTitle>
-                <DialogDescription>Descrição do video</DialogDescription>
+              <DialogHeader className="p-2 text-sm mb-0 pb-0 h-auto">
+                <DialogTitle className="px-2">Demonstração</DialogTitle>
               </DialogHeader>
-              <iframe
-                src="https://www.youtube.com/embed/QXo-Kng7pZQ?autoplay=1&controls=0&quality=hd1080"
+              <video
+                src="/preview.mp4"
                 title="Demonstração"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
+                autoPlay
+                controls
                 className="w-full aspect-video rounded-none"
-              ></iframe>
+              ></video>
             </DialogContent>
           </Dialog>
         </div>
@@ -176,11 +182,288 @@ export default async function PageHome(props: PageHomeProps) {
 
       <main className="">
         <section id="resources" className="py-24 h-full w-full">
-          <div className="container mx-auto">Recursos</div>
-        </section>
-
-        <section id="testimonials" className="py-24 h-full w-full">
-          <div className="container mx-auto">Testemunhos</div>
+          <div className="container mx-auto">
+            <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
+              <h2 className="text-base/7 font-semibold text-primary">
+                Recuros poderosos
+              </h2>
+              <p className="mt-2 max-w-lg text-pretty text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+                Os recursos que você mais configura pronto para uso
+              </p>
+              <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-16 lg:grid-cols-6 lg:grid-rows-2">
+                <div className="relative lg:col-span-3">
+                  <div className="absolute inset-px rounded-lg bg-card max-lg:rounded-t-lg lg:rounded-tl-lg" />
+                  <div className="relative flex h-full flex-col overflow-hidden rounded-lg max-lg:rounded-t-lg lg:rounded-tl-lg">
+                    <Carousel className="w-full">
+                      <CarouselContent>
+                        <CarouselItem>
+                          <img
+                            alt="Landing Page tema claro sistemas de cores azul"
+                            src="/features/landing-page01-light.png"
+                            className="w-full object-cover object-left"
+                          />
+                        </CarouselItem>
+                        <CarouselItem>
+                          <img
+                            alt="Landing Page tema escuro sistemas de cores azul"
+                            src="/features/landing-page01-dark.png"
+                            className="w-full object-cover object-left"
+                          />
+                        </CarouselItem>
+                        <CarouselItem>
+                          <img
+                            alt="Landing Page tema claro sistemas de cores vermelho"
+                            src="/features/landing-page02-light.png"
+                            className="w-full object-cover object-left"
+                          />
+                        </CarouselItem>
+                        <CarouselItem>
+                          <img
+                            alt="Landing Page tema claro sistemas de cores vermelho"
+                            src="/features/landing-page02-dark.png"
+                            className="w-full object-cover object-left"
+                          />
+                        </CarouselItem>
+                      </CarouselContent>
+                      <CarouselPrevious className="bg-primary border-primary absolute top-1/2 -translate-y-1/2 left-2 text-white" />
+                      <CarouselNext className="bg-primary border-primary absolute top-1/2 -translate-y-1/2 right-2 text-white" />
+                    </Carousel>
+                    <div className="p-4 sm:p-6 md:p-10 md:pt-4">
+                      <h3 className="text-xs sm:text-sm font-semibold text-primary">
+                        FREE
+                      </h3>
+                      <p className="mt-1 sm:mt-2 text-base sm:text-lg font-medium tracking-tight text-foreground">
+                        Landing Page comercial
+                      </p>
+                      <p className="mt-1 sm:mt-2 max-w-lg text-xs sm:text-sm text-muted-foreground">
+                        Tenha uma landing page linda para vender o seu produto,
+                        já configurada com temas claro, escuro ou do próprio
+                        sistema. O sistema de cores do projeto inteiro também já
+                        está configurado com as próprias classes do{' '}
+                        <span className="text-primary">shadcn/ui</span>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-border max-lg:rounded-t-lg lg:rounded-tl-lg" />
+                </div>
+                <div className="relative lg:col-span-3">
+                  <div className="absolute inset-px rounded-lg bg-card lg:rounded-tr-lg" />
+                  <div className="relative flex h-full flex-col overflow-hidden rounded-lg lg:rounded-tr-lg">
+                    <Carousel className="w-full">
+                      <CarouselContent>
+                        <CarouselItem>
+                          <img
+                            alt="Dasboard página de configuração do usuario"
+                            src="/features/dashboard01.png"
+                            className="w-full object-cover object-left"
+                          />
+                        </CarouselItem>
+                        <CarouselItem>
+                          <img
+                            alt="Dasboard página de configuração das preferências"
+                            src="/features/dashboard02.png"
+                            className="w-full object-cover object-left"
+                          />
+                        </CarouselItem>
+                        <CarouselItem>
+                          <img
+                            alt="Dasboard página de configuração da assinatura"
+                            src="/features/dashboard03.png"
+                            className="w-full object-cover object-left"
+                          />
+                        </CarouselItem>
+                      </CarouselContent>
+                      <CarouselPrevious className="bg-primary border-primary absolute top-1/2 -translate-y-1/2 left-2 text-white" />
+                      <CarouselNext className="bg-primary border-primary absolute top-1/2 -translate-y-1/2 right-2 text-white" />
+                    </Carousel>
+                    <div className="p-4 sm:p-6 md:p-10 md:pt-4">
+                      <h3 className="text-xs sm:text-sm font-semibold text-primary">
+                        FREE
+                      </h3>
+                      <p className="mt-1 sm:mt-2 text-base sm:text-lg font-medium tracking-tight text-foreground">
+                        Dashboard de administração
+                      </p>
+                      <p className="mt-1 sm:mt-2 max-w-lg text-xs sm:text-sm text-muted-foreground">
+                        Tenha um dashboard onde o cliente pode gerenciar as
+                        próprias informações pessoais e de assinatura. Aqui o
+                        céu é o limite. Criei um template com o plop.js para
+                        criação de componentes: com um simpres comando{' '}
+                        <code className="text-primary">pnpm plop</code> você
+                        pode criar um novo componente com uma estrutura única e
+                        escalável.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-border lg:rounded-tr-lg" />
+                </div>
+                <div className="relative lg:col-span-2">
+                  <div className="absolute inset-px rounded-lg bg-card lg:rounded-bl-lg" />
+                  <div className="relative flex h-full flex-col overflow-hidden rounded-lg lg:rounded-bl-lg">
+                    <Carousel className="w-full">
+                      <CarouselContent>
+                        <CarouselItem>
+                          <img
+                            alt="Autenticação página de login"
+                            src="/features/auth01.png"
+                            className="h-80 w-full object-cover object-left"
+                          />
+                        </CarouselItem>
+                        <CarouselItem>
+                          <img
+                            alt="Autenticação página de registro"
+                            src="/features/auth02.png"
+                            className="h-80 w-full object-cover object-left"
+                          />
+                        </CarouselItem>
+                        <CarouselItem>
+                          <img
+                            alt="Autenticação página de recuperação de senha"
+                            src="/features/auth03.png"
+                            className="h-80 w-full object-cover object-left"
+                          />
+                        </CarouselItem>
+                        <CarouselItem>
+                          <img
+                            alt="Autenticação página de mudar senha"
+                            src="/features/auth04.png"
+                            className="h-80 w-full object-cover object-left"
+                          />
+                        </CarouselItem>
+                      </CarouselContent>
+                      <CarouselPrevious className="bg-primary border-primary absolute top-1/2 -translate-y-1/2 left-2 text-white" />
+                      <CarouselNext className="bg-primary border-primary absolute top-1/2 -translate-y-1/2 right-2 text-white" />
+                    </Carousel>
+                    <div className="p-10 pt-4">
+                      <h3 className="text-sm/4 font-semibold text-primary">
+                        Freelancer
+                      </h3>
+                      <p className="mt-2 text-lg/7 font-medium tracking-tight text-foreground">
+                        Autenticação
+                      </p>
+                      <p className="mt-2 max-w-lg text-sm/6 text-muted-foreground">
+                        Autenticação completa com Auth.js:
+                        <br />- Criação de conta e login
+                        <br />- Autenticação social (Google e Github)
+                        <br />- Validação de email com token
+                        <br />- Recuperação de senha
+                        <br />- Integração com Resend opcional.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-border lg:rounded-bl-lg" />
+                </div>
+                <div className="relative lg:col-span-2">
+                  <div className="absolute inset-px rounded-lg bg-card" />
+                  <div className="relative flex h-full flex-col overflow-hidden rounded-lg">
+                    <Carousel className="w-full">
+                      <CarouselContent>
+                        <CarouselItem>
+                          <img
+                            alt="Container postgrSQL e Adminer"
+                            src="/features/docker01.png"
+                            className="h-80 w-full object-cover object-left"
+                          />
+                        </CarouselItem>
+                        <CarouselItem>
+                          <img
+                            alt="Admainer"
+                            src="/features/docker02.png"
+                            className="h-80 w-full object-cover object-left"
+                          />
+                        </CarouselItem>
+                        <CarouselItem>
+                          <img
+                            alt="Admainer"
+                            src="/features/docker03.png"
+                            className="h-80 w-full object-cover object-left"
+                          />
+                        </CarouselItem>
+                      </CarouselContent>
+                      <CarouselPrevious className="bg-primary border-primary absolute top-1/2 -translate-y-1/2 left-2 text-white" />
+                      <CarouselNext className="bg-primary border-primary absolute top-1/2 -translate-y-1/2 right-2 text-white" />
+                    </Carousel>
+                    <div className="p-10 pt-4">
+                      <h3 className="text-sm/4 font-semibold text-primary">
+                        Freelancer
+                      </h3>
+                      <p className="mt-2 text-lg/7 font-medium tracking-tight text-foreground">
+                        Containers Docker
+                      </p>
+                      <p className="mt-2 max-w-lg text-sm/6 text-muted-foreground">
+                        Já configurado com um container do PostgreSQL para
+                        persistir seus dados localmente sem ter que configurar
+                        um banco de dados com Supabase ou Neon + um container do
+                        Adminer para você acessar seu banco de dados via
+                        browser.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-border" />
+                </div>
+                <div className="relative lg:col-span-2">
+                  <div className="absolute inset-px rounded-lg bg-card max-lg:rounded-b-lg lg:rounded-br-lg" />
+                  <div className="relative flex h-full flex-col overflow-hidden rounded-lg max-lg:rounded-b-lg lg:rounded-br-lg">
+                    <Carousel className="w-full">
+                      <CarouselContent>
+                        <CarouselItem>
+                          <img
+                            alt="Dashboard"
+                            src="/features/stripe03.png"
+                            className="w-full object-cover object-left"
+                          />
+                        </CarouselItem>
+                        <CarouselItem>
+                          <video
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="w-full object-cover object-left"
+                          >
+                            <source src="/crud-stripe.mp4" type="video/mp4" />
+                            Seu navegador não suporta o elemento de vídeo.
+                          </video>
+                        </CarouselItem>
+                        <CarouselItem>
+                          <img
+                            alt="Dashboard"
+                            src="/features/stripe01.png"
+                            className="w-full object-cover object-left"
+                          />
+                        </CarouselItem>
+                        <CarouselItem>
+                          <img
+                            alt="Dashboard"
+                            src="/features/stripe02.png"
+                            className="w-full object-cover object-left"
+                          />
+                        </CarouselItem>
+                      </CarouselContent>
+                      <CarouselPrevious className="bg-primary border-primary absolute top-1/2 -translate-y-1/2 left-2 text-white" />
+                      <CarouselNext className="bg-primary border-primary absolute top-1/2 -translate-y-1/2 right-2 text-white" />
+                    </Carousel>
+                    <div className="p-10 pt-4">
+                      <h3 className="text-sm/4 font-semibold text-primary">
+                        Micro SaaS
+                      </h3>
+                      <p className="mt-2 text-lg/7 font-medium tracking-tight text-foreground">
+                        Stripe
+                      </p>
+                      <p className="mt-2 max-w-lg text-sm/6 text-muted-foreground">
+                        O maior diferencial deste template é a possibilidade de
+                        usar o próprio dashboard do Stripe para controlar os
+                        planos e assinaturas do template. Você pode criar os
+                        Produtos, Preços e Customers diretamente no Stripe e o
+                        template vai consumir essas informações pelos eventos de
+                        Webhook.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-border max-lg:rounded-b-lg lg:rounded-br-lg" />
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
         <section
@@ -218,24 +501,23 @@ export default async function PageHome(props: PageHomeProps) {
                     Posso solicitar a devolução do meu pagamento?
                   </AccordionTrigger>
                   <AccordionContent className="text-left text-lg">
-                    Sim, você pode solicitar a devolução dentro de 30 dias após
-                    a compra. Para isso, entre em contato com nosso suporte e
-                    forneça seu motivo. A equipe irá analisar seu pedido e, se
-                    aprovado, o valor será creditado de volta na forma de
-                    pagamento original.
+                    Sim, você pode solicitar o reembolso a qualquer momento.
+                    Para isso, entre em contato pelo e-mail
+                    darlleybrito@gmail.com e forneça seu motivo. Irei analisar
+                    seu pedido e o valor será reembolsado através do Stripe.
+                    Geralmente, os reembolsos levam de 5 a 10 dias úteis para
+                    serem processados e aparecerem no extrato do cliente.
                   </AccordionContent>
                 </AccordionItem>
 
                 <AccordionItem value="item-2">
                   <AccordionTrigger className="text-left text-xl text-primary">
-                    Como faço para criar uma conta no Bling?
+                    Como terei acesso ao template?
                   </AccordionTrigger>
                   <AccordionContent className="text-left text-lg">
-                    Para criar uma conta, acesse nossa página de cadastro e
-                    preencha o formulário com seus dados pessoais e informações
-                    da sua empresa. Após enviar, você receberá um e-mail de
-                    confirmação. Clique no link no e-mail e sua conta será
-                    ativada!
+                    Você pode fazer login ou criar uma conta na plataforma. Lá,
+                    você encontrará os templates disponíveis para download em
+                    sua assinatura.
                   </AccordionContent>
                 </AccordionItem>
 
@@ -245,25 +527,21 @@ export default async function PageHome(props: PageHomeProps) {
                   </AccordionTrigger>
                   <AccordionContent className="text-left text-lg">
                     Você pode cancelar sua assinatura diretamente em sua conta,
-                    na seção de configurações de pagamento. Se precisar de
-                    assistência, entre em contato com nosso suporte e teremos
-                    prazer em ajudar.
+                    na seção de configurações de assinatura.
                   </AccordionContent>
                 </AccordionItem>
 
-                <AccordionItem value="item-3">
+                <AccordionItem value="item-4">
                   <AccordionTrigger className="text-left text-xl text-primary">
                     Como posso mudar meu plano para um mais avançado?
                   </AccordionTrigger>
                   <AccordionContent className="text-left text-lg">
                     Para mudar seu plano, acesse a área de configurações dentro
-                    de sua conta. Escolha o novo plano desejado e siga as
-                    instruções para concluir a atualização. O valor proporcional
-                    ao novo plano será cobrado na próxima fatura.
+                    de sua conta. Clique no botão "Atualizar plano".
                   </AccordionContent>
                 </AccordionItem>
 
-                <AccordionItem value="item-4">
+                <AccordionItem value="item-5">
                   <AccordionTrigger className="text-left text-xl text-primary">
                     Esqueci minha senha. Como posso recuperá-la?
                   </AccordionTrigger>
@@ -285,16 +563,11 @@ export default async function PageHome(props: PageHomeProps) {
           <div className="flex flex-col items-center  py-10 sm:flex-row-reverse sm:justify-between">
             <div className="flex flex-col md:flex-row-reverse items-center gap-y-4 md:gap-x-6">
               <div className="flex items-center gap-4">
-                <Link href="#" className="group" aria-label="TaxPal on X">
-                  <svg
-                    className="size-6 dark:stroke-secondary-foreground"
-                    aria-hidden="true"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M13.3174 10.7749L19.1457 4H17.7646L12.7039 9.88256L8.66193 4H4L10.1122 12.8955L4 20H5.38119L10.7254 13.7878L14.994 20H19.656L13.3171 10.7749H13.3174ZM11.4257 12.9738L10.8064 12.0881L5.87886 5.03974H8.00029L11.9769 10.728L12.5962 11.6137L17.7652 19.0075H15.6438L11.4257 12.9742V12.9738Z" />
-                  </svg>
-                </Link>
-                <Link href="#" className="group" aria-label="TaxPal on GitHub">
+                <Link
+                  href="https://github.com/darlley"
+                  className="group"
+                  aria-label="GitHub"
+                >
                   <svg
                     className="size-6 dark:fill-secondary-foreground"
                     aria-hidden="true"
@@ -309,13 +582,14 @@ export default async function PageHome(props: PageHomeProps) {
                 <Link
                   href="https://darlley.dev"
                   className="text-primary font-bold"
+                  target="_blank"
                 >
-                  Qual seu nome?
+                  Darlley Brito
                 </Link>
               </p>
             </div>
             <p className="text-sm mt-2">
-              &copy; {new Date().getFullYear()} Microo-SaaS. Todos os direitos
+              &copy; {new Date().getFullYear()} SaaS Admin. Todos os direitos
               reservados.
             </p>
           </div>
