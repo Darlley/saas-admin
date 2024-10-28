@@ -1,10 +1,7 @@
 # SAAS ADMIN
 
-## INDICE
-
-1. Setup
-2. Landing Page
-3. Autenticação
+![thumbnail](https://github.com/Darlley/saas-admin/blob/main/public/features/landing-page01-dark.png?raw=true)
+![dashboard](https://github.com/Darlley/saas-admin/blob/main/public/features/dashboard03.png?raw=true)
 
 ## SETUP
 
