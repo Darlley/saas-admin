@@ -1,5 +1,9 @@
 # SAAS ADMIN
 
+```bash
+npx create-next-app@latest [project-name] --example https://github.com/Darlley/saas-admin
+```
+
 ![thumbnail](https://github.com/Darlley/saas-admin/blob/main/public/features/landing-page01-dark.png?raw=true)
 ![dashboard](https://github.com/Darlley/saas-admin/blob/main/public/features/dashboard03.png?raw=true)
 
