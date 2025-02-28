@@ -85,9 +85,9 @@ pnpx create-next-app@latest [project-name] --example https://github.com/Darlley/
 - [x] Footer
 
 ## STRIPE WEBHOOK
+O maior diferencial deste template é a utilização do próprio dashboard do Stripe como um "backoffice". Através dos eventos de webhook, o usuário pode controlar os recursos de produtos, preços e clientes diretamente pelo dashboard do Stripe, eliminando a necessidade de desenvolver uma interface administrativa separada. Isso simplifica significativamente o gerenciamento e oferece uma solução robusta e integrada para o controle de pagamentos e assinaturas.
 
-> [!TIP]
-> O maior diferencial deste template é a utilização do próprio dashboard do Stripe como um "backoffice". Através dos eventos de webhook, o usuário pode controlar os recursos de produtos, preços e clientes diretamente pelo dashboard do Stripe, eliminando a necessidade de desenvolver uma interface administrativa separada. Isso simplifica significativamente o gerenciamento e oferece uma solução robusta e integrada para o controle de pagamentos e assinaturas.
+https://github.com/user-attachments/assets/47850996-0397-4cce-b95e-63377b412b0f
 
 Vídeo demonstrativo: [https://www.threads.net/@darlleybbf/post/DBVWi6WRWu-](https://www.threads.net/@darlleybbf/post/DBVWi6WRWu-)
 
